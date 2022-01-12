@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cao.score.dao.MenuDao">
+
+    <resultMap type="com.cao.score.entity.Menu" id="MenuMap">
+        <result property="menuId" column="menu_id" jdbcType="INTEGER"/>
+        <result property="menuName" column="menu_name" jdbcType="VARCHAR"/>
+        <result property="menuTitle" column="menu_title" jdbcType="VARCHAR"/>
+        <result property="parentName" column="parent_name" jdbcType="VARCHAR"/>
+        <result property="action" column="action" jdbcType="VARCHAR"/>
+        <result property="orderBy" column="order_by" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="icon" column="icon" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="menuFunction" column="menu_function" jdbcType="VARCHAR"/>
+        <result property="menuStyle" column="menu_style" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="MenuMap">
+        select
+          menu_id, menu_name, menu_title, parent_name, action, order_by, status, icon, create_time, creator, menu_function, menu_style
+        from score.menu
+        where menu_id = #{menuId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="MenuMap">
+        select
+          menu_id, menu_name, menu_title, parent_name, action, order_by, status, icon, create_time, creator, menu_function, menu_style
+        from score.menu
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="MenuMap">
+        select
+        menu_id, menu_name, menu_title, parent_name, action, order_by, status, icon, create_time, creator,
+        menu_function, menu_style
+        from score.menu
+        <where>
+            <if test="menuId != null">
+                and menu_id = #{menuId}
+            </if>
+            <if test="menuName != null and menuName != ''">
+                and menu_name = #{menuName}
+            </if>
+            <if test="menuTitle != null and menuTitle != ''">
+                and menu_title = #{menuTitle}
+            </if>
+            <if test="parentName != null and parentName != ''">
+                and parent_name = #{parentName}
+            </if>
+            <if test="action != null and action != ''">
+                and action = #{action}
+            </if>
+            <if test="orderBy != null">
+                and order_by = #{orderBy}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="icon != null and icon != ''">
+                and icon = #{icon}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="creator != null and creator != ''">
+                and creator = #{creator}
+            </if>
+            <if test="menuFunction != null and menuFunction != ''">
+                and menu_function = #{menuFunction}
+            </if>
+            <if test="menuStyle != null and menuStyle != ''">
+                and menu_style = #{menuStyle}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="menuId" useGeneratedKeys="true">
+        insert into score.menu(menu_name, menu_title, parent_name, action, order_by, status, icon, create_time, creator, menu_function, menu_style)
+        values (#{menuName}, #{menuTitle}, #{parentName}, #{action}, #{orderBy}, #{status}, #{icon}, #{createTime}, #{creator}, #{menuFunction}, #{menuStyle})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="menuId" useGeneratedKeys="true">
+        insert into score.menu(menu_name, menu_title, parent_name, action, order_by, status, icon, create_time, creator,
+        menu_function, menu_style)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.menuName}, #{entity.menuTitle}, #{entity.parentName}, #{entity.action}, #{entity.orderBy},
+            #{entity.status}, #{entity.icon}, #{entity.createTime}, #{entity.creator}, #{entity.menuFunction},
+            #{entity.menuStyle})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="menuId" useGeneratedKeys="true">
+        insert into score.menu(menu_name, menu_title, parent_name, action, order_by, status, icon, create_time, creator,
+        menu_function, menu_style)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.menuName}, #{entity.menuTitle}, #{entity.parentName}, #{entity.action}, #{entity.orderBy},
+            #{entity.status}, #{entity.icon}, #{entity.createTime}, #{entity.creator}, #{entity.menuFunction},
+            #{entity.menuStyle})
+        </foreach>
+        on duplicate key update
+        menu_name = values(menu_name) , menu_title = values(menu_title) , parent_name = values(parent_name) , action =
+        values(action) , order_by = values(order_by) , status = values(status) , icon = values(icon) , create_time =
+        values(create_time) , creator = values(creator) , menu_function = values(menu_function) , menu_style =
+        values(menu_style)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update score.menu
+        <set>
+            <if test="menuName != null and menuName != ''">
+                menu_name = #{menuName},
+            </if>
+            <if test="menuTitle != null and menuTitle != ''">
+                menu_title = #{menuTitle},
+            </if>
+            <if test="parentName != null and parentName != ''">
+                parent_name = #{parentName},
+            </if>
+            <if test="action != null and action != ''">
+                action = #{action},
+            </if>
+            <if test="orderBy != null">
+                order_by = #{orderBy},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="icon != null and icon != ''">
+                icon = #{icon},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="creator != null and creator != ''">
+                creator = #{creator},
+            </if>
+            <if test="menuFunction != null and menuFunction != ''">
+                menu_function = #{menuFunction},
+            </if>
+            <if test="menuStyle != null and menuStyle != ''">
+                menu_style = #{menuStyle},
+            </if>
+        </set>
+        where menu_id = #{menuId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from score.menu where menu_id = #{menuId}
+    </delete>
+
+</mapper>

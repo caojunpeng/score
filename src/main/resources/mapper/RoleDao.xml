@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cao.score.dao.RoleDao">
+
+    <resultMap type="com.cao.score.entity.Role" id="RoleMap">
+        <result property="roleId" column="role_id" jdbcType="INTEGER"/>
+        <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
+        <result property="roleTitle" column="role_title" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="RoleMap">
+        select
+          role_id, role_name, role_title, create_time, remark, creator
+        from score.role
+        where role_id = #{roleId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="RoleMap">
+        select
+          role_id, role_name, role_title, create_time, remark, creator
+        from score.role
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="RoleMap">
+        select
+        role_id, role_name, role_title, create_time, remark, creator
+        from score.role
+        <where>
+            <if test="roleId != null">
+                and role_id = #{roleId}
+            </if>
+            <if test="roleName != null and roleName != ''">
+                and role_name = #{roleName}
+            </if>
+            <if test="roleTitle != null and roleTitle != ''">
+                and role_title = #{roleTitle}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="creator != null and creator != ''">
+                and creator = #{creator}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="roleId" useGeneratedKeys="true">
+        insert into score.role(role_name, role_title, create_time, remark, creator)
+        values (#{roleName}, #{roleTitle}, #{createTime}, #{remark}, #{creator})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="roleId" useGeneratedKeys="true">
+        insert into score.role(role_name, role_title, create_time, remark, creator)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.roleName}, #{entity.roleTitle}, #{entity.createTime}, #{entity.remark}, #{entity.creator})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="roleId" useGeneratedKeys="true">
+        insert into score.role(role_name, role_title, create_time, remark, creator)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.roleName}, #{entity.roleTitle}, #{entity.createTime}, #{entity.remark}, #{entity.creator})
+        </foreach>
+        on duplicate key update
+        role_name = values(role_name) , role_title = values(role_title) , create_time = values(create_time) , remark =
+        values(remark) , creator = values(creator)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update score.role
+        <set>
+            <if test="roleName != null and roleName != ''">
+                role_name = #{roleName},
+            </if>
+            <if test="roleTitle != null and roleTitle != ''">
+                role_title = #{roleTitle},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="creator != null and creator != ''">
+                creator = #{creator},
+            </if>
+        </set>
+        where role_id = #{roleId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from score.role where role_id = #{roleId}
+    </delete>
+
+</mapper>

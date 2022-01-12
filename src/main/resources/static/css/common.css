@@ -1,0 +1,301 @@
+/*所有界面*/
+
+
+/*登录页面*/
+.logrinBody .fromDiv{
+    width: 420px;
+    height: 420px;
+    padding: 40px;
+    background: rgba(32,163,245, 0.1);
+    position: relative;
+    left: 57%;
+    top: 190px;
+    border: 3px solid rgba(32,163,245, 0.5);
+}
+.logrinBody .loginDiv img{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: -1;
+}
+.loginDiv .fromDiv #verificationCode{
+    width: 60%;
+    display: inline-block;
+}
+.loginDiv .fromDiv .unchanged{
+    width: 38%;
+    align-content: center;
+    display: inline-block;
+}
+.loginDiv .fromDiv input{
+    height: 46px;
+    font-size: 18px;
+}
+.fromDiv .loginInputDiv{
+    margin: 5% 0%;
+    width: 97%;
+}
+.fromDiv #checkCode{
+    display: block;
+    width: 30%;
+    padding: 6px 25px;
+    background-color: #D29696;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.fromDiv #verificationCode{
+    width: 70%;
+    display: block;
+    float: left;
+}
+.fromDiv .loginBtn{
+    width: 119%;
+    margin-top: 25px;
+}
+.addUserPageDiv{
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 30px;
+}
+.addUserPageDiv label{
+    color: black;
+}
+.addUserPageDiv .addUserFrom button{
+    position: absolute;
+    right: 20px;
+}
+/*前台-主页*/
+.main-div{
+    background: url(../images/admin/main.jpg) no-repeat;
+    background-size:cover;
+    width: 100%;
+    height: 937px;
+}
+.main-div .main-top{
+    display: block;
+    width: 100%;
+    height: 60px;
+}
+.main-div .main-top .top-left{
+    display: block;
+    float: left;
+    line-height: 60px;
+    width: 15%;
+    height: 100%;
+    font-size: 25px;
+    text-align: center;
+}
+.main-div .main-top .top-right{
+    display: block;
+    float: left;
+    line-height: 60px;
+    width: 85%;
+    height: 100%;
+    text-align: right;
+}
+.main-div .main-top .top-right .headDiv{
+    margin: 0px 30px 0px 0px;
+    display: inline-block;
+}
+.main-div .main-top .top-right .headIcon{
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: middle;
+    background: url(../images/admin/account.png) no-repeat;
+    background-size: 100% 100%;
+}
+.main-div .main-top .top-right .adminManagerIcon{
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    margin-right: 5px;
+    vertical-align: middle;
+    background: url(../images/admin/setting.png) no-repeat;
+    background-size: 100% 100%;
+}
+.main-div .main-top .top-btn .logoutBtn{
+    margin-right: 25px;
+}
+.main-div .main-bottom{
+    display: block;
+    width: 100%;
+    height: 850px;
+}
+.main-div .main-bottom .main-left{
+    display: block;
+    width: 160px;
+    float: left;
+    height: 100%;
+    border-right: 1px solid #4dadff;
+}
+.main-div .main-bottom .main-left .left-menu{
+    width: 140px;
+    height: 130px;
+    padding: 27px 0px 0px 37px;
+    background: rgb(21 100 156);
+    border: 1px solid rgba(66,77,139,1);
+    margin-left: 10px;
+}
+.main-div .main-bottom .main-left .left-menu .iconSpan{
+    font-size: 50px;
+}
+.main-div .main-bottom .fileUploadDiv{
+    display: block;
+    position: absolute;
+    left: 670px;
+    top: 155px;
+}
+.main-div .main-bottom #addfiles{
+    display: none;
+}
+.main-div .main-bottom .main-right{
+    display: block;
+    width: 1743px;
+    height: 100%;
+    border: 1px solid #4dadff;
+    float: left;
+}
+
+.main-div .main-bottom .main-right .main-right-menus{
+    position: absolute;
+    left: 400px;
+    top: 200px;
+    border: 1px solid #ccc;
+    height: 650px;
+    width: 650px;
+}
+.main-div .main-bottom .main-right .main-right-menus .main-menu{
+    height: 50%;
+    width: 50%;
+    float: left;
+    text-align: center;
+    line-height: 324px;
+    background: rgba(10,36,85,0.8);
+    border: 1px solid rgba(66,77,139,1);
+}
+.main-div .main-bottom .main-right .main-right-menus .main-menu .iconSpan{
+    margin-top: 80px;
+    font-size: 120px;
+    margin-bottom: -130px;
+    display: block;
+}
+.main-div .main-bottom .main-right .main-right-info{
+    position: absolute;
+    left: 1200px;
+    border: 1px solid #ccc;
+    height: 650px;
+    width: 500px;
+    top: 200px;
+}
+.main-div .main-bottom .main-right .main-right-info .image{
+    height: 650px;
+    width: 500px;
+}
+.layui-dropdown-menu .layui-menu-body-title{
+    color: #000000de;
+}
+
+
+
+
+
+/*后台-主页*/
+.system-main{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 200px;
+    height: 100%;
+    line-height: 60px;
+    text-align: center;
+    color: #4daaa2;
+    font-size: 16px;
+}
+
+
+
+/*后台-用户管理*/
+.userListDiv .delUserBtn{
+    margin-left: 15px;
+}
+.userEditRow .saveUserBtn{
+    position: absolute;
+    right: 30px;
+    top: 20px;
+}
+.userListDiv .addUserBtn{
+    position: absolute;
+    right: 50px;
+    top: 70px;
+}
+.userListDiv .userTable{
+    margin-top: 70px;
+}
+.userListDiv #userForm .userFormCol{
+    position: absolute;
+    right: 220px;
+}
+.userListDiv #userForm .searchBtn{
+    position: absolute;
+    right: 155px;
+}
+
+
+/*后台-菜单管理*/
+.menuListDiv .delmenuBtn{
+    margin-left: 15px;
+}
+.menuEditRow .savemenuBtn{
+    position: absolute;
+    right: 30px;
+    top: 20px;
+}
+.menuListDiv .addmenuBtn{
+    position: absolute;
+    right: 50px;
+    top: 70px;
+}
+.menuListDiv .menuTable{
+    margin-top: 70px;
+}
+.menuListDiv #menuForm .menuFormCol{
+    position: absolute;
+    right: 220px;
+}
+.menuListDiv #menuForm .searchBtn{
+    position: absolute;
+    right: 155px;
+}
+
+
+/* 角色管理 */
+.roleListDiv .delroleBtn{
+    margin-left: 15px;
+}
+.roleEditRow .saveroleBtn{
+    position: absolute;
+    right: 30px;
+    top: 20px;
+}
+.roleListDiv .addroleBtn{
+    position: absolute;
+    right: 50px;
+    top: 70px;
+}
+.roleListDiv .roleTable{
+    margin-top: 70px;
+}
+.roleListDiv #roleForm .roleFormCol{
+    position: absolute;
+    right: 220px;
+}
+.roleListDiv #roleForm .searchBtn{
+    position: absolute;
+    right: 155px;
+}
+#menuTree .addRoleMenuBtn{
+    margin-left: 320px;
+}

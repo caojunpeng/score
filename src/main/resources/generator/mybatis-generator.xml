@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<!-- 右键项目运行 run as -> run configurations -> maven build mybatis-generator:generate -->
+<generatorConfiguration>
+
+
+	<context id="users-query" targetRuntime="MyBatis3Simple">
+		<property name="javaFileEncoding" value="UTF-8" />
+		<commentGenerator
+			type="org.mybatis.generator.internal.HairyCommentGenerator">
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+		<jdbcConnection connectionURL="jdbc:mysql://172.17.10.159:33036/score"
+			driverClass="com.mysql.jdbc.Driver" password="55F41AEC312911D8B92BCFBF43B88F60"
+			userId="root" />
+		<javaModelGenerator targetPackage="com.cao.score.domain"
+			targetProject="src/main/java" />
+		<sqlMapGenerator targetPackage="com.cao.score.mapper"
+			targetProject="src/main/java" />
+		<javaClientGenerator targetPackage="com.cao.score.mapper"
+			targetProject="src/main/java" type="XMLMAPPER" />
+
+		<table schema="score" tableName="menu" enableDeleteByExample="false"
+			enableUpdateByExample="false">
+		</table>
+		<table schema="score" tableName="role" enableDeleteByExample="false"
+			enableUpdateByExample="false">
+		</table>
+		<table schema="score" tableName="role_menu" enableDeleteByExample="false"
+			enableUpdateByExample="false">
+		</table>
+		<table schema="score" tableName="user" enableDeleteByExample="false"
+			enableUpdateByExample="false">
+		</table>
+		<table schema="score" tableName="user_role" enableDeleteByExample="false"
+			   enableUpdateByExample="false">
+		</table>
+	</context>
+
+</generatorConfiguration>
