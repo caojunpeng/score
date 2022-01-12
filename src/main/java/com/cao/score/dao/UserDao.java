@@ -42,6 +42,14 @@ public interface UserDao {
     List<User> queryAll(User user);
 
     /**
+     * 通过实体作为筛选条件查询单个对象
+     *
+     * @param user 实例对象
+     * @return 对象列表
+     */
+    User queryOne(User user);
+
+    /**
      * 新增数据
      *
      * @param user 实例对象

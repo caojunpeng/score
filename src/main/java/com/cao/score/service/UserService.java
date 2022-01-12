@@ -28,6 +28,13 @@ public interface UserService {
      * @return 对象列表
      */
     List<User> queryAllByLimit(int offset, int limit);
+    /**
+     * 查询单个对象
+     *
+     * @param user 实例对象
+     * @return 实例对象
+     */
+    User queryOne(User user);
 
     /**
      * 新增数据

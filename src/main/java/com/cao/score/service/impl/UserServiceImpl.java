@@ -41,6 +41,16 @@ public class UserServiceImpl implements UserService {
     public List<User> queryAllByLimit(int offset, int limit) {
         return this.userDao.queryAllByLimit(offset, limit);
     }
+    /**
+     * 查询多条数据
+     *
+     * @param user 实例对象
+     * @return 实例对象
+     */
+    @Override
+    public User queryOne(User user) {
+        return this.userDao.queryOne(user);
+    }
 
     /**
      * 新增数据

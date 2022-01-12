@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.cao.score.**.dao")
+@MapperScan("com.cao.score.dao")
 public class ScoreApplication {
 
     public static void main(String[] args) {
