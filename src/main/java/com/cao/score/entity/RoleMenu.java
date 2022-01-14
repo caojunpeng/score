@@ -11,18 +11,18 @@ import java.io.Serializable;
 public class RoleMenu implements Serializable {
     private static final long serialVersionUID = -64385276807995005L;
 
-    private Integer id;
+    private Long id;
 
     private Integer roleId;
 
     private Integer menuId;
 
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

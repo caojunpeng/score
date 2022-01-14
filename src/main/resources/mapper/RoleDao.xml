@@ -54,6 +54,18 @@
         </where>
     </select>
 
+    <!--通过实体作为筛选条件查询-->
+    <select id="getList" resultMap="RoleMap">
+        select
+        role_id, role_name, role_title, create_time, remark, creator
+        from score.role
+        <where>
+            <if test="keyword != null">
+                and role_name like CONCAT(CONCAT('%', #{keyword}), '%')
+            </if>
+        </where>
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="roleId" useGeneratedKeys="true">
         insert into score.role(role_name, role_title, create_time, remark, creator)

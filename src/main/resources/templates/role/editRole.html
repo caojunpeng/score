@@ -1,0 +1,46 @@
+<div class="roleEditRow" >
+    <form id="roleEditForm">
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">角色名称</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="roleName" th:value="${role?.roleName}" placeholder="请输入菜单名">
+                <input type="hidden" class="form-control" name="roleId" th:value="${role?.roleId}">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">角色标签</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="roleTitle" th:value="${role?.roleTitle}" placeholder="请输入角色标签">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">描述</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="remark" th:value="${role?.remark}" >
+            </div>
+        </div>
+        <div class="col-md-12">
+            <button type="button" class="btn btn-primary saveroleBtn" onclick="saveRole()">确定</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    function saveRole() {
+        $.ajax({
+            type: "POST",
+            url: "/role/saveRole",
+            data: $('#roleEditForm').serialize(),
+            success: function (obj) {
+                if(obj){
+                    $('#dataTables-roleList').DataTable().draw();
+                    layer.closeAll();
+                    layer.msg("更新成功");
+                    return;
+                }
+                layer.msg("更新失败");
+            }
+        });
+    }
+    /*]]>*/
+</script>

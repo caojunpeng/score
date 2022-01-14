@@ -12,7 +12,7 @@ import java.util.Date;
 public class Role implements Serializable {
     private static final long serialVersionUID = 251359584737792336L;
 
-    private Integer roleId;
+    private Long roleId;
     /**
      * 角色名称
      */
@@ -35,11 +35,11 @@ public class Role implements Serializable {
     private String creator;
 
 
-    public Integer getRoleId() {
+    public Long getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Integer roleId) {
+    public void setRoleId(Long roleId) {
         this.roleId = roleId;
     }
 

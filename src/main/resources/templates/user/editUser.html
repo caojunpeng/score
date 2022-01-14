@@ -1,0 +1,47 @@
+<div class="userEditRow" >
+    <form id="userEditForm">
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">用户名</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="userName" th:value="${user?.userName}" placeholder="请输入用户名">
+                <input type="hidden" class="form-control" name="userId" th:value="${user?.userId}">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">姓名</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="name" th:value="${user?.name}"  placeholder="请输入姓名">
+            </div>
+        </div>
+        <div class="col-md-12" th:if="!${user?.userId}">
+            <label class="col-sm-12 control-label">密码</label>
+            <div class="col-sm-12">
+                <input type="password" class="form-control" name="userPwd" th:value="${user?.userPwd}" placeholder="请输入密码">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <button type="button" class="btn btn-primary saveUserBtn" onclick="saveUser()">确定</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+/*<![CDATA[*/
+    function saveUser() {
+        $.ajax({
+            type: "POST",
+            url: "/user/saveUser",
+            data: $('#userEditForm').serialize(),
+            success: function (obj) {
+                var data=JSON.parse(obj);
+                if(data && data.code==200){
+                    $('#dataTables-userList').DataTable().draw();
+                    layer.closeAll();
+                    layer.msg("更新成功");
+                    return;
+                }
+                layer.msg("更新失败");
+            }
+        });
+    }
+/*]]>*/
+</script>

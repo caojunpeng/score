@@ -1,6 +1,7 @@
 package com.cao.score.dao;
 
 import com.cao.score.entity.User;
+import com.cao.score.vo.ObjectParams;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -88,5 +89,7 @@ public interface UserDao {
      * @return 影响行数
      */
     int deleteById(Long userId);
+
+    List<User> getList(ObjectParams params);
 
 }

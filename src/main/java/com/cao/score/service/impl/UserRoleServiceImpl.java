@@ -26,7 +26,7 @@ public class UserRoleServiceImpl implements UserRoleService {
      * @return 实例对象
      */
     @Override
-    public UserRole queryById(Integer id) {
+    public UserRole queryById(Long id) {
         return this.userRoleDao.queryById(id);
     }
 
@@ -73,7 +73,7 @@ public class UserRoleServiceImpl implements UserRoleService {
      * @return 是否成功
      */
     @Override
-    public boolean deleteById(Integer id) {
+    public boolean deleteById(Long id) {
         return this.userRoleDao.deleteById(id) > 0;
     }
 }

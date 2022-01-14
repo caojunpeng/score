@@ -33,6 +33,32 @@
         limit #{offset}, #{limit}
     </select>
 
+    <!--查询指定行数据-->
+    <select id="getMenusByMaps" resultMap="MenuMap">
+        select
+          menu_id, menu_name, menu_title, parent_name, action, order_by, status, icon, create_time, creator, menu_function, menu_style
+        from score.menu where 1=1
+        <if test="parentName != null and parentName != ''">
+            and parent_name = #{parentName}
+        </if>
+        <if test="status != null and status != ''">
+            and status =  #{status}
+        </if>
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="getMenuOneByMaps" resultMap="MenuMap">
+        select
+          menu_id, menu_name, menu_title, parent_name, action, order_by, status, icon, create_time, creator, menu_function, menu_style
+        from score.menu where 1=1
+        <if test="menuName != null and menuName != ''">
+            and menu_name = #{menuName}
+        </if>
+        <if test="status != null and status != ''">
+            and status =  #{status}
+        </if>
+    </select>
+
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="MenuMap">
         select

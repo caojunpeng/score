@@ -18,7 +18,7 @@ public interface RoleMenuService {
      * @param id 主键
      * @return 实例对象
      */
-    RoleMenu queryById(Integer id);
+    RoleMenu queryById(Long id);
 
     /**
      * 查询多条数据
@@ -51,6 +51,6 @@ public interface RoleMenuService {
      * @param id 主键
      * @return 是否成功
      */
-    boolean deleteById(Integer id);
+    boolean deleteById(Long id);
 
 }

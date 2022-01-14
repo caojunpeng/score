@@ -1,0 +1,114 @@
+<div class="roleListDiv">
+    <h1>角色管理</h1>
+    <form id="roleForm">
+        <div class="col-md-2 roleFormCol">
+            <input type="text" class="form-control" name="keyword">
+        </div>
+        <button type="button" class="btn btn-primary searchBtn" onclick="searchrole()">查询</button>
+        <button type="button" class="btn btn-primary addroleBtn" onclick="saverolePage()">新增角色</button>
+    </form>
+    <table class="table table-striped roleTable" id="dataTables-roleList">
+        <thead>
+        <tr>
+            <th>角色名称</th>
+            <th>角色标签</th>
+            <th>角色描述</th>
+            <th>创建时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<script type="text/javascript">
+    $('#dataTables-roleList').DataTable({
+        ajax: {
+            dataType: 'json',
+            url: "/role/datas",
+            data: function (aoData) {
+                var jsonData = $("#roleForm").serializeArray();
+                jsonData.forEach(function (e, index) {
+                    aoData[e.name] = e.value;
+                });
+                return aoData;
+            }
+        },
+        serverSide: true, paging: true,
+        searching: false, bLengthChange: false,
+        ordering: false,
+        lengthrole: [10],
+        "columns": [
+            {"data": "roleName"},
+            {"data": "roleTitle"},
+            {"data": "remark"},
+            {"data": "createTime"},
+            {
+                "data": null, render: function (data) {
+                    var btnHtml = "";
+                    btnHtml += '<button class="btn btn-primary btn-sm" onclick="saverolePage(' + data.roleId + ')">编辑</button>';
+                    btnHtml += '<button class="btn btn-danger btn-sm delroleBtn" onclick="delRole(' + data.roleId + ')">删除</button>';
+                    btnHtml += '<button class="btn btn-danger btn-sm delroleBtn" onclick="roleManage(' + data.roleId + ')">权限管理</button>';
+                    return btnHtml;
+                }
+            }
+        ],
+        responsive: true,
+        language: dataTablesLanguage
+    });
+
+    //删除方法
+    function delRole(id) {
+        layer.confirm('你确定要删除么？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                type: "POST",
+                url: "/role/delrole",
+                data: {roleId:id},
+                success: function (obj) {
+                    if(obj){
+                        $('#dataTables-roleList').DataTable().draw();
+                        layer.msg("删除成功");
+                        return;
+                    }
+                    layer.msg("删除失败");
+                }
+            });
+        }, function () {
+        });
+    }
+
+    //新增用户
+    function saverolePage(id) {
+        $.ajax({
+            type: "POST",
+            url: "/role/editRole",
+            data: {roleId:id},
+            success: function (data) {
+                layer.open({
+                    type: 1,
+                    skin: 'layui-layer-rim', //加上边框
+                    area: ['420px', '400px'], //宽高
+                    content: data
+                });
+            }
+        });
+    }
+    function searchrole() {
+        $('#dataTables-roleList').DataTable().draw();
+    }
+    function roleManage(id) {
+        $.ajax({
+            type: "POST",
+            url: "/role/roleMenuList",
+            data: {roleId:id},
+            success: function (data) {
+                layer.open({
+                    type: 1,
+                    skin: 'layui-layer-rim', //加上边框
+                    area: ['420px', '400px'], //宽高
+                    content: data
+                });
+            }
+        });
+    }
+</script>

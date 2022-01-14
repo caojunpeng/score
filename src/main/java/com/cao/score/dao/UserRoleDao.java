@@ -21,7 +21,7 @@ public interface UserRoleDao {
      * @param id 主键
      * @return 实例对象
      */
-    UserRole queryById(Integer id);
+    UserRole queryById(Long id);
 
     /**
      * 查询指定行数据
@@ -79,6 +79,6 @@ public interface UserRoleDao {
      * @param id 主键
      * @return 影响行数
      */
-    int deleteById(Integer id);
+    int deleteById(Long id);
 
 }

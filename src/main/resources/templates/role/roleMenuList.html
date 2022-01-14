@@ -1,0 +1,56 @@
+<div id="menuTree">
+    <input type="hidden" id="roleId" th:value="${roleId}"/>
+    <input type="hidden" id="menuList" th:value="${ztreeDatas}"/>
+    <ul id="treeDemo" class="ztree"></ul>
+    <button type="button" class="btn btn-primary addRoleMenuBtn" onclick="addRoleMenu()">确定</button>
+</div>
+
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var setting={
+        check: {
+            enable: true,
+            chkStyle: "checkbox",
+            chkboxType: { "Y" : "ps", "N" : "ps" }
+        },
+        callback: {
+            onCheck: zTreeOnCheck       //选中事件
+        }
+    }
+    function loadingTree(){
+        var menuList=$("#menuList").val();
+        if(menuList){
+            var zNodes =JSON.parse(menuList);
+            zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        }
+    }
+
+    //选中单个触发时间
+    function zTreeOnCheck(event, treeId, treeNode){
+        var id=treeNode.id;
+
+    }
+
+    $(document).ready(function(){
+        loadingTree()
+    });
+
+    function addRoleMenu() {
+        debugger
+        var menuIdList=new Array();
+        var nodes=zTreeObj.getCheckedNodes();
+        for(i = 0; i < nodes.length; i++) {
+            menuIdList.push(nodes[i].id)
+        }
+        $.ajax({
+            type: "post",
+            url:"/role/addRoleMenu",
+            data:{roleId:$("#roleId").val(),menuIdList:menuIdList.join(",")},
+            success:function () {
+
+            }
+        })
+    }
+
+    /*]]>*/
+</script>

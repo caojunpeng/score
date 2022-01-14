@@ -1,6 +1,8 @@
 package com.cao.score.service;
 
 import com.cao.score.entity.User;
+import com.cao.score.vo.DataTablesResult;
+import com.cao.score.vo.ObjectParams;
 
 import java.util.List;
 
@@ -59,5 +61,12 @@ public interface UserService {
      * @return 是否成功
      */
     boolean deleteById(Long userId);
+
+    /**
+     * 用户列表
+     * @param params
+     * @return
+     */
+    DataTablesResult<User> dataLists(ObjectParams params);
 
 }

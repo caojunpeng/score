@@ -28,6 +28,7 @@
 
     //菜单跳转
     utils.menuToPage = function(url){
+        debugger
         $.ajax({
             type: "POST",
             url: url,

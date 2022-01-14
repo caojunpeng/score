@@ -35,6 +35,18 @@
         limit #{offset}, #{limit}
     </select>
 
+    <!--查询table数据-->
+    <select id="getList" resultMap="UserMap">
+        select
+          user_id, user_name, user_pwd, salt, phone, email, name, create_time, update_time, login_last, login_total, creator, OPERATE_CONTENT, status
+        from score.user
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and user_name like CONCAT(CONCAT('%', #{keyword}), '%')
+            </if>
+        </where>
+    </select>
+
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="UserMap">
         select

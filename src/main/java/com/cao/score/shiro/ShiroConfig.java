@@ -56,6 +56,12 @@ public class ShiroConfig {
     @Bean
     public Realm getRealm() {
         CustomerRealm realm = new CustomerRealm();
+        HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
+        //设置使用MD5加密算法
+        credentialsMatcher.setHashAlgorithmName("md5");
+        //散列次数
+        credentialsMatcher.setHashIterations(1024);
+        realm.setCredentialsMatcher(credentialsMatcher);
         return realm;
     }
 }

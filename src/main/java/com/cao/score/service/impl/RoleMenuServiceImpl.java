@@ -26,7 +26,7 @@ public class RoleMenuServiceImpl implements RoleMenuService {
      * @return 实例对象
      */
     @Override
-    public RoleMenu queryById(Integer id) {
+    public RoleMenu queryById(Long id) {
         return this.roleMenuDao.queryById(id);
     }
 
@@ -73,7 +73,7 @@ public class RoleMenuServiceImpl implements RoleMenuService {
      * @return 是否成功
      */
     @Override
-    public boolean deleteById(Integer id) {
+    public boolean deleteById(Long id) {
         return this.roleMenuDao.deleteById(id) > 0;
     }
 }

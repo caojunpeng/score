@@ -2,7 +2,10 @@ package com.cao.score.service.impl;
 
 import com.cao.score.dao.RoleDao;
 import com.cao.score.entity.Role;
+import com.cao.score.entity.User;
 import com.cao.score.service.RoleService;
+import com.cao.score.vo.DataTablesResult;
+import com.cao.score.vo.ObjectParams;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -26,7 +29,7 @@ public class RoleServiceImpl implements RoleService {
      * @return 实例对象
      */
     @Override
-    public Role queryById(Integer roleId) {
+    public Role queryById(Long roleId) {
         return this.roleDao.queryById(roleId);
     }
 
@@ -73,7 +76,17 @@ public class RoleServiceImpl implements RoleService {
      * @return 是否成功
      */
     @Override
-    public boolean deleteById(Integer roleId) {
+    public boolean deleteById(Long roleId) {
         return this.roleDao.deleteById(roleId) > 0;
+    }
+
+    @Override
+    public DataTablesResult<Role> dataLists(ObjectParams params) {
+        List<Role> roles=roleDao.getList(params);
+        DataTablesResult<Role> dataTablesResult=new DataTablesResult<>();
+        dataTablesResult.setData(roles);
+        dataTablesResult.setRecordsFiltered(roles.size());
+        dataTablesResult.setRecordsTotal(roles.size());
+        return dataTablesResult;
     }
 }

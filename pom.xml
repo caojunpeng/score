@@ -50,12 +50,6 @@
             <version>2.3.31</version>
         </dependency>
 
-        <!--lombok-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
 
         <!--spring-boot-test-->
         <dependency>

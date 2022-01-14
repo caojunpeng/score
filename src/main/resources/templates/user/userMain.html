@@ -1,0 +1,97 @@
+
+<div class="userListDiv">
+    <h1>用户管理</h1>
+    <form id="userForm">
+        <div class="col-md-2 userFormCol">
+            <input type="text" class="form-control" name="keyword">
+        </div>
+        <button type="button" class="btn btn-primary searchBtn" onclick="searchUser()">查询</button>
+        <button type="button" class="btn btn-primary addUserBtn" onclick="saveUserPage()">新增用户</button>
+    </form>
+    <table class="table table-striped userTable" id="dataTables-userList">
+        <thead>
+        <tr>
+            <th>用户名</th>
+            <th>姓名</th>
+            <th>注册时间</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<script type="text/javascript">
+    $('#dataTables-userList').DataTable({
+        ajax: {
+            dataType: 'json',
+            url: "/user/datas",
+            data: function (aoData) {
+                var jsonData = $("#userForm").serializeArray();
+                jsonData.forEach(function (e, index) {
+                    aoData[e.name] = e.value;
+                });
+                return aoData;
+            }
+        },
+        serverSide: true, paging: true,
+        searching: false, bLengthChange: false,
+        ordering: false,
+        lengthMenu: [10],
+        "columns": [
+            {"data": "userName"},
+            {"data": "name"},
+            {"data": "createTime"},
+            {
+                "data": null, render: function (data) {
+                    var btnHtml = "";
+                    btnHtml += '<button class="btn btn-primary btn-sm" onclick="saveUserPage(' + data.userId + ')">编辑</button>';
+                    btnHtml += '<button class="btn btn-danger btn-sm delUserBtn" onclick="delUser(' + data.userId + ')">删除</button>';
+                    return btnHtml;
+                }
+            }
+        ],
+        responsive: true,
+        language: dataTablesLanguage
+    });
+
+    //删除方法
+    function delUser(id) {
+        layer.confirm('你确定要删除么？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            $.ajax({
+                type: "POST",
+                url: "/user/delUser",
+                data: {userId:id},
+                success: function (obj) {
+                    var data=JSON.parse(obj);
+                    if(data && data.code==200){
+                        layer.msg("删除成功");
+                        return;
+                    }
+                    layer.msg("删除失败");
+                }
+            });
+        }, function () {
+        });
+    }
+
+    //新增用户
+    function saveUserPage(id) {
+        $.ajax({
+            type: "POST",
+            url: "/user/editUser",
+            data: {userId:id},
+            success: function (data) {
+                layer.open({
+                    type: 1,
+                    skin: 'layui-layer-rim', //加上边框
+                    area: ['420px', '400px'], //宽高
+                    content: data
+                });
+            }
+        });
+    }
+    function searchUser() {
+        $('#dataTables-userList').DataTable().draw();
+    }
+</script>

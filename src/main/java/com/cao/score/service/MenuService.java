@@ -3,6 +3,7 @@ package com.cao.score.service;
 import com.cao.score.entity.Menu;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 菜单表(Menu)表服务接口
@@ -18,7 +19,7 @@ public interface MenuService {
      * @param menuId 主键
      * @return 实例对象
      */
-    Menu queryById(Integer menuId);
+    Menu queryById(Long menuId);
 
     /**
      * 查询多条数据
@@ -28,6 +29,20 @@ public interface MenuService {
      * @return 对象列表
      */
     List<Menu> queryAllByLimit(int offset, int limit);
+    /**
+     * 查询多条数据
+     *
+     * @param map 参数
+     * @return 对象列表
+     */
+    List<Menu> getMenusByMaps(Map<String,Object> map);
+    /**
+     * 查询一条数据
+     *
+     * @param map 参数
+     * @return 对象列表
+     */
+    Menu getMenuOneByMaps(Map<String,Object> map);
 
     /**
      * 新增数据
@@ -51,6 +66,6 @@ public interface MenuService {
      * @param menuId 主键
      * @return 是否成功
      */
-    boolean deleteById(Integer menuId);
+    boolean deleteById(Long menuId);
 
 }

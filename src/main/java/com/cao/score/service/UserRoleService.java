@@ -18,7 +18,7 @@ public interface UserRoleService {
      * @param id 主键
      * @return 实例对象
      */
-    UserRole queryById(Integer id);
+    UserRole queryById(Long id);
 
     /**
      * 查询多条数据
@@ -51,6 +51,6 @@ public interface UserRoleService {
      * @param id 主键
      * @return 是否成功
      */
-    boolean deleteById(Integer id);
+    boolean deleteById(Long id);
 
 }

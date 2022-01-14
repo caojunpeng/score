@@ -1,10 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:replace="head">
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-    主页加载成功
+<div class="main-div">
+    <div class="main-top">
+        <div class="top-left">个人系统</div>
+
+        <div class="top-right">
+            <div class="headDiv adminManagerDiv" onclick="adminManager()"> <i class="adminManagerIcon"></i>设置</div>
+            <div class="headDiv headSapn" onclick="headInfo()"> <i class="headIcon"></i><span class="headSpan" th:text="${userName}"></span></div>
+            <input type="hidden" id="userName" th:value="${userName}"/>
+        </div>
+    </div>
+    <div class="main-bottom">
+        <div class="main-left">
+            <ul class="menuUl">
+                <li th:each="menu : ${menulist}" th:onclick="menuClick([[${menu.action}]]);">
+                    <div class="left-menu">
+                        <div class="blackgroundDiv">
+                            <sapn class="glyphicon glyphicon-folder-open iconSpan" th:title="${menu.menuTitle}" aria-hidden="true"></sapn><br/>
+                            <span th:text="${menu.menuTitle}"></span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="
+">
+
+        </div>
+    </div>
+</div>
+
 </body>
+<script type="text/javascript">
+    $(function () {
+        var addfiles=$("#addfiles").val();
+        localStorage.setItem("login-userName",addfiles);
+        $(".menuUl li").eq(0).click();
+    })
+    function menuClick(url) {
+        $.ajax({
+            type: 'POST',
+            url:url,
+            success: function(data) {
+                if(data){
+                    //$(".main-right").html(data);
+                }
+            }
+        });
+    }
+    function logout() {
+        window.location.href="/loginOut";
+    }
+    function  adminManager() {
+        window.location.href="/admin/adminPage";
+    }
+    layui.use(['dropdown'], function(){
+        var dropdown = layui.dropdown;
+        //初演示
+        dropdown.render({
+            elem: '.headSapn'
+            ,align: 'center' //居中对齐（2.6.8 新增）
+            ,data: [{
+                title: '修改密码'
+                ,id: 100
+                ,style: 'color:black'
+            },{
+                title: '退出'
+                ,id: 101
+                ,style: 'color:black'
+            }]
+            ,click: function(obj){
+                if(obj.title=="修改密码"){
+                    $.ajax({
+                        type: "POST",
+                        url: "/saveUserPage",
+                        success: function (obj) {
+                            layer.open({
+                                type: 1,
+                                skin: 'layui-layer-rim', //加上边框
+                                area: ['420px', '440px'], //宽高
+                                content: obj
+                            });
+                        }
+                    });
+                }else if(obj.title=="退出"){
+                    logout()
+                }
+            }
+            ,style: 'color:black'
+        });
+    })
+    function fileUpload(){
+        $("#addfiles").click();
+    }
+
+</script>
 </html>

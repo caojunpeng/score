@@ -1,7 +1,9 @@
 package com.cao.score.controller;
 
 
+import com.cao.score.entity.Menu;
 import com.cao.score.entity.User;
+import com.cao.score.service.MenuService;
 import com.cao.score.service.UserService;
 import com.cao.score.shiro.SaltUtil;
 import org.apache.shiro.SecurityUtils;
@@ -18,8 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-
+/**
+ * 登录管理
+ */
 @Controller
 public class LoginController {
 
@@ -27,6 +34,9 @@ public class LoginController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private MenuService menuService;
 
     /**
      * 登录验证
@@ -55,7 +65,7 @@ public class LoginController {
     @RequestMapping("/login")
     public ModelAndView login() {
         ModelAndView modelAndView=new ModelAndView();
-        modelAndView.setViewName("login");
+        modelAndView.setViewName("/login");
         return modelAndView;
     }
 
@@ -112,6 +122,13 @@ public class LoginController {
     @RequestMapping("/index")
     private ModelAndView index(){
         ModelAndView modelAndView=new ModelAndView();
+        Object object = SecurityUtils.getSubject().getPrincipal();
+        modelAndView.addObject("userName",object);
+        Map<String,Object> map=new HashMap<>();
+        map.put("parentName","main");
+        map.put("status",1);
+        List<Menu> menusList = menuService.getMenusByMaps(map);
+        modelAndView.addObject("menulist",menusList);
         modelAndView.setViewName("/index");
         return modelAndView;
     }

@@ -1,6 +1,8 @@
 package com.cao.score.service;
 
 import com.cao.score.entity.Role;
+import com.cao.score.vo.DataTablesResult;
+import com.cao.score.vo.ObjectParams;
 
 import java.util.List;
 
@@ -18,7 +20,7 @@ public interface RoleService {
      * @param roleId 主键
      * @return 实例对象
      */
-    Role queryById(Integer roleId);
+    Role queryById(Long roleId);
 
     /**
      * 查询多条数据
@@ -51,6 +53,8 @@ public interface RoleService {
      * @param roleId 主键
      * @return 是否成功
      */
-    boolean deleteById(Integer roleId);
+    boolean deleteById(Long roleId);
+
+    public DataTablesResult<Role> dataLists(ObjectParams roleParams);
 
 }

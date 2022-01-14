@@ -12,7 +12,7 @@ import java.util.Date;
 public class Menu implements Serializable {
     private static final long serialVersionUID = -92827764570818200L;
 
-    private Integer menuId;
+    private Long menuId;
     /**
      * 菜单名称
      */
@@ -59,11 +59,11 @@ public class Menu implements Serializable {
     private String menuStyle;
 
 
-    public Integer getMenuId() {
+    public Long getMenuId() {
         return menuId;
     }
 
-    public void setMenuId(Integer menuId) {
+    public void setMenuId(Long menuId) {
         this.menuId = menuId;
     }
 

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="adminHead">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    /*layui和bootstrap冲突样式*/
+    .layui-nav-child{
+        margin-bottom: 0px;
+    }
+    .layui-header .system-main{
+        display: block;
+        margin-left: 200px;
+        width:calc(100% - 200px);
+    }
+    .layui-header .system-main #main{
+        position: absolute;
+        right: 200px;
+    }
+    .layui-header .system-main #logout{
+        position: absolute;
+        right: 120px;
+    }
+</style>
+<body>
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo layui-hide-xs">后台管理</div>
+        <div class="system-main">
+            <a href="/index" id="main">系统主页</a>
+            <a href="/logOut" id="logout">退出登录</a>
+        </div>
+    </div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item " th:each="menuP : ${parentMenu}">
+                    <a class="" href="javascript:;" th:text="${menuP.menuTitle}"> </a>
+                    <dl class="layui-nav-child" >
+                        <dd th:each="menu : ${menuList}"><a href="javascript:;" th:onclick="utils.menuToPage([[${menu.action}]]);" th:text="${menu.menuTitle}" th:if="${menu.parentName} eq ${menuP.menuName}">用户管理</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        底部固定区域
+    </div>
+</div>
+</body>
+<script>
+
+    $(function () {
+        $(".layui-nav-tree li:first").addClass("layui-nav-itemed");
+    })
+</script>
+</html>

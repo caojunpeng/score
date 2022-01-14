@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 菜单表(Menu)表服务实现类
@@ -26,7 +27,7 @@ public class MenuServiceImpl implements MenuService {
      * @return 实例对象
      */
     @Override
-    public Menu queryById(Integer menuId) {
+    public Menu queryById(Long menuId) {
         return this.menuDao.queryById(menuId);
     }
 
@@ -40,6 +41,16 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<Menu> queryAllByLimit(int offset, int limit) {
         return this.menuDao.queryAllByLimit(offset, limit);
+    }
+
+    @Override
+    public List<Menu> getMenusByMaps(Map<String, Object> map) {
+        return this.menuDao.getMenusByMaps(map);
+    }
+
+    @Override
+    public Menu getMenuOneByMaps(Map<String, Object> map) {
+        return this.menuDao.getMenuOneByMaps(map);
     }
 
     /**
@@ -73,7 +84,7 @@ public class MenuServiceImpl implements MenuService {
      * @return 是否成功
      */
     @Override
-    public boolean deleteById(Integer menuId) {
+    public boolean deleteById(Long menuId) {
         return this.menuDao.deleteById(menuId) > 0;
     }
 }

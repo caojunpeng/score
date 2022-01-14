@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 菜单表(Menu)表数据库访问层
@@ -21,7 +22,7 @@ public interface MenuDao {
      * @param menuId 主键
      * @return 实例对象
      */
-    Menu queryById(Integer menuId);
+    Menu queryById(Long menuId);
 
     /**
      * 查询指定行数据
@@ -31,6 +32,19 @@ public interface MenuDao {
      * @return 对象列表
      */
     List<Menu> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
+
+    /**
+     * 通过map查询菜单数组
+     * @param map
+     * @return
+     */
+    List<Menu> getMenusByMaps(Map<String, Object> map);
+    /**
+     * 通过map查询菜单数组
+     * @param map
+     * @return
+     */
+    Menu getMenuOneByMaps(Map<String, Object> map);
 
 
     /**
@@ -79,6 +93,6 @@ public interface MenuDao {
      * @param menuId 主键
      * @return 影响行数
      */
-    int deleteById(Integer menuId);
+    int deleteById(Long menuId);
 
 }

@@ -3,6 +3,8 @@ package com.cao.score.service.impl;
 import com.cao.score.dao.UserDao;
 import com.cao.score.entity.User;
 import com.cao.score.service.UserService;
+import com.cao.score.vo.DataTablesResult;
+import com.cao.score.vo.ObjectParams;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -85,5 +87,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean deleteById(Long userId) {
         return this.userDao.deleteById(userId) > 0;
+    }
+
+    @Override
+    public DataTablesResult<User> dataLists(ObjectParams params) {
+        List<User> users=userDao.getList(params);
+        DataTablesResult<User> dataTablesResult=new DataTablesResult<>();
+        dataTablesResult.setData(users);
+        dataTablesResult.setRecordsFiltered(users.size());
+        dataTablesResult.setRecordsTotal(users.size());
+        return dataTablesResult;
     }
 }

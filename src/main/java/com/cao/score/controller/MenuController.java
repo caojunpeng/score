@@ -5,6 +5,7 @@ import com.cao.score.service.MenuService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 
@@ -24,14 +25,14 @@ public class MenuController {
     private MenuService menuService;
 
     /**
-     * 通过主键查询单条数据
-     *
-     * @param id 主键
-     * @return 单条数据
+     * 跳转到主页面
+     * @return
      */
-    @GetMapping("selectOne")
-    public Menu selectOne(Integer id) {
-        return this.menuService.queryById(id);
+    @RequestMapping("/main")
+    public ModelAndView menuMain(){
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.setViewName("/menu/menuMain");
+        return modelAndView;
     }
 
 }
