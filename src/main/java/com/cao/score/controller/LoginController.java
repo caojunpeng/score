@@ -124,7 +124,7 @@ public class LoginController {
         ModelAndView modelAndView=new ModelAndView();
         Object object = SecurityUtils.getSubject().getPrincipal();
         modelAndView.addObject("userName",object);
-        Map<String,Object> map=new HashMap<>();
+        Map<String,Object> map=new HashMap();
         map.put("parentName","main");
         map.put("status",1);
         List<Menu> menusList = menuService.getMenusByMaps(map);

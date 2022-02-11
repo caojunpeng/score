@@ -1,0 +1,166 @@
+<div class="studentEnter">
+    <h3>基本信息录入</h3>
+    <button type="button" class="btn btn-primary" onclick="checkStudentInfoFile()">导入学生信息</button>
+    <button type="button" class="btn btn-primary" onclick="downloadStudentExcelTemplate()">模板导出</button>
+    <input type="file" hidden="hidden" name="studentInfoFiles" id="studentInfoFiles" onchange="exportStudentsInfo()">
+    <div class="studentInfoDiv">
+        <form id="studentInfoForm">
+            <div class="col-md-4">
+                <label  >学号</label>
+                <input type="text" class="form-control"  name="studentId" placeholder="请输入学号">
+            </div>
+            <div class="col-md-4">
+                <label >姓名</label>
+                <input type="text" class="form-control" name="name" placeholder="请输入姓名">
+            </div>
+            <div class="col-md-4">
+                <label >性别</label>
+                <select class="form-control" name="sex">
+                    <option value="1">男</option>
+                    <option value="2">女</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label >年龄</label>
+                <input type="text" class="form-control" name="age" placeholder="请输入年龄">
+            </div>
+            <div class="col-md-4">
+                <label >出生日期</label>
+                <input type="text" class="form-control" id="birthdate" name="birthdate" placeholder="请输入出生日期">
+            </div>
+            <div class="col-md-4">
+                <label >身份证号</label>
+                <input type="text" class="form-control" name="identityNum" placeholder="请输入身份证号">
+            </div>
+            <div class="col-md-4">
+                <label >家庭住址</label>
+                <input type="text" class="form-control" name="address" placeholder="请输入家庭住址">
+            </div>
+            <div class="col-md-4">
+                <label >年级</label>
+                <select class="form-control" name="gradeNum" id="gradeNumSelect" onchange="loadClassNumList()">
+                    <option value="">未知</option>
+                    <option  th:each="dict:${gradeNumList}" th:value="${dict.dictMsg}"  th:text="${dict.dictMsg}" ></option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label >班级</label>
+                <select class="form-control" name="classNum" id="classNumSelect">
+                    <option value="">未知</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-success" onclick="insertStudentInfo()">提交</button>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+
+
+    $("#birthdate").datetimepicker({
+        language: 'zh-CN',
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,//今天按钮
+        clearBtn:true,//清除按钮
+        minView:'2',
+        pickerPosition: "bottom-left"
+    });
+
+
+    //加载班级
+    function loadClassNumList(){
+        var gradeNum = $("#gradeNumSelect").val();
+        if(gradeNum){
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/students/getClassNumList",
+                data: {gradeNum:gradeNum},
+                success: function (result) {
+                    if(result){
+                        var obj = result;
+                        if(obj && obj.code == 200 && obj.data.length>0){
+                            var classObjList = obj.data;
+                            $("#classNumSelect").html("");
+                            var html="";
+                            for(var i=0;i<classObjList.length;i++){
+                                var classObj=classObjList[i];
+                                html+='<option value="'+classObj.dictName+'">'+classObj.dictName+'</option>';
+                            }
+                            $("#classNumSelect").html(html);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    //选择文件
+    function checkStudentInfoFile() {
+        $("#studentInfoFiles").click();
+    }
+    //插入单个学生信息
+    function insertStudentInfo() {
+        var studentId = $("input [name='studentId']").val();
+        if(!studentId){
+            layer.msg("学号不能为空");
+            return;
+        }else if(utils.isNum(studentId)){
+            layer.msg("学号格式为纯数字");
+            return;
+        }
+        var age = $("input [name='age']").val();
+        if(!age){
+            layer.msg("年龄不能为空");
+            return;
+        }else if(utils.isNum(age)){
+            layer.msg("年龄格式为纯数字");
+            return;
+        }
+        var identityNum = $("input [name='identityNum']").val();
+        if(!identityNum){
+            layer.msg("身份证号不能为空");
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/students/insertStudentInfo",
+            data: $('#studentInfoForm').serialize(),
+            success: function (result) {
+                layer.msg(result);
+            }
+        });
+    }
+    
+    //导入学生信息
+    function exportStudentsInfo() {
+        var studentInfoFiles = $("#studentInfoFiles")[0].files[0].name;
+        if(studentInfoFiles && (studentInfoFiles.toLowerCase().endsWith(".xlsx") || studentInfoFiles.toLowerCase().endsWith(".xls"))){
+            var packageName="";
+            var formData = new FormData();
+            formData.append("files", $("#studentInfoFiles")[0].files[0]);
+            $.ajax({
+                type: 'POST',
+                data: formData,
+                url:"/students/exportStudentsInfo",
+                async: false,
+                processData: false,
+                contentType: false,
+                secureuri: false,
+                success: function(data){
+                    if(data){
+                        var obj = JSON.parse(data);
+                        layer.msg(obj.msg)
+                    }
+                }
+            });
+        }else{
+            layer.msg("文件格式不正确");
+        }
+    }
+    //导出模板
+    function downloadStudentExcelTemplate() {
+        window.location.href="/students/downloadStudentExcelTemplate";
+    }
+</script>

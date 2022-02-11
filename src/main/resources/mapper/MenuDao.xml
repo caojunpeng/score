@@ -105,6 +105,19 @@
         </where>
     </select>
 
+    <!--通过实体作为筛选条件查询-->
+    <select id="getList" resultMap="MenuMap">
+        select
+        menu_id, menu_name, menu_title, parent_name, action, order_by, status, icon, create_time, creator,
+        menu_function, menu_style
+        from score.menu
+        <where>
+            <if test="menuId != null">
+                and menu_id = #{menuId}
+            </if>
+        </where>
+    </select>
+
     <!--新增所有列-->
     <insert id="insert" keyProperty="menuId" useGeneratedKeys="true">
         insert into score.menu(menu_name, menu_title, parent_name, action, order_by, status, icon, create_time, creator, menu_function, menu_style)

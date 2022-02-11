@@ -1,0 +1,147 @@
+<style>
+    .main-div .main-bottom .main-right .studentInfoManagement .disabled:active{
+        color: #fff !important;
+    }
+</style>
+<div class="studentInfoManagement">
+    <h3>基本信息管理</h3>
+    <div class="studentInfoManagement-top">
+        <form id="studentInfoForm">
+            <div class="col-md-2">
+                <label class="control-label">关键字</label>
+                <input type="text" class="form-control" name="keyword" placeholder="学号/姓名/身份证号">
+            </div>
+            <div class="col-md-2">
+                <label class="control-label">性别</label>
+                <input type="text" class="form-control" name="sex" placeholder="学号/姓名/身份证号">
+            </div>
+            <div class="col-md-2">
+                <label class="control-label">年级</label>
+                <select class="form-control" name="gradeNum" id="gradeNumSelect" onchange="loadClassNumList()">
+                    <option value="">全部</option>
+                    <option  th:each="dict:${gradeNumList}" th:value="${dict.dictMsg}"  th:text="${dict.dictMsg}" ></option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="control-label">班级</label>
+                <select class="form-control" name="classNum" id="classNumSelect">
+                    <option value="">全部</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-primary searchBtn" onclick="searchStudentInfo()">查询</button>
+        </form>
+    </div>
+    <table id="dataTables-studentInfoDatas"  class="table table-bordered">
+        <thead>
+            <tr>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>年龄</th>
+                <th>出生日期</th>
+                <th>身份证号</th>
+                <th>家庭住址</th>
+                <th>年级</th>
+                <th>班级</th>
+                <th>操作</th>
+            </tr>
+        <thead>
+    </table>
+</div>
+<script type="text/javascript">
+    $('#dataTables-studentInfoDatas').DataTable({
+		ajax : {
+			dataType : 'json',
+			url : "/students/studentInfoDatas",
+			data : function(aoData){
+                var jsonData = $("#studentInfoForm").serializeArray();
+                jsonData.forEach(function (e, index) {
+                    aoData[e.name] = e.value;
+                });
+                return aoData;
+            }
+		},
+		serverSide : true,
+		searching : false,
+		bLengthChange : false,
+		lengthMenu : [ 10,20,50 ],
+		"columns" : [
+			{
+				"data" : "studentId"
+			},
+			{
+				"data" : "name"
+			},
+			{
+				"data" : "sex"
+			},
+			{
+				"data" : "age"
+			},
+			{
+				"data" : "birthdate"
+			},
+			{
+				"data" : "identityNum"
+			},
+			{
+				"data" : "address"
+			},
+			{
+				"data" : "gradeNum"
+			},
+			{
+				"data" : "classNum"
+			},
+			{
+				"data" : null,"render" : function(nRow, indexType,dataObj) {
+					var html ="";
+                      html+='<button type="button" class="btn btn-success" onclick="editStudentInfo()">编辑</button>'  ;
+                      html+='<button type="button" class="btn btn-success" onclick="delStudentInfo()">删除</button>'  ;
+                    return  html;
+				}
+			}
+		],
+		responsive : true,
+		language : dataTablesLanguage
+	});
+
+    //查询
+    function searchStudentInfo() {
+        $('#dataTables-studentInfoDatas').DataTable().draw();
+    }
+
+    //加载班级
+    function loadClassNumList(){
+        var gradeNum = $("#gradeNumSelect").val();
+        if(gradeNum){
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/students/getClassNumList",
+                data: {gradeNum:gradeNum},
+                success: function (result) {
+                    if(result){
+                        var obj = result;
+                        if(obj && obj.code == 200 && obj.data.length>0){
+                            var classObjList = obj.data;
+                            $("#classNumSelect").html("");
+                            var html="";
+                            html+='<option value="">全部</option>';
+                            for(var i=0;i<classObjList.length;i++){
+                                var classObj=classObjList[i];
+                                html+='<option value="'+classObj.dictName+'">'+classObj.dictName+'</option>';
+                            }
+                            $("#classNumSelect").html(html);
+                        }
+                    }
+                }
+            });
+        }
+    }
+</script>

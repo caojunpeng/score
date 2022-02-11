@@ -25,14 +25,14 @@ public class AdminController {
     @RequestMapping("/adminPage")
     public ModelAndView adminPage(){
         ModelAndView modelAndView=new ModelAndView();
-        Map<String,Object> map=new HashMap<>();
+        Map<String,Object> map=new HashMap();
         map.put("parentName","admin");
         map.put("status",1);
         List<Menu> menusList = menuService.getMenusByMaps(map);
         modelAndView.addObject("menuList",menusList);
         map.put("menuName","admin");
         Menu menu=menuService.getMenuOneByMaps(map);
-        List<Menu> parentMenuList = new ArrayList<>();
+        List<Menu> parentMenuList = new ArrayList();
         parentMenuList.add(menu);
         modelAndView.addObject("parentMenu",parentMenuList);
         modelAndView.setViewName("/admin");

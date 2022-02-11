@@ -11,18 +11,14 @@
         <result property="email" column="email" jdbcType="VARCHAR"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-        <result property="loginLast" column="login_last" jdbcType="TIMESTAMP"/>
-        <result property="loginTotal" column="login_total" jdbcType="INTEGER"/>
         <result property="creator" column="creator" jdbcType="VARCHAR"/>
-        <result property="operateContent" column="OPERATE_CONTENT" jdbcType="VARCHAR"/>
         <result property="status" column="status" jdbcType="INTEGER"/>
     </resultMap>
 
     <!--查询单个-->
     <select id="queryById" resultMap="UserMap">
         select
-          user_id, user_name, user_pwd, salt, phone, email, name, create_time, update_time, login_last, login_total, creator, OPERATE_CONTENT, status
+          user_id, user_name, user_pwd, salt, phone, email, name, create_time,  creator,  status
         from score.user
         where user_id = #{userId}
     </select>
@@ -30,7 +26,7 @@
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="UserMap">
         select
-          user_id, user_name, user_pwd, salt, phone, email, name, create_time, update_time, login_last, login_total, creator, OPERATE_CONTENT, status
+          user_id, user_name, user_pwd, salt, phone, email, name, create_time, creator, status
         from score.user
         limit #{offset}, #{limit}
     </select>
@@ -38,7 +34,7 @@
     <!--查询table数据-->
     <select id="getList" resultMap="UserMap">
         select
-          user_id, user_name, user_pwd, salt, phone, email, name, create_time, update_time, login_last, login_total, creator, OPERATE_CONTENT, status
+          user_id, user_name, user_pwd, salt, phone, email, name, create_time, creator, status
         from score.user
         <where>
             <if test="keyword != null and keyword != ''">
@@ -50,8 +46,8 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="UserMap">
         select
-        user_id, user_name, user_pwd, salt, phone, email, name, create_time, update_time, login_last, login_total,
-        creator, OPERATE_CONTENT, status
+        user_id, user_name, user_pwd, salt, phone, email, name, create_time,
+        creator, status
         from score.user
         <where>
             <if test="userId != null">
@@ -78,20 +74,8 @@
             <if test="createTime != null">
                 and create_time = #{createTime}
             </if>
-            <if test="updateTime != null">
-                and update_time = #{updateTime}
-            </if>
-            <if test="loginLast != null">
-                and login_last = #{loginLast}
-            </if>
-            <if test="loginTotal != null">
-                and login_total = #{loginTotal}
-            </if>
             <if test="creator != null and creator != ''">
                 and creator = #{creator}
-            </if>
-            <if test="operateContent != null and operateContent != ''">
-                and OPERATE_CONTENT = #{operateContent}
             </if>
             <if test="status != null">
                 and status = #{status}
@@ -101,8 +85,8 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryOne" resultMap="UserMap">
         select
-        user_id, user_name, user_pwd, salt, phone, email, name, create_time, update_time, login_last, login_total,
-        creator, OPERATE_CONTENT, status
+        user_id, user_name, user_pwd, salt, phone, email, name, create_time,
+        creator, status
         from score.user
         <where>
             <if test="userId != null">
@@ -129,20 +113,8 @@
             <if test="createTime != null">
                 and create_time = #{createTime}
             </if>
-            <if test="updateTime != null">
-                and update_time = #{updateTime}
-            </if>
-            <if test="loginLast != null">
-                and login_last = #{loginLast}
-            </if>
-            <if test="loginTotal != null">
-                and login_total = #{loginTotal}
-            </if>
             <if test="creator != null and creator != ''">
                 and creator = #{creator}
-            </if>
-            <if test="operateContent != null and operateContent != ''">
-                and OPERATE_CONTENT = #{operateContent}
             </if>
             <if test="status != null">
                 and status = #{status}
@@ -153,35 +125,30 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
-        insert into user(user_name, user_pwd, salt, phone, email, name, create_time, update_time, login_last, login_total, creator, OPERATE_CONTENT, status)
-        values (#{userName}, #{userPwd}, #{salt}, #{phone}, #{email}, #{name}, #{createTime}, #{updateTime}, #{loginLast}, #{loginTotal}, #{creator}, #{operateContent}, #{status})
+        insert into user(user_name, user_pwd, salt, phone, email, name, create_time, creator, status)
+        values (#{userName}, #{userPwd}, #{salt}, #{phone}, #{email}, #{name}, #{createTime}, #{creator}, #{status})
     </insert>
 
     <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
-        insert into score.user(user_name, user_pwd, salt, phone, email, name, create_time, update_time, login_last,
-        login_total, creator, OPERATE_CONTENT, status)
+        insert into score.user(user_name, user_pwd, salt, phone, email, name, create_time, creator, status)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.userName}, #{entity.userPwd}, #{entity.salt}, #{entity.phone}, #{entity.email}, #{entity.name},
-            #{entity.createTime}, #{entity.updateTime}, #{entity.loginLast}, #{entity.loginTotal}, #{entity.creator},
-            #{entity.operateContent}, #{entity.status})
+            #{entity.createTime}, #{entity.creator}, #{entity.status})
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="userId" useGeneratedKeys="true">
-        insert into score.user(user_name, user_pwd, salt, phone, email, name, create_time, update_time, login_last,
-        login_total, creator, OPERATE_CONTENT, status)
+        insert into score.user(user_name, user_pwd, salt, phone, email, name, create_time, creator, status)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.userName}, #{entity.userPwd}, #{entity.salt}, #{entity.phone}, #{entity.email}, #{entity.name},
-            #{entity.createTime}, #{entity.updateTime}, #{entity.loginLast}, #{entity.loginTotal}, #{entity.creator},
-            #{entity.operateContent}, #{entity.status})
+            #{entity.createTime}, #{entity.creator}, #{entity.status})
         </foreach>
         on duplicate key update
         user_name = values(user_name) , user_pwd = values(user_pwd) , salt = values(salt) , phone = values(phone) ,
-        email = values(email) , name = values(name) , create_time = values(create_time) , update_time =
-        values(update_time) , login_last = values(login_last) , login_total = values(login_total) , creator =
-        values(creator) , OPERATE_CONTENT = values(OPERATE_CONTENT) , status = values(status)
+        email = values(email) , name = values(name) , create_time = values(create_time) , creator =
+        values(creator) , status = values(status)
     </insert>
 
     <!--通过主键修改数据-->
@@ -209,20 +176,8 @@
             <if test="createTime != null">
                 create_time = #{createTime},
             </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime},
-            </if>
-            <if test="loginLast != null">
-                login_last = #{loginLast},
-            </if>
-            <if test="loginTotal != null">
-                login_total = #{loginTotal},
-            </if>
             <if test="creator != null and creator != ''">
                 creator = #{creator},
-            </if>
-            <if test="operateContent != null and operateContent != ''">
-                OPERATE_CONTENT = #{operateContent},
             </if>
             <if test="status != null">
                 status = #{status},

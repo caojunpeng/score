@@ -76,6 +76,8 @@
     display: block;
     width: 100%;
     height: 60px;
+    border: 1px solid rgb(55 125 196);
+    color: #fff;
 }
 .main-div .main-top .top-left{
     display: block;
@@ -141,6 +143,7 @@
 }
 .main-div .main-bottom .main-left .left-menu .iconSpan{
     font-size: 50px;
+    color: #fff;
 }
 .main-div .main-bottom .fileUploadDiv{
     display: block;
@@ -157,6 +160,21 @@
     height: 100%;
     border: 1px solid #4dadff;
     float: left;
+    background-color: rgba(12,36,53,0.75);
+    padding: 15px;
+}
+/* 学生信息 */
+.main-div .main-bottom .main-right .studentEnter H3{
+    color: #fff;
+    text-align: center;
+}
+
+.main-div .main-bottom .main-right .studentEnter .studentInfoDiv #studentInfoForm label{
+    color: #fff;
+}
+
+.main-div .main-bottom .main-right .studentEnter #studentInfoFiles{
+    display: none;
 }
 
 .main-div .main-bottom .main-right .main-right-menus{
@@ -198,6 +216,25 @@
     color: #000000de;
 }
 
+/*学生信息管理*/
+.main-div .main-bottom .main-right .studentInfoManagement{
+    color: #fff;
+}
+.main-div .main-bottom .main-right .studentInfoManagement H3{
+    text-align: center;
+}
+.main-div .main-bottom .main-right .studentInfoManagement .studentInfoManagement-top{
+    display: flow-root;
+}
+.main-div .main-bottom .main-right .studentInfoManagement .studentInfoManagement-top button{
+    margin-top: 25px;
+}
+.main-div .main-bottom .main-right .studentInfoManagement table{
+    margin-top: 20px;
+}
+.main-div .main-bottom .main-right .studentInfoManagement table.dataTable tbody tr{
+    background-color: rgba(0,0,0,0.1);
+}
 
 
 

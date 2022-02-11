@@ -30,18 +30,12 @@ private static Logger logger = LoggerFactory.getLogger(ResponseUtil.class);
 	 * 失败json
 	 * @param code
 	 * @param message
-	 * @param data
 	 * @return
 	 */
-	public static String printFailJson(int code,String message,Object data){
+	public static String printFailJson(int code,String message){
 		Map<String, Object> printMap = new HashMap<>();
 		printMap.put("code", code);
 		printMap.put("message", message);
-		if (data==null || StringUtils.isBlank(data+"")) {
-			printMap.put("data", new HashMap<>());
-		}else {
-			printMap.put("data", data);
-		}
 		ObjectMapper mapper = new ObjectMapper();
 		String returnValue = "";
 		try {

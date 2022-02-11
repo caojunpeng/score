@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cao.score.dao.ScoresDao">
+
+    <resultMap type="com.cao.score.entity.Scores" id="ScoresMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="studentId" column="student_id" jdbcType="VARCHAR"/>
+        <result property="score" column="score" jdbcType="NUMERIC"/>
+        <result property="subject" column="subject" jdbcType="INTEGER"/>
+        <result property="qualifiedState" column="qualified_state" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="ScoresMap">
+        select
+          id, student_id, score, subject, qualified_state
+        from score.scores
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="ScoresMap">
+        select
+          id, student_id, score, subject, qualified_state
+        from score.scores
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="ScoresMap">
+        select
+        id, student_id, score, subject, qualified_state
+        from score.scores
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="studentId != null and studentId != ''">
+                and student_id = #{studentId}
+            </if>
+            <if test="score != null">
+                and score = #{score}
+            </if>
+            <if test="subject != null">
+                and subject = #{subject}
+            </if>
+            <if test="qualifiedState != null">
+                and qualified_state = #{qualifiedState}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into score.scores(student_id, score, subject, qualified_state)
+        values (#{studentId}, #{score}, #{subject}, #{qualifiedState})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into score.scores(student_id, score, subject, qualified_state)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.studentId}, #{entity.score}, #{entity.subject}, #{entity.qualifiedState})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into score.scores(student_id, score, subject, qualified_state)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.studentId}, #{entity.score}, #{entity.subject}, #{entity.qualifiedState})
+        </foreach>
+        on duplicate key update
+        student_id = values(student_id) , score = values(score) , subject = values(subject) , qualified_state =
+        values(qualified_state)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update score.scores
+        <set>
+            <if test="studentId != null and studentId != ''">
+                student_id = #{studentId},
+            </if>
+            <if test="score != null">
+                score = #{score},
+            </if>
+            <if test="subject != null">
+                subject = #{subject},
+            </if>
+            <if test="qualifiedState != null">
+                qualified_state = #{qualifiedState},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from score.scores where id = #{id}
+    </delete>
+
+</mapper>

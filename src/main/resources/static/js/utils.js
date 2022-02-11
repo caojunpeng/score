@@ -39,6 +39,24 @@
         });
     }
 
+    /**
+     * 是否为数字
+     */
+    utils.isNum = function(para){
+        if(/^\d+$/.test(para)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    //将null转换成空
+    utils.changeBlank = function changeBlank(content){
+        if(content==null){
+            return "";
+        }
+        return content;
+    }
 
 }(window.utils = (window.utils || {})));
 

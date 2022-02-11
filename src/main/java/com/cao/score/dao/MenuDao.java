@@ -1,6 +1,8 @@
 package com.cao.score.dao;
 
 import com.cao.score.entity.Menu;
+import com.cao.score.entity.Role;
+import com.cao.score.vo.ObjectParams;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -94,5 +96,13 @@ public interface MenuDao {
      * @return 影响行数
      */
     int deleteById(Long menuId);
+
+    /**
+     * 通过实体作为筛选条件查询
+     *
+     * @param params 实例对象
+     * @return 对象列表
+     */
+    List<Menu> getList(ObjectParams params);
 
 }

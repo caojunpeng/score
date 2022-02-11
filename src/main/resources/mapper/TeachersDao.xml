@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cao.score.dao.TeachersDao">
+
+    <resultMap type="com.cao.score.entity.Teachers" id="TeachersMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="sex" column="sex" jdbcType="INTEGER"/>
+        <result property="age" column="age" jdbcType="INTEGER"/>
+        <result property="identityNum" column="identity_num" jdbcType="INTEGER"/>
+        <result property="subject" column="subject" jdbcType="INTEGER"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="gradeNum" column="grade_num" jdbcType="INTEGER"/>
+        <result property="classNum" column="class_num" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TeachersMap">
+        select
+          id, name, sex, age, identity_num, subject, phone, grade_num, class_num
+        from score.teachers
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="TeachersMap">
+        select
+          id, name, sex, age, identity_num, subject, phone, grade_num, class_num
+        from score.teachers
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="TeachersMap">
+        select
+        id, name, sex, age, identity_num, subject, phone, grade_num, class_num
+        from score.teachers
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="sex != null">
+                and sex = #{sex}
+            </if>
+            <if test="age != null">
+                and age = #{age}
+            </if>
+            <if test="identityNum != null">
+                and identity_num = #{identityNum}
+            </if>
+            <if test="subject != null">
+                and subject = #{subject}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+            <if test="gradeNum != null">
+                and grade_num = #{gradeNum}
+            </if>
+            <if test="classNum != null">
+                and class_num = #{classNum}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into score.teachers(name, sex, age, identity_num, subject, phone, grade_num, class_num)
+        values (#{name}, #{sex}, #{age}, #{identityNum}, #{subject}, #{phone}, #{gradeNum}, #{classNum})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into score.teachers(name, sex, age, identity_num, subject, phone, grade_num, class_num)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.sex}, #{entity.age}, #{entity.identityNum}, #{entity.subject}, #{entity.phone},
+            #{entity.gradeNum}, #{entity.classNum})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into score.teachers(name, sex, age, identity_num, subject, phone, grade_num, class_num)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.sex}, #{entity.age}, #{entity.identityNum}, #{entity.subject}, #{entity.phone},
+            #{entity.gradeNum}, #{entity.classNum})
+        </foreach>
+        on duplicate key update
+        name = values(name) , sex = values(sex) , age = values(age) , identity_num = values(identity_num) , subject =
+        values(subject) , phone = values(phone) , grade_num = values(grade_num) , class_num = values(class_num)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update score.teachers
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="age != null">
+                age = #{age},
+            </if>
+            <if test="identityNum != null">
+                identity_num = #{identityNum},
+            </if>
+            <if test="subject != null">
+                subject = #{subject},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="gradeNum != null">
+                grade_num = #{gradeNum},
+            </if>
+            <if test="classNum != null">
+                class_num = #{classNum},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from score.teachers where id = #{id}
+    </delete>
+
+</mapper>

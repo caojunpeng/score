@@ -21,22 +21,25 @@
                 <li th:each="menu : ${menulist}" th:onclick="menuClick([[${menu.action}]]);">
                     <div class="left-menu">
                         <div class="blackgroundDiv">
-                            <sapn class="glyphicon glyphicon-folder-open iconSpan" th:title="${menu.menuTitle}" aria-hidden="true"></sapn><br/>
+                            <sapn th:classappend="${(menu.icon !=null ? menu.icon : '') }" class="iconSpan" th:title="${menu.menuTitle}" aria-hidden="true"></sapn><br/>
                             <span th:text="${menu.menuTitle}"></span>
                         </div>
                     </div>
                 </li>
             </ul>
         </div>
-        <div class="
-">
+        <div class="main-right">
 
         </div>
     </div>
 </div>
 
 </body>
+
+<script src="js/plugins/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script src="js/plugins/datetimepicker/js/bootstrap-datetimepicker.zh-CN.js"></script>
 <script type="text/javascript">
+
     $(function () {
         var addfiles=$("#addfiles").val();
         localStorage.setItem("login-userName",addfiles);
@@ -48,7 +51,7 @@
             url:url,
             success: function(data) {
                 if(data){
-                    //$(".main-right").html(data);
+                    $(".main-right").html(data);
                 }
             }
         });

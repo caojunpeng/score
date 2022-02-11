@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cao.score.dao.StudentsDao">
+
+    <resultMap type="com.cao.score.entity.Students" id="StudentsMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="studentId" column="student_id" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="sex" column="sex" jdbcType="INTEGER"/>
+        <result property="age" column="age" jdbcType="INTEGER"/>
+        <result property="birthdate" column="birthdate" jdbcType="TIMESTAMP"/>
+        <result property="identityNum" column="identity_num" jdbcType="INTEGER"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="gradeNum" column="grade_num" jdbcType="INTEGER"/>
+        <result property="classNum" column="class_num" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="StudentsMap">
+        select
+          id, student_id, name, sex, age, birthdate, identity_num, address, grade_num, class_num
+        from score.students
+        where id = #{id}
+    </select>
+
+    <!--查询单个-->
+    <select id="queryByMap" parameterType="map" resultMap="StudentsMap">
+        select
+          id, student_id, name, sex, age, birthdate, identity_num, address, grade_num, class_num
+        from score.students
+        <where>
+            <if test="identityNum != null">
+                and identity_num = #{identityNum}
+            </if>
+        </where>
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="StudentsMap">
+        select
+          id, student_id, name, sex, age, birthdate, identity_num, address, grade_num, class_num
+        from score.students
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="getStudentInfoDatas" resultMap="StudentsMap">
+        select
+          id, student_id, name, sex, age, birthdate, identity_num, address, grade_num, class_num
+        from score.students
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and (identity_num LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+                or student_id LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+                or name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+                or address LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+                )
+            </if>
+            <if test="sex != null">
+                and sex = #{sex}
+            </if>
+            <if test="gradeNum != null">
+                and grade_num = #{gradeNum}
+            </if>
+            <if test="classNum != null">
+                and class_num = #{classNum}
+            </if>
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="StudentsMap">
+        select
+        id, student_id, name, sex, age, birthdate, identity_num, address, grade_num, class_num
+        from score.students
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="studentId != null and studentId != ''">
+                and student_id = #{studentId}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="sex != null">
+                and sex = #{sex}
+            </if>
+            <if test="age != null">
+                and age = #{age}
+            </if>
+            <if test="birthdate != null">
+                and birthdate = #{birthdate}
+            </if>
+            <if test="identityNum != null">
+                and identity_num = #{identityNum}
+            </if>
+            <if test="address != null and address != ''">
+                and address = #{address}
+            </if>
+            <if test="gradeNum != null">
+                and grade_num = #{gradeNum}
+            </if>
+            <if test="classNum != null">
+                and class_num = #{classNum}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into score.students(student_id, name, sex, age, birthdate, identity_num, address, grade_num, class_num)
+        values (#{studentId}, #{name}, #{sex}, #{age}, #{birthdate}, #{identityNum}, #{address}, #{gradeNum}, #{classNum})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into score.students(student_id, name, sex, age, birthdate, identity_num, address, grade_num, class_num)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.studentId}, #{entity.name}, #{entity.sex}, #{entity.age}, #{entity.birthdate},
+            #{entity.identityNum}, #{entity.address}, #{entity.gradeNum}, #{entity.classNum})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into score.students(student_id, name, sex, age, birthdate, identity_num, address, grade_num, class_num)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.studentId}, #{entity.name}, #{entity.sex}, #{entity.age}, #{entity.birthdate},
+            #{entity.identityNum}, #{entity.address}, #{entity.gradeNum}, #{entity.classNum})
+        </foreach>
+        on duplicate key update
+        student_id = values(student_id) , name = values(name) , sex = values(sex) , age = values(age) , birthdate =
+        values(birthdate) , identity_num = values(identity_num) , address = values(address) , grade_num =
+        values(grade_num) , class_num = values(class_num)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update score.students
+        <set>
+            <if test="studentId != null and studentId != ''">
+                student_id = #{studentId},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="age != null">
+                age = #{age},
+            </if>
+            <if test="birthdate != null">
+                birthdate = #{birthdate},
+            </if>
+            <if test="identityNum != null">
+                identity_num = #{identityNum},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="gradeNum != null">
+                grade_num = #{gradeNum},
+            </if>
+            <if test="classNum != null">
+                class_num = #{classNum},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from score.students where id = #{id}
+    </delete>
+
+</mapper>

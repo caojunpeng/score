@@ -6,6 +6,8 @@ import com.cao.score.shiro.SaltUtil;
 import com.cao.score.utiles.ResponseUtil;
 import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
+import org.apache.catalina.security.SecurityUtil;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,8 +67,8 @@ public class UserController {
     @RequestMapping("/editUser")
     public ModelAndView editUser(ObjectParams params) {
         ModelAndView modelAndView = new ModelAndView();
-        if(params!=null && params.getId()!=null){
-            User userByUserId = userService.queryById(params.getId());
+        if(params!=null && params.getUserId()!=null){
+            User userByUserId = userService.queryById(params.getUserId());
             modelAndView.addObject("user",userByUserId);
         }
         modelAndView.setViewName("/user/editUser");
@@ -82,10 +84,10 @@ public class UserController {
     @RequestMapping("/delUser")
     public String delUser(ObjectParams params) {
         try{
-            userService.deleteById(params.getId());
+            userService.deleteById(params.getUserId());
         }catch (Exception e){
             logger.error("删除用户异常,异常信息；"+e.getMessage(),e);
-            ResponseUtil.printFailJson(ResponseUtil.SERVERUPLOAD,"删除用户异常",e.getMessage());
+            ResponseUtil.printFailJson(ResponseUtil.SERVERUPLOAD,"删除用户异常");
         }
         return ResponseUtil.printJson("删除用户成功",null);
     }
@@ -101,7 +103,6 @@ public class UserController {
         try{
             Long userId = user.getUserId();
             if(userId!=null){
-                user.setUpdateTime(new Date());
                 User user1 = userService.update(user);
             }else{
                 //1.获取随机盐
@@ -112,11 +113,15 @@ public class UserController {
                 Md5Hash md5 = new Md5Hash(user.getUserPwd(),salt,1024);
                 user.setUserPwd(md5.toHex());
                 user.setCreateTime(new Date());
+                User u=(User)SecurityUtils.getSubject().getPrincipal();
+                if(u!=null){
+                    user.setCreator(u.getUserName());
+                }
                 userService.insert(user);
             }
         }catch (Exception e){
             logger.error("新增对象异常,异常信息："+e.getMessage(),e);
-            ResponseUtil.printFailJson(ResponseUtil.SERVERUPLOAD,"新增对象异常",e.getMessage());
+            ResponseUtil.printFailJson(ResponseUtil.SERVERUPLOAD,"新增对象异常");
         }
         return ResponseUtil.printJson("新增对象成功",null);
     }

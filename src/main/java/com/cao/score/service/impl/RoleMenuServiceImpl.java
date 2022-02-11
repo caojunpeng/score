@@ -1,8 +1,11 @@
 package com.cao.score.service.impl;
 
 import com.cao.score.dao.RoleMenuDao;
+import com.cao.score.entity.Role;
 import com.cao.score.entity.RoleMenu;
 import com.cao.score.service.RoleMenuService;
+import com.cao.score.vo.DataTablesResult;
+import com.cao.score.vo.ObjectParams;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -76,4 +79,6 @@ public class RoleMenuServiceImpl implements RoleMenuService {
     public boolean deleteById(Long id) {
         return this.roleMenuDao.deleteById(id) > 0;
     }
+
+
 }

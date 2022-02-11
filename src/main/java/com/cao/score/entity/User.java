@@ -42,25 +42,9 @@ public class User implements Serializable {
      */
     private Date createTime;
     /**
-     * 更新时间
-     */
-    private Date updateTime;
-    /**
-     * 最后一次登录时间
-     */
-    private Date loginLast;
-    /**
-     * 登录次数
-     */
-    private Integer loginTotal;
-    /**
      * 创建者
      */
     private String creator;
-    /**
-     * 操作内容详情
-     */
-    private String operateContent;
     /**
      * 状态:0 禁用;1 使用
      */
@@ -131,44 +115,12 @@ public class User implements Serializable {
         this.createTime = createTime;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Date getLoginLast() {
-        return loginLast;
-    }
-
-    public void setLoginLast(Date loginLast) {
-        this.loginLast = loginLast;
-    }
-
-    public Integer getLoginTotal() {
-        return loginTotal;
-    }
-
-    public void setLoginTotal(Integer loginTotal) {
-        this.loginTotal = loginTotal;
-    }
-
     public String getCreator() {
         return creator;
     }
 
     public void setCreator(String creator) {
         this.creator = creator;
-    }
-
-    public String getOperateContent() {
-        return operateContent;
-    }
-
-    public void setOperateContent(String operateContent) {
-        this.operateContent = operateContent;
     }
 
     public Integer getStatus() {

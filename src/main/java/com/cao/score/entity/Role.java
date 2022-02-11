@@ -18,10 +18,6 @@ public class Role implements Serializable {
      */
     private String roleName;
     /**
-     * 角色标签
-     */
-    private String roleTitle;
-    /**
      * 创建时间
      */
     private Date createTime;
@@ -49,14 +45,6 @@ public class Role implements Serializable {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
-    }
-
-    public String getRoleTitle() {
-        return roleTitle;
-    }
-
-    public void setRoleTitle(String roleTitle) {
-        this.roleTitle = roleTitle;
     }
 
     public Date getCreateTime() {

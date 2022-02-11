@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cao.score.dao.DictDao">
+
+    <resultMap type="com.cao.score.entity.Dict" id="DictMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="dictId" column="dict_id" jdbcType="INTEGER"/>
+        <result property="typeId" column="type_id" jdbcType="INTEGER"/>
+        <result property="dictName" column="dict_name" jdbcType="VARCHAR"/>
+        <result property="dictMsg" column="dict_msg" jdbcType="VARCHAR"/>
+        <result property="dictStatus" column="dict_status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DictMap">
+        select
+          id, dict_id, type_id, dict_name, dict_msg, dict_status
+        from score.dict
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="DictMap">
+        select
+          id, dict_id, type_id, dict_name, dict_msg, dict_status
+        from score.dict
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="DictMap">
+        select
+        id, dict_id, type_id, dict_name, dict_msg, dict_status
+        from score.dict
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="dictId != null">
+                and dict_id = #{dictId}
+            </if>
+            <if test="typeId != null">
+                and type_id = #{typeId}
+            </if>
+            <if test="dictName != null and dictName != ''">
+                and dict_name = #{dictName}
+            </if>
+            <if test="dictMsg != null and dictMsg != ''">
+                and dict_msg = #{dictMsg}
+            </if>
+            <if test="dictStatus != null">
+                and dict_status = #{dictStatus}
+            </if>
+            <if test="groupByStr != null">
+                group by ${groupByStr}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into score.dict(dict_id, type_id, dict_name, dict_msg, dict_status)
+        values (#{dictId}, #{typeId}, #{dictName}, #{dictMsg}, #{dictStatus})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into score.dict(dict_id, type_id, dict_name, dict_msg, dict_status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.dictId}, #{entity.typeId}, #{entity.dictName}, #{entity.dictMsg}, #{entity.dictStatus})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into score.dict(dict_id, type_id, dict_name, dict_msg, dict_status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.dictId}, #{entity.typeId}, #{entity.dictName}, #{entity.dictMsg}, #{entity.dictStatus})
+        </foreach>
+        on duplicate key update
+        dict_id = values(dict_id) , type_id = values(type_id) , dict_name = values(dict_name) , dict_msg =
+        values(dict_msg) , dict_status = values(dict_status)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update score.dict
+        <set>
+            <if test="dictId != null">
+                dict_id = #{dictId},
+            </if>
+            <if test="typeId != null">
+                type_id = #{typeId},
+            </if>
+            <if test="dictName != null and dictName != ''">
+                dict_name = #{dictName},
+            </if>
+            <if test="dictMsg != null and dictMsg != ''">
+                dict_msg = #{dictMsg},
+            </if>
+            <if test="dictStatus != null">
+                dict_status = #{dictStatus},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from score.dict where id = #{id}
+    </delete>
+
+</mapper>

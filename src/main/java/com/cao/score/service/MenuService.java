@@ -1,6 +1,8 @@
 package com.cao.score.service;
 
 import com.cao.score.entity.Menu;
+import com.cao.score.vo.DataTablesResult;
+import com.cao.score.vo.ObjectParams;
 
 import java.util.List;
 import java.util.Map;
@@ -67,5 +69,12 @@ public interface MenuService {
      * @return 是否成功
      */
     boolean deleteById(Long menuId);
+
+    /**
+     * 菜单table数据加载
+     * @param params
+     * @return
+     */
+    public DataTablesResult<Menu> dataLists(ObjectParams params);
 
 }

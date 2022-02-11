@@ -2,7 +2,10 @@ package com.cao.score.service.impl;
 
 import com.cao.score.dao.MenuDao;
 import com.cao.score.entity.Menu;
+import com.cao.score.entity.RoleMenu;
 import com.cao.score.service.MenuService;
+import com.cao.score.vo.DataTablesResult;
+import com.cao.score.vo.ObjectParams;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -86,5 +89,15 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public boolean deleteById(Long menuId) {
         return this.menuDao.deleteById(menuId) > 0;
+    }
+
+    @Override
+    public DataTablesResult<Menu> dataLists(ObjectParams params) {
+        List<Menu> menu=menuDao.getList(params);
+        DataTablesResult<Menu> dataTablesResult=new DataTablesResult<>();
+        dataTablesResult.setData(menu);
+        dataTablesResult.setRecordsFiltered(menu.size());
+        dataTablesResult.setRecordsTotal(menu.size());
+        return dataTablesResult;
     }
 }

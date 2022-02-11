@@ -1,0 +1,67 @@
+<div class="menuEditRow" >
+    <form id="menuEditForm">
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">菜单名</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="menuName" th:value="${menu?.menuName}" placeholder="请输入菜单名">
+                <input type="hidden" class="form-control" name="menuId" th:value="${menu?.menuId}">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">菜单标签</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="menuTitle" th:value="${menu?.menuTitle}" placeholder="请输入菜单标签">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">父级</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="parentName" th:value="${menu?.parentName}" placeholder="请输入父级">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">请求地址</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="action" th:value="${menu?.action}" placeholder="请求地址">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">顺序</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="orderBy" th:value="${menu?.orderBy}" placeholder="顺序">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">状态</label>
+            <div class="col-sm-12">
+                <select class="form-control" name="status" >
+                    <option value="1" th:checked="${menu?.status} eq '1'">可用</option>
+                    <option value="0" th:checked="${menu?.status} eq '0'">禁用</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <button type="button" class="btn btn-primary savemenuBtn" onclick="savemenu()">确定</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    function savemenu() {
+        $.ajax({
+            type: "POST",
+            url: "/menu/saveMenu",
+            data: $('#menuEditForm').serialize(),
+            success: function (obj) {
+                if(obj){
+                    $('#dataTables-menuList').DataTable().draw();
+                    layer.closeAll();
+                    layer.msg("更新成功");
+                    return;
+                }
+                layer.msg("更新失败");
+            }
+        });
+    }
+    /*]]>*/
+</script>

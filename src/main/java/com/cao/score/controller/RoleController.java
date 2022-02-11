@@ -1,13 +1,10 @@
 package com.cao.score.controller;
 
 import com.cao.score.entity.Role;
-import com.cao.score.entity.User;
 import com.cao.score.service.RoleService;
-import com.cao.score.shiro.SaltUtil;
 import com.cao.score.utiles.ResponseUtil;
 import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
-import org.apache.shiro.crypto.hash.Md5Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 /**
  * 角色表(Role)表控制层
@@ -35,6 +31,7 @@ public class RoleController {
      */
     @Resource
     private RoleService roleService;
+
 
     /**
      * 跳转到主页面
@@ -66,8 +63,8 @@ public class RoleController {
     @RequestMapping("/editRole")
     public ModelAndView editRole(ObjectParams params) {
         ModelAndView modelAndView = new ModelAndView();
-        if(params!=null && params.getId()!=null){
-            Role role = roleService.queryById(params.getId());
+        if(params!=null && params.getRoleId()!=null){
+            Role role = roleService.queryById(params.getRoleId());
             modelAndView.addObject("role",role);
         }
         modelAndView.setViewName("/role/editRole");
@@ -83,10 +80,10 @@ public class RoleController {
     @RequestMapping("/delRole")
     public String delRole(ObjectParams params) {
         try{
-            roleService.deleteById(params.getId());
+            roleService.deleteById(params.getRoleId());
         }catch (Exception e){
             logger.error("删除角色异常,异常信息；"+e.getMessage(),e);
-            ResponseUtil.printFailJson(ResponseUtil.SERVERUPLOAD,"删除角色异常",e.getMessage());
+            ResponseUtil.printFailJson(ResponseUtil.SERVERUPLOAD,"删除角色异常");
         }
         return ResponseUtil.printJson("删除角色成功",null);
     }
@@ -100,6 +97,9 @@ public class RoleController {
     @RequestMapping("/saveRole")
     public String saveRole(Role role) {
         try{
+            if(role==null){
+                ResponseUtil.printFailJson(ResponseUtil.SERVERUPLOAD,"参数异常");
+            }
             Long roleId = role.getRoleId();
             if(roleId!=null){
                 roleService.update(role);
@@ -108,7 +108,7 @@ public class RoleController {
             }
         }catch (Exception e){
             logger.error("保存角色异常,异常信息："+e.getMessage(),e);
-            ResponseUtil.printFailJson(ResponseUtil.SERVERUPLOAD,"保存角色异常",e.getMessage());
+            ResponseUtil.printFailJson(ResponseUtil.SERVERUPLOAD,"保存角色异常");
         }
         return ResponseUtil.printJson("保存角色成功",null);
     }
