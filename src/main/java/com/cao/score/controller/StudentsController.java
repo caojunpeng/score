@@ -1,9 +1,11 @@
 package com.cao.score.controller;
 
 import com.cao.score.entity.Dict;
+import com.cao.score.entity.GradeClass;
 import com.cao.score.entity.Students;
 import com.cao.score.service.CommonFilesService;
 import com.cao.score.service.DictService;
+import com.cao.score.service.GradeClassService;
 import com.cao.score.service.StudentsService;
 import com.cao.score.utiles.*;
 import com.cao.score.vo.DataTablesResult;
@@ -47,6 +49,9 @@ public class StudentsController {
     private StudentsService studentsService;
 
     @Resource
+    private GradeClassService gradeClassService;
+
+    @Resource
     private CommonFilesService commonFilesService;
 
     @Resource
@@ -72,9 +77,8 @@ public class StudentsController {
         ModelAndView modelAndView=new ModelAndView();
         //获取所有的年级
         Map<String,Object> map = new HashMap<>();
-        map.put("typeId",2);
-        map.put("groupByStr","dict_msg");
-        List<Dict> gradeNumList = dictService.queryAllDict(map);
+        map.put("groupStr","grade_num");
+        List<GradeClass> gradeNumList = gradeClassService.queryAllByMap(map);
         modelAndView.addObject("gradeNumList",gradeNumList);
         modelAndView.setViewName("/student/studentEnter");
         return modelAndView;
@@ -89,9 +93,8 @@ public class StudentsController {
         ModelAndView modelAndView=new ModelAndView();
         //获取所有的年级
         Map<String,Object> map = new HashMap<>();
-        map.put("typeId",2);
-        map.put("groupByStr","dict_msg");
-        List<Dict> gradeNumList = dictService.queryAllDict(map);
+        map.put("groupStr","grade_num");
+        List<GradeClass> gradeNumList = gradeClassService.queryAllByMap(map);
         modelAndView.addObject("gradeNumList",gradeNumList);
         modelAndView.setViewName("/student/studentInfoManagement");
         return modelAndView;
@@ -117,10 +120,9 @@ public class StudentsController {
         try{
             //获取所有的年级
             Map<String,Object> map = new HashMap<>();
-            map.put("typeId",2);
-            map.put("dictMsg",objectParams.getGradeNum()+"");
-            map.put("groupByStr","dict_id");
-            List<Dict> classNumList = dictService.queryAllDict(map);
+            map.put("gradeNum",objectParams.getGradeNum()+"");
+            map.put("groupStr","class_num");
+            List<GradeClass> classNumList = gradeClassService.queryAllByMap(map);
             result=ResponseUtil.printJson("查询成功",classNumList);
         }catch (Exception e){
             logger.error("获取所属年级的所有班级异常，异常信息："+e.getMessage(),e);
@@ -157,7 +159,7 @@ public class StudentsController {
                     String birthdatae= map.get("fifthColumn")+"";
                     Date date=ScoreDateUtils.parseStrToDate(birthdatae,ScoreDateUtils.format_day);
                     students.setBirthdate(date);
-                    students.setIdentityNum(Integer.valueOf(map.get("sixthColumn")+""));
+                    students.setIdentityNum(map.get("sixthColumn")+"");
                     students.setAddress(map.get("seventhColumn")+"");
                     students.setGradeNum(Integer.valueOf(map.get("eighthColumn")+""));
                     students.setClassNum(Integer.valueOf(map.get("ninthColumn")+""));
@@ -174,18 +176,68 @@ public class StudentsController {
         return result;
     }
 
+    /**
+     * 单个学生信息录入
+     * @param students
+     * @return
+     */
     @ResponseBody
-    @RequestMapping("/insertStudentInfo")
-    public String insertStudentInfo(Students students){
+    @RequestMapping("/saveStudentInfo")
+    public String saveStudentInfo(Students students){
         String result = "";
         try {
-            studentsService.insert(students);
-            result=ResponseUtil.printJson("导入成功",students);
+            if(students.getId()!=null) {
+                studentsService.update(students);
+                result=ResponseUtil.printJson("修改成功",students);
+            }else{
+                studentsService.insert(students);
+                result=ResponseUtil.printJson("导入成功",students);
+            }
         }catch (Exception e){
             logger.error("学生信息录入异常，异常信息"+e.getMessage(),e);
             result=ResponseUtil.printJson("学生信息录入异常",null);
         }
         return result;
+    }
+
+    /**
+     * 单个学生信息录入
+     * @param id 主键id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/delStudentInfo")
+    public String delStudentInfo(Long id){
+        String result = "";
+        try {
+            studentsService.deleteById(id);
+            result=ResponseUtil.printJson("删除成功",null);
+        }catch (Exception e){
+            logger.error("学生信息录入异常，异常信息"+e.getMessage(),e);
+            result=ResponseUtil.printJson("学生信息录入异常",null);
+        }
+        return result;
+    }
+
+
+    /**
+     * 跳转到修改或新增页面
+     * @param studentId
+     * @return
+     */
+    @RequestMapping("/saveStudentInfoPage")
+    public ModelAndView saveStudentInfoPage(Long studentId){
+        ModelAndView modelAndView=new ModelAndView();
+        if (studentId != null){
+            Students students = studentsService.queryById(studentId);
+            modelAndView.addObject("student",students);
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("groupStr","grade_num");
+        List<GradeClass> gradeNumList = gradeClassService.queryAllByMap(map);
+        modelAndView.addObject("gradeNumList",gradeNumList);
+        modelAndView.setViewName("/student/saveStudentInfo");
+        return modelAndView;
     }
 
     /**

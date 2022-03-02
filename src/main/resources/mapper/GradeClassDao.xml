@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cao.score.dao.GradeClassDao">
+
+    <resultMap type="com.cao.score.entity.GradeClass" id="GradeClassMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="classNum" column="class_num" jdbcType="INTEGER"/>
+        <result property="gradeNum" column="grade_num" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="GradeClassMap">
+        select
+          id, class_num, grade_num
+        from score.grade_class
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="GradeClassMap">
+        select
+          id, class_num, grade_num
+        from score.grade_class
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="GradeClassMap">
+        select
+        id, class_num, grade_num
+        from score.grade_class
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="classNum != null">
+                and class_num = #{classNum}
+            </if>
+            <if test="gradeNum != null">
+                and grade_num = #{gradeNum}
+            </if>
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAllByMap" resultMap="GradeClassMap">
+        select
+        id, class_num, grade_num
+        from score.grade_class
+        <where>
+            <if test="classNum != null and classNum != ''">
+                and class_num = #{classNum}
+            </if>
+            <if test="gradeNum != null and gradeNum != ''">
+                and grade_num = #{gradeNum}
+            </if>
+        </where>
+        <if test="groupStr != null">
+            group by ${groupStr}
+        </if>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into score.grade_class(class_num, grade_num)
+        values (#{classNum}, #{gradeNum})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into score.grade_class(class_num, grade_num)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.classNum}, #{entity.gradeNum})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into score.grade_class(class_num, grade_num)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.classNum}, #{entity.gradeNum})
+        </foreach>
+        on duplicate key update
+        class_num = values(class_num) , grade_num = values(grade_num)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update score.grade_class
+        <set>
+            <if test="classNum != null">
+                class_num = #{classNum},
+            </if>
+            <if test="gradeNum != null">
+                grade_num = #{gradeNum},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from score.grade_class where id = #{id}
+    </delete>
+
+</mapper>

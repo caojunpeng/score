@@ -1,5 +1,7 @@
 package com.cao.score.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -34,11 +36,12 @@ public class Students implements Serializable {
     /**
      * 出生日期
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date birthdate;
     /**
      * 身份证号
      */
-    private Integer identityNum;
+    private String identityNum;
     /**
      * 家庭住址
      */
@@ -101,11 +104,11 @@ public class Students implements Serializable {
         this.birthdate = birthdate;
     }
 
-    public Integer getIdentityNum() {
+    public String getIdentityNum() {
         return identityNum;
     }
 
-    public void setIdentityNum(Integer identityNum) {
+    public void setIdentityNum(String identityNum) {
         this.identityNum = identityNum;
     }
 

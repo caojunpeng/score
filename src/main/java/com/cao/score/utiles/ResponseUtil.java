@@ -23,6 +23,8 @@ private static Logger logger = LoggerFactory.getLogger(ResponseUtil.class);
 	public static final int PARAMS_ERROR = 10001;
 	/** 结果集异常 */
 	public static final int RESULT_ERROR = 10002;
+	/** 执行失败 */
+	public static final int EXEC_FAILURE = 10003;
 
 
 	

@@ -2,6 +2,14 @@
     .main-div .main-bottom .main-right .studentInfoManagement .disabled:active{
         color: #fff !important;
     }
+    .layer-blue{
+        overflow: auto;
+        background: #194898;
+        color: #fff;
+    }
+    .layui-layer-title,.layui-layer-ico{
+        color: #fff;
+    }
 </style>
 <div class="studentInfoManagement">
     <h3>基本信息管理</h3>
@@ -19,18 +27,13 @@
                 <label class="control-label">年级</label>
                 <select class="form-control" name="gradeNum" id="gradeNumSelect" onchange="loadClassNumList()">
                     <option value="">全部</option>
-                    <option  th:each="dict:${gradeNumList}" th:value="${dict.dictMsg}"  th:text="${dict.dictMsg}" ></option>
+                    <option  th:each="grade:${gradeNumList}" th:value="${grade.gradeNum}"  th:text="${grade.gradeNum}" ></option>
                 </select>
             </div>
             <div class="col-md-2">
                 <label class="control-label">班级</label>
                 <select class="form-control" name="classNum" id="classNumSelect">
                     <option value="">全部</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
                 </select>
             </div>
             <button type="button" class="btn btn-primary searchBtn" onclick="searchStudentInfo()">查询</button>
@@ -101,8 +104,8 @@
 			{
 				"data" : null,"render" : function(nRow, indexType,dataObj) {
 					var html ="";
-                      html+='<button type="button" class="btn btn-success" onclick="editStudentInfo()">编辑</button>'  ;
-                      html+='<button type="button" class="btn btn-success" onclick="delStudentInfo()">删除</button>'  ;
+                      html+='<button type="button" class="btn btn-success" onclick="saveStudentInfoPage('+dataObj.id+')">编辑</button>'  ;
+                      html+='<button type="button" class="btn btn-success" onclick="delStudentInfo('+dataObj.id+')">删除</button>'  ;
                     return  html;
 				}
 			}
@@ -135,13 +138,61 @@
                             html+='<option value="">全部</option>';
                             for(var i=0;i<classObjList.length;i++){
                                 var classObj=classObjList[i];
-                                html+='<option value="'+classObj.dictName+'">'+classObj.dictName+'</option>';
+                                html+='<option value="'+classObj.classNum+'">'+classObj.classNum+'</option>';
                             }
                             $("#classNumSelect").html(html);
                         }
                     }
                 }
             });
+        }else{
+            var html="";
+            html+='<option value="">全部</option>';
+            $("#classNumSelect").html(html);
         }
     }
+
+    //修改学生信息
+    function saveStudentInfoPage(id) {
+        $.ajax({
+            type: "POST",
+            url: "/students/saveStudentInfoPage",
+            //async: false,同步
+            data: {studentId:id},
+            success: function (html) {
+                layer.open({
+                    type: 1,
+                    skin: 'layer-blue',
+                    area: ['600px', '450px'], //宽高
+                    content: html
+                });
+            }
+        });
+    }
+
+    //删除学生信息
+    function delStudentInfo(id) {
+        layer.confirm('您确定删除该学生信息吗？', {
+            btn: ['确认','取消'] //按钮
+        }, function(){
+            $.ajax({
+                type: "POST",
+                url: "/students/delStudentInfo",
+                //async: false,同步
+                data: {id:id},
+                success: function (result) {
+                    if(result){
+                        var obj = result;
+                        if(obj && obj.code == 200){
+                            layer.msg(obj.message);
+                            $('#dataTables-studentInfoDatas').DataTable().draw();
+                        }
+                    }
+                }
+            });
+        }, function(){
+
+        });
+    }
+
 </script>

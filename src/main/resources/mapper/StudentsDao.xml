@@ -9,7 +9,7 @@
         <result property="sex" column="sex" jdbcType="INTEGER"/>
         <result property="age" column="age" jdbcType="INTEGER"/>
         <result property="birthdate" column="birthdate" jdbcType="TIMESTAMP"/>
-        <result property="identityNum" column="identity_num" jdbcType="INTEGER"/>
+        <result property="identityNum" column="identity_num" jdbcType="VARCHAR"/>
         <result property="address" column="address" jdbcType="VARCHAR"/>
         <result property="gradeNum" column="grade_num" jdbcType="INTEGER"/>
         <result property="classNum" column="class_num" jdbcType="INTEGER"/>

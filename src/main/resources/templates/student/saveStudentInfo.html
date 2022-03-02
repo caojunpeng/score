@@ -1,0 +1,125 @@
+<div class="studentSaveRow" >
+    <form id="studentSaveForm">
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">学号</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="studentId" th:value="${student?.studentId}" placeholder="请输入用户名">
+                <input type="hidden" class="form-control" name="id" th:value="${student?.id}">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">姓名</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="name" th:value="${student?.name}"  placeholder="请输入姓名">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">性别</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="sex" th:value="${student?.sex}"  placeholder="请输入手机号">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">年龄</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="age" th:value="${student?.age}"  placeholder="请输入邮箱">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">出生日期</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="birthdate" th:value="${student?.birthdate}"  placeholder="请输入邮箱">
+            </div>
+
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">身份证号</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="identityNum" th:value="${student?.identityNum}"  placeholder="请输入邮箱">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">家庭住址</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="address" th:value="${student?.address}"  placeholder="请输入邮箱">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">年级</label>
+            <div class="col-sm-12">
+                <select class="form-control" name="gradeNum" id="editGradeNumSelect" onchange="loadClassNumList()">
+                    <option value="">待选择</option>
+                    <option  th:each="grade:${gradeNumList}" th:value="${grade.gradeNum}"  th:text="${grade.gradeNum}" ></option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">班级</label>
+            <div class="col-sm-12">
+                <select class="form-control" name="classNum" id="editClassNumSelect">
+                    <option value="">待选择</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <button type="button" class="btn btn-primary savestudentBtn" onclick="saveStudent()">确定</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    //保存学生信息方法
+    function saveStudent() {
+        $.ajax({
+            type: "POST",
+            url: "/students/saveStudentInfo",
+            data: $('#studentSaveForm').serialize(),
+            success: function (obj) {
+                var data=JSON.parse(obj);
+                if(data && data.code==200){
+                    $('#dataTables-studentInfoDatas').DataTable().draw();
+                    layer.closeAll();
+                    layer.msg("更新成功");
+                    return;
+                }
+                layer.msg("更新失败");
+            }
+        });
+    }
+
+    //加载班级
+    function loadClassNumList(){
+        debugger
+        var gradeNum = $("#editGradeNumSelect").val();
+        if(gradeNum){
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/students/getClassNumList",
+                data: {gradeNum:gradeNum},
+                success: function (result) {
+                    if(result){
+                        var obj = result;
+                        if(obj && obj.code == 200 && obj.data.length>0){
+                            var classObjList = obj.data;
+                            $("#editClassNumSelect").html("");
+                            var html="";
+                            html+='<option value="">待选择</option>';
+                            for(var i=0;i<classObjList.length;i++){
+                                var classObj=classObjList[i];
+                                html+='<option value="'+classObj.classNum+'">'+classObj.classNum+'</option>';
+                            }
+                            $("#editClassNumSelect").html(html);
+                        }
+                    }
+                }
+            });
+        }else{
+            var html="";
+            html+='<option value="">待选择</option>';
+            $("#editClassNumSelect").html(html);
+        }
+    }
+
+    /*]]>*/
+</script>
