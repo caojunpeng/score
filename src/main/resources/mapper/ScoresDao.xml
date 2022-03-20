@@ -18,6 +18,7 @@
         where id = #{id}
     </select>
 
+
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="ScoresMap">
         select
@@ -46,6 +47,20 @@
             </if>
             <if test="qualifiedState != null">
                 and qualified_state = #{qualifiedState}
+            </if>
+        </where>
+    </select>
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryOneByScoreParams" resultMap="ScoresMap">
+        select
+        id, student_id, score, subject, qualified_state
+        from score.scores
+        <where>
+            <if test="studentId != null and studentId != ''">
+                and student_id = #{studentId}
+            </if>
+            <if test="subject != null">
+                and subject = #{subject}
             </if>
         </where>
     </select>

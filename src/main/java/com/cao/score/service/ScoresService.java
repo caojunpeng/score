@@ -1,6 +1,7 @@
 package com.cao.score.service;
 
 import com.cao.score.entity.Scores;
+import com.cao.score.vo.ScoreParams;
 
 import java.util.List;
 
@@ -53,4 +54,7 @@ public interface ScoresService {
      */
     boolean deleteById(Long id);
 
+    String saveScoreByParams(ScoreParams scoreParams);
+
+    Scores saveScore(Scores scores);
 }

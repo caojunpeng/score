@@ -1,5 +1,7 @@
 package com.cao.score.entity;
 
+import com.cao.score.utiles.ScoreStringUtils;
+
 import java.io.Serializable;
 
 /**
@@ -72,4 +74,16 @@ public class Scores implements Serializable {
         this.qualifiedState = qualifiedState;
     }
 
+    public Scores(Long id, String studentId, Double score, Integer subject, Integer qualifiedState) {
+        if(id!=null){
+            this.id = id;
+        }
+        this.studentId = studentId;
+        this.score = score;
+        this.subject = subject;
+        this.qualifiedState = qualifiedState;
+    }
+    public Scores(){
+
+    }
 }

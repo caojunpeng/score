@@ -114,39 +114,55 @@ public class ExcelUtils {
                             Cell cell = cells.next();
                             if (cell.getColumnIndex() == 0 ) {
                                 cell.setCellType(CellType.STRING);
-                                maps.put("firstColumn",cell.getStringCellValue().trim());
+                                maps.put("zeroColumn",cell.getStringCellValue().trim());
                             }
                             if (cell.getColumnIndex() == 1 ) {
                                 cell.setCellType(CellType.STRING);
-                                maps.put("secondColumn",cell.getStringCellValue().trim());
+                                maps.put("oneColumn",cell.getStringCellValue().trim());
                             }
                             if (cell.getColumnIndex() == 2 ) {
                                 cell.setCellType(CellType.STRING);
-                                maps.put("thirdlyColumn",cell.getStringCellValue().trim());
+                                maps.put("twoColumn",cell.getStringCellValue().trim());
                             }
                             if (cell.getColumnIndex() == 3 ) {
                                 cell.setCellType(CellType.STRING);
-                                maps.put("fourthlyColumn",cell.getStringCellValue().trim());
+                                maps.put("threeColumn",cell.getStringCellValue().trim());
                             }
                             if (cell.getColumnIndex() == 4 ) {
                                 cell.setCellType(CellType.STRING);
-                                maps.put("fifthColumn",cell.getStringCellValue().trim());
+                                maps.put("fourColumn",cell.getStringCellValue().trim());
                             }
                             if (cell.getColumnIndex() == 5 ) {
                                 cell.setCellType(CellType.STRING);
-                                maps.put("sixthColumn",cell.getStringCellValue().trim());
+                                maps.put("fiveColumn",cell.getStringCellValue().trim());
                             }
                             if (cell.getColumnIndex() == 6 ) {
                                 cell.setCellType(CellType.STRING);
-                                maps.put("seventhColumn",cell.getStringCellValue().trim());
+                                maps.put("sixColumn",cell.getStringCellValue().trim());
                             }
                             if (cell.getColumnIndex() == 7 ) {
                                 cell.setCellType(CellType.STRING);
-                                maps.put("eighthColumn",cell.getStringCellValue().trim());
+                                maps.put("evenColumn",cell.getStringCellValue().trim());
                             }
                             if (cell.getColumnIndex() == 8 ) {
                                 cell.setCellType(CellType.STRING);
-                                maps.put("ninthColumn",cell.getStringCellValue().trim());
+                                maps.put("eightColumn",cell.getStringCellValue().trim());
+                            }
+                            if (cell.getColumnIndex() == 9 ) {
+                                cell.setCellType(CellType.STRING);
+                                maps.put("nineColumn",cell.getStringCellValue().trim());
+                            }
+                            if (cell.getColumnIndex() == 10 ) {
+                                cell.setCellType(CellType.STRING);
+                                maps.put("tenColumn",cell.getStringCellValue().trim());
+                            }
+                            if (cell.getColumnIndex() == 11 ) {
+                                cell.setCellType(CellType.STRING);
+                                maps.put("elevenColumn",cell.getStringCellValue().trim());
+                            }
+                            if (cell.getColumnIndex() == 12 ) {
+                                cell.setCellType(CellType.STRING);
+                                maps.put("twelveColumn",cell.getStringCellValue().trim());
                             }
                         }
                         acclist.add(maps);

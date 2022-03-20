@@ -1,6 +1,7 @@
 package com.cao.score.dao;
 
 import com.cao.score.entity.Scores;
+import com.cao.score.vo.ScoreParams;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,6 +24,7 @@ public interface ScoresDao {
      */
     Scores queryById(Long id);
 
+
     /**
      * 查询指定行数据
      *
@@ -40,6 +42,14 @@ public interface ScoresDao {
      * @return 对象列表
      */
     List<Scores> queryAll(Scores scores);
+
+    /**
+     * 通过实体作为筛选条件查询
+     *
+     * @param scores 实例对象
+     * @return 对象列表
+     */
+    Scores queryOneByScoreParams(ScoreParams scores);
 
     /**
      * 新增数据

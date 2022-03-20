@@ -152,17 +152,17 @@ public class StudentsController {
             if (!maps.isEmpty()){
                 for(Map<String, Object> map:maps){
                     Students students = new Students();
-                    students.setStudentId(map.get("firstColumn")+"");
-                    students.setName(map.get("secondColumn")+"");
-                    students.setSex(Integer.valueOf(map.get("thirdlyColumn")+""));
-                    students.setAge(Integer.valueOf(map.get("fourthlyColumn")+""));
-                    String birthdatae= map.get("fifthColumn")+"";
+                    students.setStudentId(map.get("zeroColumn")+"");
+                    students.setName(map.get("oneColumn")+"");
+                    students.setSex(Integer.valueOf(map.get("twoColumn")+""));
+                    students.setAge(Integer.valueOf(map.get("threeColumn")+""));
+                    String birthdatae= map.get("fourColumn")+"";
                     Date date=ScoreDateUtils.parseStrToDate(birthdatae,ScoreDateUtils.format_day);
                     students.setBirthdate(date);
-                    students.setIdentityNum(map.get("sixthColumn")+"");
-                    students.setAddress(map.get("seventhColumn")+"");
-                    students.setGradeNum(Integer.valueOf(map.get("eighthColumn")+""));
-                    students.setClassNum(Integer.valueOf(map.get("ninthColumn")+""));
+                    students.setIdentityNum(map.get("fiveColumn")+"");
+                    students.setAddress(map.get("sixColumn")+"");
+                    students.setGradeNum(Integer.valueOf(map.get("evenColumn")+""));
+                    students.setClassNum(Integer.valueOf(map.get("eightColumn")+""));
                     studentsService.insert(students);
                 }
                 result=ResponseUtil.printJson("导入成功",maps);

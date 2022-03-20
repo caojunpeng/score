@@ -65,6 +65,64 @@
     position: absolute;
     right: 20px;
 }
+
+/*后台-菜单管理*/
+.menuListDiv .delmenuBtn{
+    margin-left: 15px;
+}
+.menuEditRow .savemenuBtn{
+    position: absolute;
+    right: 30px;
+    top: 20px;
+}
+.menuListDiv .addmenuBtn{
+    position: absolute;
+    right: 50px;
+    top: 70px;
+}
+.menuListDiv .menuTable{
+    margin-top: 70px;
+}
+.menuListDiv #menuForm .menuFormCol{
+    position: absolute;
+    right: 220px;
+}
+.menuListDiv #menuForm .searchBtn{
+    position: absolute;
+    right: 155px;
+}
+
+
+/* 角色管理 */
+.roleListDiv .delroleBtn{
+    margin-left: 15px;
+}
+.roleEditRow .saveroleBtn{
+    position: absolute;
+    right: 30px;
+    top: 20px;
+}
+.roleListDiv .addroleBtn{
+    position: absolute;
+    right: 50px;
+    top: 70px;
+}
+.roleListDiv .roleTable{
+    margin-top: 70px;
+}
+.roleListDiv #roleForm .roleFormCol{
+    position: absolute;
+    right: 220px;
+}
+.roleListDiv #roleForm .searchBtn{
+    position: absolute;
+    right: 155px;
+}
+#menuTree .addRoleMenuBtn{
+    margin-left: 320px;
+}
+
+
 /*前台-主页*/
 .main-div{
     background: url(../images/admin/main.jpg) no-repeat;
@@ -128,7 +186,7 @@
 }
 .main-div .main-bottom .main-left{
     display: block;
-    width: 160px;
+    width: 9.5%;
     float: left;
     height: 100%;
     border-right: 1px solid #4dadff;
@@ -156,28 +214,30 @@
 }
 .main-div .main-bottom .main-right{
     display: block;
-    width: 1743px;
+    width: 90%;
     height: 100%;
     border: 1px solid #4dadff;
     float: left;
     background-color: rgba(12,36,53,0.75);
     padding: 15px;
 }
+
+
 /* 学生信息 */
-.main-div .main-bottom .main-right .studentEnter H3{
+ .studentEnter H3{
     color: #fff;
     text-align: center;
 }
 
-.main-div .main-bottom .main-right .studentEnter .studentInfoDiv #studentInfoForm label{
+ .studentEnter .studentInfoDiv #studentInfoForm label{
     color: #fff;
 }
 
-.main-div .main-bottom .main-right .studentEnter #studentInfoFiles{
+ .studentEnter #studentInfoFiles{
     display: none;
 }
 
-.main-div .main-bottom .main-right .main-right-menus{
+ .main-right-menus{
     position: absolute;
     left: 400px;
     top: 200px;
@@ -185,7 +245,7 @@
     height: 650px;
     width: 650px;
 }
-.main-div .main-bottom .main-right .main-right-menus .main-menu{
+ .main-right-menus .main-menu{
     height: 50%;
     width: 50%;
     float: left;
@@ -194,13 +254,13 @@
     background: rgba(10,36,85,0.8);
     border: 1px solid rgba(66,77,139,1);
 }
-.main-div .main-bottom .main-right .main-right-menus .main-menu .iconSpan{
+ .main-right-menus .main-menu .iconSpan{
     margin-top: 80px;
     font-size: 120px;
     margin-bottom: -130px;
     display: block;
 }
-.main-div .main-bottom .main-right .main-right-info{
+ .main-right-info{
     position: absolute;
     left: 1200px;
     border: 1px solid #ccc;
@@ -208,7 +268,7 @@
     width: 500px;
     top: 200px;
 }
-.main-div .main-bottom .main-right .main-right-info .image{
+ .main-right-info .image{
     height: 650px;
     width: 500px;
 }
@@ -217,22 +277,22 @@
 }
 
 /*学生信息管理*/
-.main-div .main-bottom .main-right .studentInfoManagement{
+ .studentInfoManagement{
     color: #fff;
 }
-.main-div .main-bottom .main-right .studentInfoManagement H3{
+ .studentInfoManagement H3{
     text-align: center;
 }
-.main-div .main-bottom .main-right .studentInfoManagement .studentInfoManagement-top{
+ .studentInfoManagement .studentInfoManagement-top{
     display: flow-root;
 }
-.main-div .main-bottom .main-right .studentInfoManagement .studentInfoManagement-top button{
+ .studentInfoManagement .studentInfoManagement-top button{
     margin-top: 25px;
 }
-.main-div .main-bottom .main-right .studentInfoManagement table{
+ .studentInfoManagement table{
     margin-top: 20px;
 }
-.main-div .main-bottom .main-right .studentInfoManagement table.dataTable tbody tr{
+ .studentInfoManagement table.dataTable tbody tr{
     background-color: rgba(0,0,0,0.1);
 }
 
@@ -280,59 +340,11 @@
     right: 155px;
 }
 
-
-/*后台-菜单管理*/
-.menuListDiv .delmenuBtn{
-    margin-left: 15px;
+/*成绩录入*/
+.scoresEnter h3{
+    color: #fff;
 }
-.menuEditRow .savemenuBtn{
-    position: absolute;
-    right: 30px;
-    top: 20px;
-}
-.menuListDiv .addmenuBtn{
-    position: absolute;
-    right: 50px;
-    top: 70px;
-}
-.menuListDiv .menuTable{
-    margin-top: 70px;
-}
-.menuListDiv #menuForm .menuFormCol{
-    position: absolute;
-    right: 220px;
-}
-.menuListDiv #menuForm .searchBtn{
-    position: absolute;
-    right: 155px;
+.scoresEnter #scoresInfoFiles{
+    display: none;
 }
 
-
-/* 角色管理 */
-.roleListDiv .delroleBtn{
-    margin-left: 15px;
-}
-.roleEditRow .saveroleBtn{
-    position: absolute;
-    right: 30px;
-    top: 20px;
-}
-.roleListDiv .addroleBtn{
-    position: absolute;
-    right: 50px;
-    top: 70px;
-}
-.roleListDiv .roleTable{
-    margin-top: 70px;
-}
-.roleListDiv #roleForm .roleFormCol{
-    position: absolute;
-    right: 220px;
-}
-.roleListDiv #roleForm .searchBtn{
-    position: absolute;
-    right: 155px;
-}
-#menuTree .addRoleMenuBtn{
-    margin-left: 320px;
-}

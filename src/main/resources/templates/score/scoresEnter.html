@@ -1,0 +1,178 @@
+<div class="scoresEnter">
+    <h3>成绩信息录入</h3>
+    <button type="button" class="btn btn-primary" onclick="checkScoresInfoFile()">导入成绩信息</button>
+    <button type="button" class="btn btn-primary" onclick="downloadScoresExcelTemplate()">模板导出</button>
+    <input type="file" name="scoresInfoFiles" id="scoresInfoFiles" onchange="exportScoresInfo()">
+    <div class="">
+        <div class="col-md-4">
+            <label >年级</label>
+            <select class="form-control" name="gradeNum" id="gradeNumSelect" onchange="loadClassNumList()">
+                <option value="">全部</option>
+                <option th:each="grade:${gradeNumList}" th:value="${grade.gradeNum}"  th:text="${grade.gradeNum}" ></option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label >班级</label>
+            <select class="form-control" name="classNum" id="classNumSelect">
+                <option value="">全部</option>
+            </select>
+        </div>
+    </div>
+    <div class="scoresDiv">
+        <form id="scoresForm">
+            <div class="col-md-4">
+                <label >姓名</label>
+                <input type="text" class="form-control"  name="name" placeholder="请输入姓名">
+            </div>
+            <div class="col-md-4">
+                <label >学号</label>
+                <input type="text" class="form-control"  name="studentId" placeholder="请输入学号">
+            </div>
+            <div class="col-md-4">
+                <label >语文</label>
+                <input type="text" class="form-control"  name="chineseScore" placeholder="请输入语文成绩">
+            </div>
+            <div class="col-md-4">
+                <label >数学</label>
+                <input type="text" class="form-control"  name="mathScore" placeholder="请输入数学成绩">
+            </div>
+            <div class="col-md-4">
+                <label >英语</label>
+                <input type="text" class="form-control" name="EnglishScore" placeholder="请输入英语成绩">
+            </div>
+            <div class="col-md-4">
+                <label >政治</label>
+                <input type="text" class="form-control" name="politicsScore" placeholder="请输入政治成绩">
+            </div>
+            <div class="col-md-4">
+                <label >历史</label>
+                <input type="text" class="form-control" name="historyScore" placeholder="请输入历史成绩">
+            </div>
+            <div class="col-md-4">
+                <label >地理</label>
+                <input type="text" class="form-control" name="geographyScore" placeholder="请输入地理成绩">
+            </div>
+            <div class="col-md-4">
+                <label >生物</label>
+                <input type="text" class="form-control" name="biologicalScore" placeholder="请输入生物成绩">
+            </div>
+            <div class="col-md-4">
+                <label >物理</label>
+                <input type="text" class="form-control" name="physicalScore" placeholder="请输入物理成绩">
+            </div>
+            <div class="col-md-4">
+                <label >化学</label>
+                <input type="text" class="form-control" name="chemicalScore" placeholder="请输入化学成绩">
+            </div>
+            <button type="button" class="btn btn-success" onclick="insertScores()">提交</button>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    //选择导入的文件
+    function checkScoresInfoFile() {
+        $("#scoresInfoFiles").click();
+    }
+
+    //成绩导入
+    function exportScoresInfo() {
+        var scoresInfoFiles = $("#scoresInfoFiles")[0].files[0].name;
+        if(scoresInfoFiles && (scoresInfoFiles.toLowerCase().endsWith(".xlsx") || scoresInfoFiles.toLowerCase().endsWith(".xls"))){
+            var packageName="";
+            var formData = new FormData();
+            formData.append("files", $("#scoresInfoFiles")[0].files[0]);
+            $.ajax({
+                type: 'POST',
+                data: formData,
+                url:"/scores/exportScoreInfo",
+                async: false,
+                processData: false,
+                contentType: false,
+                secureuri: false,
+                success: function(data){
+                    if(data){
+                        var obj = JSON.parse(data);
+                        layer.msg(obj.msg)
+                    }
+                }
+            });
+        }else{
+            layer.msg("文件格式不正确");
+        }
+    }
+
+    //模板导出
+    function downloadScoresExcelTemplate(){
+        window.location.href="/scores/downloadScoresExcelTemplate";
+    }
+
+    //插入单个学生的成绩信息
+    function insertScores() {
+        debugger
+        var chineseScore = $("input[name='chineseScore']").val();
+        if(!checkNum(chineseScore)){
+            layer.msg("成绩");
+            return;
+        }
+        var mathScore = $("input[name='mathScore']").val();
+        if(!checkNum(mathScore)){
+            layer.msg("学号格式为纯数字");
+            return;
+        }
+        var chineseScore = $("input[name='chineseScore']").val();
+        if(!checkNum(chineseScore)){
+            layer.msg("学号格式为纯数字");
+            return;
+        }
+        var chineseScore = $("input[name='chineseScore']").val();
+        if(!checkNum(chineseScore)){
+            layer.msg("学号格式为纯数字");
+            return;
+        }
+        var chineseScore = $("input[name='chineseScore']").val();
+        if(!checkNum(chineseScore)){
+            layer.msg("学号格式为纯数字");
+            return;
+        }var chineseScore = $("input[name='chineseScore']").val();
+        if(!checkNum(chineseScore)){
+            layer.msg("学号格式为纯数字");
+            return;
+        }
+        var chineseScore = $("input[name='chineseScore']").val();
+        if(!checkNum(chineseScore)){
+            layer.msg("学号格式为纯数字");
+            return;
+        }
+        var chineseScore = $("input[name='chineseScore']").val();
+        if(!checkNum(chineseScore)){
+            layer.msg("学号格式为纯数字");
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/scores/saveScoreByParams",
+            data: $('#scoresForm').serialize(),
+            success: function (result) {
+                if(result){
+                    var obj = result;
+                    if(obj && obj.code == 200){
+                        layer.msg(obj.message);
+                    }
+                }
+            }
+        });
+    }
+
+    //纯数字和小数校验
+    function checkNum(num){
+        var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+        var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+        if (regPos.test(num) || regNeg.test(num)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>
