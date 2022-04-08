@@ -50,6 +50,39 @@
             </if>
         </where>
     </select>
+
+    <select id="getScoresInfoDatas" parameterType="com.cao.score.vo.ObjectParams" resultType="com.cao.score.vo.ScoreParams">
+        SELECT
+        stu.grade_num gradeNum,
+        stu.class_num classNum,
+        stu.student_id studentId,
+        stu.name name,
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 1 AND s.student_id = stu.student_id LIMIT 1 ) chineseScore,
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 2 AND s.student_id = stu.student_id LIMIT 1 ) mathScore,
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 3 AND s.student_id = stu.student_id LIMIT 1 ) englishScore,
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 4 AND s.student_id = stu.student_id LIMIT 1 ) politicsScore,
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 5 AND s.student_id = stu.student_id LIMIT 1 ) historyScore,
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 6 AND s.student_id = stu.student_id LIMIT 1 ) geographyScore,
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 7 AND s.student_id = stu.student_id LIMIT 1 ) biologicalScore,
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 8 AND s.student_id = stu.student_id LIMIT 1 ) physicalScore,
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 9 AND s.student_id = stu.student_id LIMIT 1 ) chemicalScore
+        FROM
+        students stu
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and (stu.identity_num LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+                or stu.student_id LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+                or stu. name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+                )
+            </if>
+            <if test="gradeNum != null">
+                and stu.grade_num = #{gradeNum}
+            </if>
+            <if test="classNum != null">
+                and stu.class_num = #{classNum}
+            </if>
+        </where>
+    </select>
     <!--通过实体作为筛选条件查询-->
     <select id="queryOneByScoreParams" resultMap="ScoresMap">
         select

@@ -13,21 +13,20 @@
         </div>
         <div class="col-md-4">
             <label >班级</label>
-            <select class="form-control" name="classNum" id="classNumSelect">
+            <select class="form-control" name="classNum" id="classNumSelect" onchange="loadStudentNameList()">
+                <option value="">全部</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label >姓名</label>
+            <select class="form-control" name="name" id="studentNameSelect"  onchange="loadStudentId()">
                 <option value="">全部</option>
             </select>
         </div>
     </div>
     <div class="scoresDiv">
         <form id="scoresForm">
-            <div class="col-md-4">
-                <label >姓名</label>
-                <input type="text" class="form-control"  name="name" placeholder="请输入姓名">
-            </div>
-            <div class="col-md-4">
-                <label >学号</label>
-                <input type="text" class="form-control"  name="studentId" placeholder="请输入学号">
-            </div>
+            <input type="hidden" class="form-control"  name="studentId">
             <div class="col-md-4">
                 <label >语文</label>
                 <input type="text" class="form-control"  name="chineseScore" placeholder="请输入语文成绩">
@@ -111,41 +110,7 @@
         debugger
         var chineseScore = $("input[name='chineseScore']").val();
         if(!checkNum(chineseScore)){
-            layer.msg("成绩");
-            return;
-        }
-        var mathScore = $("input[name='mathScore']").val();
-        if(!checkNum(mathScore)){
-            layer.msg("学号格式为纯数字");
-            return;
-        }
-        var chineseScore = $("input[name='chineseScore']").val();
-        if(!checkNum(chineseScore)){
-            layer.msg("学号格式为纯数字");
-            return;
-        }
-        var chineseScore = $("input[name='chineseScore']").val();
-        if(!checkNum(chineseScore)){
-            layer.msg("学号格式为纯数字");
-            return;
-        }
-        var chineseScore = $("input[name='chineseScore']").val();
-        if(!checkNum(chineseScore)){
-            layer.msg("学号格式为纯数字");
-            return;
-        }var chineseScore = $("input[name='chineseScore']").val();
-        if(!checkNum(chineseScore)){
-            layer.msg("学号格式为纯数字");
-            return;
-        }
-        var chineseScore = $("input[name='chineseScore']").val();
-        if(!checkNum(chineseScore)){
-            layer.msg("学号格式为纯数字");
-            return;
-        }
-        var chineseScore = $("input[name='chineseScore']").val();
-        if(!checkNum(chineseScore)){
-            layer.msg("学号格式为纯数字");
+            layer.msg("成绩格式为纯数字");
             return;
         }
 
@@ -174,5 +139,80 @@
         } else {
             return false;
         }
+    }
+    //加载班级
+    function loadClassNumList(){
+        debugger
+        var gradeNum = $("#gradeNumSelect").val();
+        if(gradeNum){
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/students/getClassNumList",
+                data: {gradeNum:gradeNum},
+                success: function (result) {
+                    debugger
+                    if(result){
+                        var obj = result;
+                        if(obj && obj.code == 200 && obj.data.length>0){
+                            var classObjList = obj.data;
+                            $("#classNumSelect").html("");
+                            var html="";
+                            html+='<option value="">待选择</option>';
+                            for(var i=0;i<classObjList.length;i++){
+                                var classObj=classObjList[i];
+                                html+='<option value="'+classObj.classNum+'" >'+classObj.classNum+'</option>';
+                            }
+                            $("#classNumSelect").html(html);
+                        }
+                    }
+                }
+            });
+        }else{
+            var html="";
+            html+='<option value="">待选择</option>';
+            $("#classNumSelect").html(html);
+        }
+    }
+
+    //加载当前班级所有学生信息  classNumSelect:班级
+    function loadStudentNameList(){
+        debugger
+        var gradeNum = $("#gradeNumSelect").val();//年级
+        var classNum = $("#classNumSelect").val();//年级
+        if(gradeNum){
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/students/getStudentList",
+                data: {gradeNum:gradeNum,classNum:classNum},
+                success: function (result) {
+                    if(result){
+                        var obj = result;
+                        if(obj && obj.code == 200 && obj.data.length>0){
+                            var studentObjList = obj.data;
+                            $("#studentNameSelect").html("");
+                            var html="";
+                            html+='<option value="">待选择</option>';
+                            for(var i=0;i<studentObjList.length;i++){
+                                var stu=studentObjList[i];
+                                html+='<option value="'+stu.studentId+'">'+stu.name+'</option>';
+                            }
+                            $("#studentNameSelect").html(html);
+                        }
+                    }
+                }
+            });
+        }else{
+            var html="";
+            html+='<option value="">待选择</option>';
+            $("#studentNameSelect").html(html);
+        }
+    }
+    
+    //学号赋值
+    function loadStudentId() {
+        var studentId=$("#studentNameSelect").val();
+        $("input[name='studentId']").val(studentId);
     }
 </script>

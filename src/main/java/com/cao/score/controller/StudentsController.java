@@ -133,6 +133,26 @@ public class StudentsController {
     }
 
     /**
+     * 获取所属班级的所有学生信息
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getStudentList")
+    public String getStudentList(ObjectParams objectParams){
+        String result="";
+        try{
+            //获取当前班级的所有学生信息
+            List<Students> classNumList = studentsService.getStudentByParams(objectParams);
+            result=ResponseUtil.printJson("查询成功",classNumList);
+        }catch (Exception e){
+            logger.error("获取所属年级的所有班级异常，异常信息："+e.getMessage(),e);
+            result=ResponseUtil.printFailJson(ResponseUtil.SERVERUPLOAD,"获取所属年级的所有班级异常");
+        }
+
+        return result;
+    }
+
+    /**
      * 导入学生信息
      * @return
      */

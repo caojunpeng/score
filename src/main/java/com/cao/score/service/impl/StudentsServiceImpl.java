@@ -57,6 +57,11 @@ public class StudentsServiceImpl implements StudentsService {
         return dataTablesResult;
     }
 
+    @Override
+    public List<Students> getStudentByParams(ObjectParams objectParams) {
+        return studentsDao.getStudentInfoDatas(objectParams);
+    }
+
     /**
      * 新增数据
      *

@@ -1,17 +1,23 @@
 package com.cao.score.service.impl;
 
 import com.cao.score.dao.ScoresDao;
+import com.cao.score.entity.GradeClass;
 import com.cao.score.entity.Scores;
+import com.cao.score.entity.Students;
 import com.cao.score.service.ScoresService;
 import com.cao.score.utiles.ResponseUtil;
 import com.cao.score.utiles.ScoreStringUtils;
+import com.cao.score.vo.DataTablesResult;
+import com.cao.score.vo.ObjectParams;
 import com.cao.score.vo.ScoreParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 成绩表(Scores)表服务实现类
@@ -87,6 +93,16 @@ public class ScoresServiceImpl implements ScoresService {
         return scores;
     }
 
+    @Override
+    public DataTablesResult<ScoreParams> getScoresInfoDatas(ObjectParams objectParams) {
+        List<ScoreParams> studentInfoDatas = scoresDao.getScoresInfoDatas(objectParams);
+        DataTablesResult<ScoreParams> dataTablesResult=new DataTablesResult<>();
+        dataTablesResult.setData(studentInfoDatas);
+        dataTablesResult.setRecordsFiltered(studentInfoDatas.size());
+        dataTablesResult.setRecordsTotal(studentInfoDatas.size());
+        return dataTablesResult;
+    }
+
     /**
      * 通过主键删除数据
      *
@@ -107,136 +123,44 @@ public class ScoresServiceImpl implements ScoresService {
             Scores scores = new Scores();
             scores.setStudentId(scoreParams.getStudentId());
             double chineseScore = scoreParams.getChineseScore();
-            Scores s = new Scores();
-            if(chineseScore!=0.0){//语文
-                Integer subject = 1;
-                scoreParams.setSubject(subject);
-                Scores select = scoresDao.queryOneByScoreParams(scoreParams);
-                //获取跟新或新增队想
-                if (select!=null){
-                    s = new Scores(select.getId(),scoreParams.getStudentId(),chineseScore,subject,checkScoreState(chineseScore));
-                }else{
-                    s = new Scores(null,scoreParams.getStudentId(),chineseScore,subject,checkScoreState(chineseScore));
-                }
-                //保存或更新
-                saveScore(s);
-            }
+            saveScoreInfo(chineseScore,scoreParams,1);//语文
             double mathScore = scoreParams.getMathScore();
-            if(mathScore!=0.0){//数学
-                Integer subject = 2;
-                scoreParams.setSubject(subject);
-                Scores select = scoresDao.queryOneByScoreParams(scoreParams);
-                //获取跟新或新增队想
-                if (select!=null) {
-                    s = new Scores(select.getId(), scoreParams.getStudentId(), mathScore, subject, checkScoreState(mathScore));
-                }else {
-                    s = new Scores(null, scoreParams.getStudentId(), mathScore, subject, checkScoreState(mathScore));
-                }
-                //保存或更新
-                saveScore(s);
-            }
+            saveScoreInfo(mathScore,scoreParams,2);//数学
             double englishScore = scoreParams.getEnglishScore();
-            if(englishScore!=0.0){//英语
-                Integer subject = 3;
-                scoreParams.setSubject(subject);
-                Scores select = scoresDao.queryOneByScoreParams(scoreParams);
-                //获取跟新或新增队想
-                if (select!=null) {
-                 s =new Scores(select.getId(),scoreParams.getStudentId(),englishScore,subject,checkScoreState(englishScore));
-                }else {
-                    s =new Scores(null,scoreParams.getStudentId(),englishScore,subject,checkScoreState(englishScore));
-                }
-                //保存或更新
-                saveScore(s);
-            }
+            saveScoreInfo(englishScore,scoreParams,3);//英语
             double politicsScore = scoreParams.getPoliticsScore();
-            if(politicsScore!=0.0){//政治成绩
-                Integer subject = 4;
-                scoreParams.setSubject(subject);
-                Scores select = scoresDao.queryOneByScoreParams(scoreParams);
-                //获取跟新或新增队想
-                if (select!=null) {
-                 s =new Scores(select.getId(),scoreParams.getStudentId(),politicsScore,subject,checkScoreState(politicsScore));
-                }else {
-                    s =new Scores(null,scoreParams.getStudentId(),politicsScore,subject,checkScoreState(politicsScore));
-                }
-                //保存或更新
-                saveScore(s);
-            }
+            saveScoreInfo(politicsScore,scoreParams,4);//政治成就
             double historyScore = scoreParams.getHistoryScore();
-            if(historyScore!=0.0){//历史成绩
-                Integer subject = 5;
-                scoreParams.setSubject(subject);
-                Scores select = scoresDao.queryOneByScoreParams(scoreParams);
-                //获取跟新或新增队想
-                if (select!=null) {
-                 s =new Scores(select.getId(),scoreParams.getStudentId(),historyScore,subject,checkScoreState(historyScore));
-                }else {
-                    s =new Scores(null,scoreParams.getStudentId(),historyScore,subject,checkScoreState(historyScore));
-                }
-                //保存或更新
-                saveScore(s);
-            }
+            saveScoreInfo(historyScore,scoreParams,5);//历史成绩
             double geographyScore = scoreParams.getGeographyScore();
-            if(geographyScore !=0.0){//geographyScore
-                Integer subject = 6;
-                scoreParams.setSubject(subject);
-                Scores select = scoresDao.queryOneByScoreParams(scoreParams);
-                //获取跟新或新增队想
-                if (select!=null) {
-                 s =new Scores(select.getId(),scoreParams.getStudentId(),geographyScore,subject,checkScoreState(geographyScore));
-                }else {
-                    s =new Scores(null,scoreParams.getStudentId(),geographyScore,subject,checkScoreState(geographyScore));
-                }
-                //保存或更新
-                saveScore(s);
-            }
+            saveScoreInfo(geographyScore,scoreParams,6);
             double biologicalScore = scoreParams.getBiologicalScore();
-            if(biologicalScore !=0.0){//biologicalScore
-                Integer subject = 7;
-                scoreParams.setSubject(subject);
-                Scores select = scoresDao.queryOneByScoreParams(scoreParams);
-                //获取跟新或新增队想
-                if (select!=null) {
-                 s =new Scores(select.getId(),scoreParams.getStudentId(),biologicalScore,subject,checkScoreState(biologicalScore));
-                }else {
-                    s =new Scores(null,scoreParams.getStudentId(),biologicalScore,subject,checkScoreState(biologicalScore));
-                }
-                //保存或更新
-                saveScore(s);
-            }
+            saveScoreInfo(biologicalScore,scoreParams,7);
             double physicalScore = scoreParams.getPhysicalScore();
-            if(physicalScore !=0.0){//物理成绩
-                Integer subject = 8;
-                scoreParams.setSubject(subject);
-                Scores select = scoresDao.queryOneByScoreParams(scoreParams);
-                //获取跟新或新增队想
-                if (select!=null) {
-                 s =new Scores(select.getId(),scoreParams.getStudentId(),physicalScore,subject,checkScoreState(physicalScore));
-                }else {
-                    s =new Scores(null,scoreParams.getStudentId(),physicalScore,subject,checkScoreState(physicalScore));
-                }
-                //保存或更新
-                saveScore(s);
-            }
+            saveScoreInfo(physicalScore,scoreParams,8);
             double chemicalScore = scoreParams.getChemicalScore();
-            if(chemicalScore !=0.0){//化学成绩
-                Integer subject = 9;
-                scoreParams.setSubject(subject);
-                Scores select = scoresDao.queryOneByScoreParams(scoreParams);
-                //获取跟新或新增队想
-                if (select!=null) {
-                 s =new Scores(select.getId(),scoreParams.getStudentId(),chemicalScore,subject,checkScoreState(chemicalScore));
-                }else {
-                    s =new Scores(null,scoreParams.getStudentId(),chemicalScore,subject,checkScoreState(chemicalScore));
-                }
-                //保存或更新
-                saveScore(s);
-            }
+            saveScoreInfo(chemicalScore,scoreParams,9);
+            return ResponseUtil.printJson("成绩录入成功",null);
         }catch (Exception e){
             logger.error("成绩信息录入异常,异常信息:"+e.getMessage(),e);
+            return ResponseUtil.printFailJson(ResponseUtil.SERVERUPLOAD,"服务器异常");
         }
-        return null;
+    }
+
+    private void saveScoreInfo(double score,ScoreParams scoreParams,Integer subject){
+        Scores s = new Scores();
+        if(score !=0.0){//化学成绩
+            scoreParams.setSubject(subject);
+            Scores select = scoresDao.queryOneByScoreParams(scoreParams);
+            //获取跟新或新增队想
+            if (select!=null) {
+                s =new Scores(select.getId(),scoreParams.getStudentId(),score,subject,checkScoreState(score));
+            }else {
+                s =new Scores(null,scoreParams.getStudentId(),score,subject,checkScoreState(score));
+            }
+            //保存或更新
+            saveScore(s);
+        }
     }
 
     /**
@@ -250,4 +174,5 @@ public class ScoresServiceImpl implements ScoresService {
             return 0;
         }
     }
+
 }

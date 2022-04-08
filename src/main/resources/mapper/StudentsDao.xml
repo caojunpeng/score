@@ -53,7 +53,6 @@
                 and (identity_num LIKE CONCAT(CONCAT('%', #{keyword}), '%')
                 or student_id LIKE CONCAT(CONCAT('%', #{keyword}), '%')
                 or name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
-                or address LIKE CONCAT(CONCAT('%', #{keyword}), '%')
                 )
             </if>
             <if test="sex != null">

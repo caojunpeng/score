@@ -32,7 +32,7 @@ public class ScoreParams {
     /**
      * 英语成绩
      */
-    private double EnglishScore;
+    private double englishScore;
 
     /**
      * 政治成绩
@@ -126,11 +126,11 @@ public class ScoreParams {
     }
 
     public double getEnglishScore() {
-        return EnglishScore;
+        return englishScore;
     }
 
     public void setEnglishScore(double englishScore) {
-        EnglishScore = englishScore;
+        englishScore = englishScore;
     }
 
     public double getPoliticsScore() {

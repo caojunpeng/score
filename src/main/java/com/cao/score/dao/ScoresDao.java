@@ -1,6 +1,7 @@
 package com.cao.score.dao;
 
 import com.cao.score.entity.Scores;
+import com.cao.score.vo.ObjectParams;
 import com.cao.score.vo.ScoreParams;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -90,5 +91,7 @@ public interface ScoresDao {
      * @return 影响行数
      */
     int deleteById(Long id);
+
+    List<ScoreParams> getScoresInfoDatas(ObjectParams objectParams);
 
 }

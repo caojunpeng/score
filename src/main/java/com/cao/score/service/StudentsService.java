@@ -39,6 +39,13 @@ public interface StudentsService {
     DataTablesResult<Students> getStudentInfoDatas(ObjectParams objectParams);
 
     /**
+     * 通过ObjectParams参数查询对象
+     * @param objectParams
+     * @return
+     */
+    List<Students> getStudentByParams(ObjectParams objectParams);
+
+    /**
      * 新增数据
      *
      * @param students 实例对象

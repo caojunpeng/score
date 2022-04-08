@@ -8,8 +8,9 @@ import com.cao.score.service.GradeClassService;
 import com.cao.score.service.ScoresService;
 import com.cao.score.utiles.ExcelUtils;
 import com.cao.score.utiles.ResponseUtil;
-import com.cao.score.utiles.ScoreDateUtils;
 import com.cao.score.utiles.ScoreFileUtil;
+import com.cao.score.vo.DataTablesResult;
+import com.cao.score.vo.ObjectParams;
 import com.cao.score.vo.ScoreParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +79,32 @@ public class ScoresController {
         modelAndView.addObject("gradeNumList",gradeNumList);
         modelAndView.setViewName("/score/scoresEnter");
         return modelAndView;
+    }
+
+    /**
+     * 跳转到成绩信息录入
+     * @return
+     */
+    @RequestMapping("/scoreManagement")
+    public ModelAndView scoreManagement(){
+        ModelAndView modelAndView=new ModelAndView();
+        //获取所有的年级
+        Map<String,Object> map = new HashMap<>();
+        map.put("groupStr","grade_num");
+        List<GradeClass> gradeNumList = gradeClassService.queryAllByMap(map);
+        modelAndView.setViewName("/score/scoresManagement");
+        return modelAndView;
+    }
+
+    /**
+     * 获取学生成绩信息列表
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/scoresInfoDatas")
+    public DataTablesResult<ScoreParams> scoresInfoDatas(ObjectParams objectParams){
+        return scoresService.getScoresInfoDatas(objectParams);
+
     }
 
     /**

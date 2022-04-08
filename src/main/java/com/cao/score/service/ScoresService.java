@@ -1,6 +1,8 @@
 package com.cao.score.service;
 
 import com.cao.score.entity.Scores;
+import com.cao.score.vo.DataTablesResult;
+import com.cao.score.vo.ObjectParams;
 import com.cao.score.vo.ScoreParams;
 
 import java.util.List;
@@ -54,7 +56,24 @@ public interface ScoresService {
      */
     boolean deleteById(Long id);
 
+    /**
+     * 保存一个学生的所有科目成绩
+     * @param scoreParams
+     * @return
+     */
     String saveScoreByParams(ScoreParams scoreParams);
 
+    /**
+     * 保存成绩对象
+     * @param scores
+     * @return
+     */
     Scores saveScore(Scores scores);
+
+    /**
+     * 成绩列表信息
+     * @param objectParams
+     * @return
+     */
+    DataTablesResult<ScoreParams> getScoresInfoDatas(ObjectParams objectParams);
 }

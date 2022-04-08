@@ -1,0 +1,214 @@
+<style>
+    .main-div .main-bottom .main-right .studentInfoManagement .disabled:active{
+        color: #fff !important;
+    }
+    .layer-blue{
+        overflow: auto;
+        background: #194898;
+        color: #fff;
+    }
+    .layui-layer-title,.layui-layer-ico{
+        color: #fff;
+    }
+</style>
+<div class="studentInfoManagement">
+    <h3>成绩信息管理</h3>
+    <div class="studentInfoManagement-top">
+        <form id="scoreInfoForm">
+            <div class="col-md-2">
+                <label class="control-label">关键字</label>
+                <input type="text" class="form-control" name="keyword" placeholder="学号/姓名/身份证号">
+            </div>
+            <div class="col-md-2">
+                <label class="control-label">年级</label>
+                <select class="form-control" name="gradeNum" id="gradeNumSelect" onchange="loadClassNumList()">
+                    <option value="">全部</option>
+                    <option  th:each="grade:${gradeNumList}" th:value="${grade.gradeNum}"  th:text="${grade.gradeNum}" ></option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="control-label">班级</label>
+                <select class="form-control" name="classNum" id="classNumSelect">
+                    <option value="">全部</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="control-label">性别</label>
+                <input type="text" class="form-control" name="sex" placeholder="学号/姓名/身份证号">
+            </div>
+            <button type="button" class="btn btn-primary searchBtn" onclick="searchScoreInfo()">查询</button>
+        </form>
+    </div>
+    <table id="dataTables-scoreInfoDatas"  class="table table-bordered">
+        <thead>
+            <tr>
+                <th>班级</th>
+                <th>年级</th>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>语文</th>
+                <th>数学</th>
+                <th>英语</th>
+                <th>政治</th>
+                <th>历史</th>
+                <th>地理</th>
+                <th>生物</th>
+                <th>物理</th>
+                <th>化学</th>
+                <th>操作</th>
+            </tr>
+        <thead>
+    </table>
+</div>
+<script type="text/javascript">
+    $('#dataTables-scoreInfoDatas').DataTable({
+		ajax : {
+			dataType : 'json',
+			url : "/scores/scoresInfoDatas",
+			data : function(aoData){
+                var jsonData = $("#scoreInfoForm").serializeArray();
+                jsonData.forEach(function (e, index) {
+                    aoData[e.name] = e.value;
+                });
+                return aoData;
+            }
+		},
+		serverSide : true,
+		searching : false,
+		bLengthChange : false,
+		lengthMenu : [ 10,20,50 ],
+		"columns" : [
+			{
+				"data" : "classNum"
+			},
+			{
+				"data" : "gradeNum"
+			},
+			{
+				"data" : "studentId"
+			},
+			{
+				"data" : "name"
+			},
+			{
+				"data" : "chineseScore"
+			},
+			{
+				"data" : "mathScore"
+			},
+			{
+				"data" : "englishScore"
+			},
+			{
+				"data" : "politicsScore"
+			},
+			{
+				"data" : "historyScore"
+			},
+            {
+                "data" : "geographyScore"
+            },
+            {
+                "data" : "biologicalScore"
+            },
+            {
+                "data" : "physicalScore"
+            },
+            {
+                "data" : "chemicalScore"
+            },
+			{
+				"data" : null,"render" : function(nRow, indexType,dataObj) {
+					var html ="";
+                      html+='<button type="button" class="btn btn-success" onclick="saveStudentInfoPage('+dataObj.studentId+')">编辑</button>'  ;
+                      html+='<button type="button" class="btn btn-success" onclick="delStudentInfo('+dataObj.studentId+')">删除</button>'  ;
+                    return  html;
+				}
+			}
+		],
+		responsive : true,
+		language : dataTablesLanguage
+	});
+
+    //查询
+    function searchScoreInfo() {
+        $('#dataTables-scoreInfoDatas').DataTable().draw();
+    }
+
+    //加载班级
+    function loadClassNumList(){
+        var gradeNum = $("#gradeNumSelect").val();
+        if(gradeNum){
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/students/getClassNumList",
+                data: {gradeNum:gradeNum},
+                success: function (result) {
+                    if(result){
+                        var obj = result;
+                        if(obj && obj.code == 200 && obj.data.length>0){
+                            var classObjList = obj.data;
+                            $("#classNumSelect").html("");
+                            var html="";
+                            html+='<option value="">全部</option>';
+                            for(var i=0;i<classObjList.length;i++){
+                                var classObj=classObjList[i];
+                                html+='<option value="'+classObj.classNum+'">'+classObj.classNum+'</option>';
+                            }
+                            $("#classNumSelect").html(html);
+                        }
+                    }
+                }
+            });
+        }else{
+            var html="";
+            html+='<option value="">全部</option>';
+            $("#classNumSelect").html(html);
+        }
+    }
+
+    //修改学生信息
+    function saveStudentInfoPage(id) {
+        $.ajax({
+            type: "POST",
+            url: "/students/saveStudentInfoPage",
+            //async: false,同步
+            data: {studentId:id},
+            success: function (html) {
+                layer.open({
+                    type: 1,
+                    skin: 'layer-blue',
+                    area: ['600px', '450px'], //宽高
+                    content: html
+                });
+            }
+        });
+    }
+
+    //删除学生信息
+    function delStudentInfo(id) {
+        layer.confirm('您确定删除该学生信息吗？', {
+            btn: ['确认','取消'] //按钮
+        }, function(){
+            $.ajax({
+                type: "POST",
+                url: "/students/delStudentInfo",
+                //async: false,同步
+                data: {id:id},
+                success: function (result) {
+                    if(result){
+                        var obj = result;
+                        if(obj && obj.code == 200){
+                            layer.msg(obj.message);
+                            $('#dataTables-scoreInfoDatas').DataTable().draw();
+                        }
+                    }
+                }
+            });
+        }, function(){
+
+        });
+    }
+
+</script>
