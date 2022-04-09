@@ -92,6 +92,13 @@ public interface ScoresDao {
      */
     int deleteById(Long id);
 
+    /**
+     * 通过学号清空成绩信息
+     * @param id
+     * @return
+     */
+    int deleteByStudentId(String studentId);
+
     List<ScoreParams> getScoresInfoDatas(ObjectParams objectParams);
 
 }

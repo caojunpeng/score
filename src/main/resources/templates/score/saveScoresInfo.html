@@ -1,0 +1,86 @@
+<div class="scoreSaveRow" >
+    <form id="scoreSaveForm">
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">语文</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="chineseScore" th:value="${score?.chineseScore}" >
+                <input type="hidden" name="studentId" th:value="${score?.studentId}" >
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">数学</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="mathScore" th:value="${score?.mathScore}" >
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">英语</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="englishScore" th:value="${score?.englishScore}"  >
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">政治</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="politicsScore" th:value="${score?.politicsScore}" >
+            </div>
+
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">历史</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="historyScore" th:value="${score?.historyScore}" >
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">地理</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="geographyScore" th:value="${score?.geographyScore}" >
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">生物</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="biologicalScore" th:value="${score?.biologicalScore}" >
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">物理</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="physicalScore" th:value="${score?.physicalScore}" >
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">化学</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="chemicalScore" th:value="${score?.chemicalScore}" >
+            </div>
+        </div>
+        <div class="col-md-12">
+            <button type="button" class="btn btn-primary saveScoreBtn" onclick="saveScore()">确定</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    //保存学生信息方法
+    function saveScore() {
+        $.ajax({
+            type: "POST",
+            url: "/scores/saveScoreByParams",
+            data: $('#scoreSaveForm').serialize(),
+            success: function (obj) {
+                var data=JSON.parse(obj);
+                if(data && data.code==200){
+                    $('#dataTables-scoreInfoDatas').DataTable().draw();
+                    layer.closeAll();
+                    layer.msg("更新成功");
+                    return;
+                }
+                layer.msg("更新失败");
+            }
+        });
+    }
+
+    /*]]>*/
+</script>

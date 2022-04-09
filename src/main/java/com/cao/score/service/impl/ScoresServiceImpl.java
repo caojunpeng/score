@@ -103,6 +103,11 @@ public class ScoresServiceImpl implements ScoresService {
         return dataTablesResult;
     }
 
+    @Override
+    public List<ScoreParams> getScoresInfos(ObjectParams objectParams) {
+        return scoresDao.getScoresInfoDatas(objectParams);
+    }
+
     /**
      * 通过主键删除数据
      *
@@ -114,12 +119,25 @@ public class ScoresServiceImpl implements ScoresService {
         return this.scoresDao.deleteById(id) > 0;
     }
 
+    /**
+     * 通过主键删除数据
+     *
+     * @param id 主键
+     * @return 是否成功
+     */
+    @Override
+    public boolean deleteByStudentId(String studentId) {
+        return this.scoresDao.deleteByStudentId(studentId) > 0;
+    }
+
     @Override
     public String saveScoreByParams(ScoreParams scoreParams) {
         try{
             if(ScoreStringUtils.isBlank(scoreParams.getStudentId())){
                 return ResponseUtil.printFailJson(ResponseUtil.PARAMS_ERROR,"学号为空");
             }
+            //首先删除某学生所有账号
+            deleteByStudentId(scoreParams.getStudentId());
             Scores scores = new Scores();
             scores.setStudentId(scoreParams.getStudentId());
             double chineseScore = scoreParams.getChineseScore();

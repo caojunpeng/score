@@ -92,7 +92,25 @@ public class ScoresController {
         Map<String,Object> map = new HashMap<>();
         map.put("groupStr","grade_num");
         List<GradeClass> gradeNumList = gradeClassService.queryAllByMap(map);
+        modelAndView.addObject("gradeNumList",gradeNumList);
         modelAndView.setViewName("/score/scoresManagement");
+        return modelAndView;
+    }
+
+    /**
+     * 跳转到成绩信息录入
+     * @return
+     */
+    @RequestMapping("/saveScoresInfoPage")
+    public ModelAndView saveScoresInfoPage(ObjectParams objectParams){
+        ModelAndView modelAndView=new ModelAndView();
+        List<ScoreParams> scoresInfos = scoresService.getScoresInfos(objectParams);
+        ScoreParams scoreParams = new ScoreParams();
+        if(!scoresInfos.isEmpty()){
+            scoreParams = scoresInfos.get(0);
+        }
+        modelAndView.addObject("score",scoreParams);
+        modelAndView.setViewName("/score/saveScoresInfo");
         return modelAndView;
     }
 
@@ -159,6 +177,16 @@ public class ScoresController {
     @RequestMapping("/saveScoreByParams")
     public String saveScoreByParams(ScoreParams scoreParams){
         return scoresService.saveScoreByParams(scoreParams);
+    }
+
+    /**
+     * 通过学号清空学生成绩
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/deleteByStudentId")
+    public boolean deleteByStudentId(ObjectParams objectParams){
+        return scoresService.deleteByStudentId(objectParams.getStudentId());
     }
     /**
      * 成绩excel模板下载

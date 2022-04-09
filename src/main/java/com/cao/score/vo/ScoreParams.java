@@ -130,7 +130,7 @@ public class ScoreParams {
     }
 
     public void setEnglishScore(double englishScore) {
-        englishScore = englishScore;
+        this.englishScore = englishScore;
     }
 
     public double getPoliticsScore() {

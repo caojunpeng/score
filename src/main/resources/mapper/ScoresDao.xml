@@ -75,6 +75,9 @@
                 or stu. name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
                 )
             </if>
+            <if test="studentId != null and studentId != ''">
+                and stu.student_id = #{studentId}
+            </if>
             <if test="gradeNum != null">
                 and stu.grade_num = #{gradeNum}
             </if>
@@ -146,6 +149,10 @@
     <!--通过主键删除-->
     <delete id="deleteById">
         delete from score.scores where id = #{id}
+    </delete>
+    <!--通过主键删除-->
+    <delete id="deleteByStudentId">
+        delete from score.scores where student_id = #{studentId}
     </delete>
 
 </mapper>

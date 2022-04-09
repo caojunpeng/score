@@ -10,6 +10,10 @@
     .layui-layer-title,.layui-layer-ico{
         color: #fff;
     }
+    #dataTables-studentInfoDatas_wrapper{
+        margin-top: 15px;
+        padding: 0 15px;
+    }
 </style>
 <div class="studentInfoManagement">
     <h3>基本信息管理</h3>
@@ -104,8 +108,8 @@
 			{
 				"data" : null,"render" : function(nRow, indexType,dataObj) {
 					var html ="";
-                      html+='<button type="button" class="btn btn-success" onclick="saveStudentInfoPage('+dataObj.id+')">编辑</button>'  ;
-                      html+='<button type="button" class="btn btn-success" onclick="delStudentInfo('+dataObj.id+')">删除</button>'  ;
+                      html+='<button type="button" class="btn btn-success btn-edit" onclick="saveStudentInfoPage('+dataObj.id+')">编辑</button>'  ;
+                      html+='<button type="button" class="btn btn-danger btn-del" onclick="delStudentInfo('+dataObj.id+')">删除</button>'  ;
                     return  html;
 				}
 			}

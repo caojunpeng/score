@@ -23,6 +23,19 @@ public class ObjectParams extends DataTablesParams {
     private Integer gradeNum;//年级
     private Integer classNum;//班级
 
+    /**
+     * 学号
+     */
+    private String studentId;
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+
     public Integer getSex() {
         return sex;
     }

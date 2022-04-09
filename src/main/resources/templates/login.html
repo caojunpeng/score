@@ -2,37 +2,38 @@
 <html  xmlns:th="http://www.thymeleaf.org">
 <head th:replace="head">
     <meta charset="UTF-8">
-    <title>Title</title>
 </head>
 <body class="logrinBody" onload="createCode()">
 <div class="loginDiv">
     <img src="/images/login/login.jpg">
 </div>
 <div>
-<div class="fromDiv">
-    <form id="loginFrom" role="form" action="/loginHtml">
-        <div class="form-group">
-            <div class="col-sm-9 loginInputDiv">
-                <input type="text" id="userName" name="userName" class="form-control" placeholder="用户名"/>
+    <div class="loginTitle">峪河镇中心校成绩管理系统</div>
+    <div class="fromDiv">
+        <form id="loginFrom" role="form" action="/loginHtml">
+            <div class="form-group">
+                <div class="col-sm-9 loginInputDiv">
+                    <input type="text" id="userName" name="userName" class="form-control loginInput" placeholder="用户名"/>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-9 loginInputDiv">
-                <input type="password" class="form-control" name="userPwd" id="userPwd" placeholder="密码">
+            <div class="form-group">
+                <div class="col-sm-9 loginInputDiv">
+                    <input type="password" class="form-control loginInput" name="userPwd" id="userPwd" placeholder="密码">
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-9 loginInputDiv">
-                <input type="text" class="form-control" id="verificationCode" placeholder="验证码">
-                <input type="text" onclick="createCode()" readonly="readonly" id="checkCode" class="form-control unchanged form-control" />
+            <div class="form-group">
+                <div class="col-sm-9 loginInputDiv">
+                    <input type="text" class="form-control loginInput" id="verificationCode" placeholder="验证码">
+                    <input type="text" onclick="createCode()" readonly="readonly" id="checkCode" class="form-control unchanged form-control" />
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-10">
-                <button type="button" class="btn btn-info loginBtn" onclick="userlogin()">登录</button>
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <button type="button" class="btn btn-info loginBtn" onclick="userlogin()">登录</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 </body>
 <script>

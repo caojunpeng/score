@@ -76,4 +76,18 @@ public interface ScoresService {
      * @return
      */
     DataTablesResult<ScoreParams> getScoresInfoDatas(ObjectParams objectParams);
+
+    /**
+     * 成绩信息查询
+     * @param objectParams
+     * @return
+     */
+    List<ScoreParams> getScoresInfos(ObjectParams objectParams);
+
+    /**
+     * 通过学号清空所有科目成绩
+     * @param objectParams
+     * @return
+     */
+    public boolean deleteByStudentId(String objectParams);
 }
