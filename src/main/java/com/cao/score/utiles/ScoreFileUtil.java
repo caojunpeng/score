@@ -12,6 +12,8 @@ public class ScoreFileUtil extends FileUtils {
 
     private static Logger logger = LoggerFactory.getLogger(ScoreFileUtil.class);
 
+    public static final String EXCEL = ".xlsx";
+
     /**
      * MultipartFile 转 File
      * @param file
@@ -106,4 +108,6 @@ public class ScoreFileUtil extends FileUtils {
             ioe.printStackTrace();
         }
     }
+
+
 }

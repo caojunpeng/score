@@ -18,6 +18,21 @@
         from score.dict
         where id = #{id}
     </select>
+    <!--查询单个-->
+    <select id="selectOneByDictIdAndTypeId" resultMap="DictMap">
+        select
+          id, dict_id, type_id, dict_name, dict_msg, dict_status
+        from score.dict
+        <where>
+            <if test="dictId != null">
+                and dict_id = #{dictId}
+            </if>
+            <if test="typeId != null">
+                and type_id = #{typeId}
+            </if>
+        </where>
+        limit 1
+    </select>
 
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="DictMap">

@@ -24,7 +24,7 @@
     border-radius: 3px !important;;
 /*    background: rgba(32,163,245, 0.3) !important;;
     border: 3px solid rgba(32,163,245, 0.45) !important;;*/
-    color: #ffffff !important;;
+
 }
 
 .logrinBody .fromDiv{
@@ -46,6 +46,7 @@
 .loginDiv .fromDiv #verificationCode{
     width: 60%;
     display: inline-block;
+    color: #fff;
 }
 .loginDiv .fromDiv .unchanged{
     width: 38%;
@@ -67,6 +68,7 @@
 .fromDiv .loginInputDiv #verificationCode{
     background: rgba(32,163,245, 0.3) !important;
     border: 3px solid rgba(32,163,245, 0.45) !important;
+    color: #ffffff !important;
 }
 .fromDiv #checkCode{
     display: block;
@@ -338,6 +340,26 @@
     margin-left: 10%;
 }
 
+/*教师信息管理*/
+.teacherInfoManagement{
+    color: #fff;
+}
+.teacherInfoManagement H3{
+    text-align: center;
+}
+.teacherInfoManagement table.dataTable tbody tr{
+    background-color: rgba(0,0,0,0.1);
+}
+.teacherInfoManagement .teacherInfoManagement-top{
+    display: flow-root;
+}
+.teacherInfoManagement .teacherInfoManagement-top button{
+    margin-top: 25px;
+}
+.studentInfoManagement table{
+    margin-top: 20px;
+}
+
 
 
 /*后台-主页*/
@@ -384,6 +406,7 @@
 /*成绩录入*/
 .scoresEnter h3{
     color: #fff;
+    text-align: center;
 }
 .scoresEnter #scoresInfoFiles{
     display: none;
@@ -393,6 +416,6 @@
 
 
 /*强制字体白色*/
-.next,.previous,.dataTables_info{
+.next,.previous,.dataTables_info,.layui-layer-setwin{
     color: #fff !important;
 }

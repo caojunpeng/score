@@ -22,6 +22,25 @@ public class ObjectParams extends DataTablesParams {
     private Integer sex;//性别
     private Integer gradeNum;//年级
     private Integer classNum;//班级
+    private Integer subject;//科目
+
+    private boolean exportType;//导出状态 true为导出
+
+    public boolean isExportType() {
+        return exportType;
+    }
+
+    public void setExportType(boolean exportType) {
+        this.exportType = exportType;
+    }
+
+    public Integer getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Integer subject) {
+        this.subject = subject;
+    }
 
     /**
      * 学号

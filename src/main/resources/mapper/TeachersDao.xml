@@ -7,7 +7,7 @@
         <result property="name" column="name" jdbcType="VARCHAR"/>
         <result property="sex" column="sex" jdbcType="INTEGER"/>
         <result property="age" column="age" jdbcType="INTEGER"/>
-        <result property="identityNum" column="identity_num" jdbcType="INTEGER"/>
+        <result property="identityNum" column="identity_num" jdbcType="VARCHAR"/>
         <result property="subject" column="subject" jdbcType="INTEGER"/>
         <result property="phone" column="phone" jdbcType="VARCHAR"/>
         <result property="gradeNum" column="grade_num" jdbcType="INTEGER"/>
@@ -56,6 +56,33 @@
             </if>
             <if test="phone != null and phone != ''">
                 and phone = #{phone}
+            </if>
+            <if test="gradeNum != null">
+                and grade_num = #{gradeNum}
+            </if>
+            <if test="classNum != null">
+                and class_num = #{classNum}
+            </if>
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="getTeacherInfoDatas" parameterType="com.cao.score.vo.ObjectParams" resultMap="TeachersMap">
+        select
+        id, name, sex, age, identity_num, subject, phone, grade_num, class_num
+        from score.teachers
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and (name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+                or identity_num LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+                or phone LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+                )
+            </if>
+            <if test="sex != null">
+                and sex = #{sex}
+            </if>
+            <if test="subject != null">
+                and subject = #{subject}
             </if>
             <if test="gradeNum != null">
                 and grade_num = #{gradeNum}

@@ -50,6 +50,18 @@ public class User implements Serializable {
      */
     private Integer status;
 
+    /**
+     * 原密码
+     */
+    private String originalPassword;
+
+    public String getOriginalPassword() {
+        return originalPassword;
+    }
+
+    public void setOriginalPassword(String originalPassword) {
+        this.originalPassword = originalPassword;
+    }
 
     public Long getUserId() {
         return userId;

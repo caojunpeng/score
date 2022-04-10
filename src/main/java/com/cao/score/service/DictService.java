@@ -32,6 +32,8 @@ public interface DictService {
 
     public List<Dict> queryAllDict(Map<String,Object> dict);
 
+    Dict selectOneByDictIdAndTypeId(Integer dictId,Integer typeId);
+
     /**
      * 新增数据
      *

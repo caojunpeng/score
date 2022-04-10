@@ -10,6 +10,8 @@ import com.cao.score.utiles.ScoreStringUtils;
 import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
 import com.cao.score.vo.ScoreParams;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -95,11 +97,15 @@ public class ScoresServiceImpl implements ScoresService {
 
     @Override
     public DataTablesResult<ScoreParams> getScoresInfoDatas(ObjectParams objectParams) {
+        if(!objectParams.isExportType()) {
+            PageHelper.offsetPage(objectParams.getStart(), objectParams.getLength());
+        }
         List<ScoreParams> studentInfoDatas = scoresDao.getScoresInfoDatas(objectParams);
+        PageInfo<ScoreParams> page = new PageInfo<ScoreParams>(studentInfoDatas);
         DataTablesResult<ScoreParams> dataTablesResult=new DataTablesResult<>();
-        dataTablesResult.setData(studentInfoDatas);
-        dataTablesResult.setRecordsFiltered(studentInfoDatas.size());
-        dataTablesResult.setRecordsTotal(studentInfoDatas.size());
+        dataTablesResult.setData(page.getList());
+        dataTablesResult.setRecordsFiltered(page.getTotal());
+        dataTablesResult.setRecordsTotal(page.getTotal());
         return dataTablesResult;
     }
 
@@ -120,9 +126,9 @@ public class ScoresServiceImpl implements ScoresService {
     }
 
     /**
-     * 通过主键删除数据
+     * 通过学号
      *
-     * @param id 主键
+     * @param studentId 主键
      * @return 是否成功
      */
     @Override

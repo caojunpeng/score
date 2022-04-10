@@ -29,7 +29,7 @@
         <div class="layui-logo layui-hide-xs">后台管理</div>
         <div class="system-main">
             <a href="/index" id="main">系统主页</a>
-            <a href="/logOut" id="logout">退出登录</a>
+            <a href="#" onclick="logout()" id="logout">退出登录</a>
         </div>
     </div>
     <div class="layui-side layui-bg-black">
@@ -61,5 +61,8 @@
     $(function () {
         $(".layui-nav-tree li:first").addClass("layui-nav-itemed");
     })
+    function logout() {
+        window.location.href="/loginOut";
+    }
 </script>
 </html>

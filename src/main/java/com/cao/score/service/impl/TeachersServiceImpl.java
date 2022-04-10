@@ -1,8 +1,14 @@
 package com.cao.score.service.impl;
 
 import com.cao.score.dao.TeachersDao;
+import com.cao.score.entity.Dict;
+import com.cao.score.entity.Students;
 import com.cao.score.entity.Teachers;
+import com.cao.score.service.DictService;
 import com.cao.score.service.TeachersService;
+import com.cao.score.vo.DataTablesResult;
+import com.cao.score.vo.ObjectParams;
+import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,6 +24,9 @@ import java.util.List;
 public class TeachersServiceImpl implements TeachersService {
     @Resource
     private TeachersDao teachersDao;
+
+    @Resource
+    private DictService dictService;
 
     /**
      * 通过ID查询单条数据
@@ -75,5 +84,29 @@ public class TeachersServiceImpl implements TeachersService {
     @Override
     public boolean deleteById(Long id) {
         return this.teachersDao.deleteById(id) > 0;
+    }
+
+    @Override
+    public DataTablesResult<Teachers> getTeacherInfoDatas(ObjectParams objectParams) {
+        if(!objectParams.isExportType()) {
+            PageHelper.offsetPage(objectParams.getStart(), objectParams.getLength());
+        }
+        List<Teachers> teachers = teachersDao.getTeacherInfoDatas(objectParams);
+        if(!teachers.isEmpty()){
+            for (Teachers teacher: teachers){
+                Integer subject = teacher.getSubject();
+                if(subject!=null){
+                    Dict dict = dictService.selectOneByDictIdAndTypeId(subject, 1);
+                    if(dict!=null){
+                        teacher.setSubjectStr(dict.getDictName());
+                    }
+                }
+            }
+        }
+        DataTablesResult<Teachers> dataTablesResult=new DataTablesResult<>();
+        dataTablesResult.setData(teachers);
+        dataTablesResult.setRecordsFiltered(teachers.size());
+        dataTablesResult.setRecordsTotal(teachers.size());
+        return dataTablesResult;
     }
 }

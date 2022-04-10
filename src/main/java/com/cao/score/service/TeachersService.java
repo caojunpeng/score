@@ -1,6 +1,8 @@
 package com.cao.score.service;
 
 import com.cao.score.entity.Teachers;
+import com.cao.score.vo.DataTablesResult;
+import com.cao.score.vo.ObjectParams;
 
 import java.util.List;
 
@@ -52,5 +54,7 @@ public interface TeachersService {
      * @return 是否成功
      */
     boolean deleteById(Long id);
+
+    DataTablesResult<Teachers> getTeacherInfoDatas(ObjectParams objectParams);
 
 }

@@ -29,11 +29,15 @@ public class Teachers implements Serializable {
     /**
      * 身份证号
      */
-    private Integer identityNum;
+    private String identityNum;
     /**
      * 任职科目：见字典type_id=2
      */
     private Integer subject;
+    /**
+     * 教授科目（转义后）
+     */
+    private String subjectStr;
     /**
      * 联系方式
      */
@@ -47,6 +51,13 @@ public class Teachers implements Serializable {
      */
     private Integer classNum;
 
+    public String getSubjectStr() {
+        return subjectStr;
+    }
+
+    public void setSubjectStr(String subjectStr) {
+        this.subjectStr = subjectStr;
+    }
 
     public Long getId() {
         return id;
@@ -80,11 +91,11 @@ public class Teachers implements Serializable {
         this.age = age;
     }
 
-    public Integer getIdentityNum() {
+    public String getIdentityNum() {
         return identityNum;
     }
 
-    public void setIdentityNum(Integer identityNum) {
+    public void setIdentityNum(String identityNum) {
         this.identityNum = identityNum;
     }
 

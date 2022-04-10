@@ -38,6 +38,7 @@ public class Students implements Serializable {
      */
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date birthdate;
+    private String birthDateStr;
     /**
      * 身份证号
      */
@@ -55,6 +56,13 @@ public class Students implements Serializable {
      */
     private Integer classNum;
 
+    public String getBirthDateStr() {
+        return birthDateStr;
+    }
+
+    public void setBirthDateStr(String birthDateStr) {
+        this.birthDateStr = birthDateStr;
+    }
 
     public Long getId() {
         return id;

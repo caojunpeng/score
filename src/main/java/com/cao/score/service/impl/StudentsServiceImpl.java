@@ -4,11 +4,16 @@ import com.cao.score.dao.StudentsDao;
 import com.cao.score.entity.Role;
 import com.cao.score.entity.Students;
 import com.cao.score.service.StudentsService;
+import com.cao.score.utiles.ScoreDateUtils;
+import com.cao.score.utiles.ScoreStringUtils;
 import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,11 +54,25 @@ public class StudentsServiceImpl implements StudentsService {
 
     @Override
     public DataTablesResult<Students> getStudentInfoDatas(ObjectParams objectParams) {
+        if(!objectParams.isExportType()) {
+            PageHelper.offsetPage(objectParams.getStart(), objectParams.getLength());
+        }
         List<Students> studentInfoDatas = studentsDao.getStudentInfoDatas(objectParams);
+        if(!studentInfoDatas.isEmpty()){
+            for(Students student:studentInfoDatas){
+                String birthDateStr = "";
+                Date birthdate = student.getBirthdate();
+                if(birthdate!=null){
+                    birthDateStr = ScoreDateUtils.dateToStr(birthdate,ScoreDateUtils.format_date);
+                }
+                student.setBirthDateStr(birthDateStr);
+            }
+        }
+        PageInfo<Students> page = new PageInfo<Students>(studentInfoDatas);
         DataTablesResult<Students> dataTablesResult=new DataTablesResult<>();
-        dataTablesResult.setData(studentInfoDatas);
-        dataTablesResult.setRecordsFiltered(studentInfoDatas.size());
-        dataTablesResult.setRecordsTotal(studentInfoDatas.size());
+        dataTablesResult.setData(page.getList());
+        dataTablesResult.setRecordsFiltered(page.getTotal());
+        dataTablesResult.setRecordsTotal(page.getTotal());
         return dataTablesResult;
     }
 

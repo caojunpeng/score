@@ -52,6 +52,11 @@ public class DictServiceImpl implements DictService {
         return this.dictDao.queryAll(dict);
     }
 
+    @Override
+    public Dict selectOneByDictIdAndTypeId(Integer dictId, Integer typeId) {
+        return this.dictDao.selectOneByDictIdAndTypeId(dictId,typeId);
+    }
+
     /**
      * 新增数据
      *

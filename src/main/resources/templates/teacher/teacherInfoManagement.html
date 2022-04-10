@@ -1,5 +1,5 @@
 <style>
-    .main-div .main-bottom .main-right .studentInfoManagement .disabled:active{
+    .main-div .main-bottom .main-right .teacherInfoManagement .disabled:active{
         color: #fff !important;
     }
     .layer-blue{
@@ -10,22 +10,26 @@
     .layui-layer-title,.layui-layer-ico{
         color: #fff;
     }
-    #dataTables-studentInfoDatas_wrapper{
+    #dataTables-teacherInfoDatas_wrapper{
         margin-top: 15px;
         padding: 0 15px;
     }
 </style>
-<div class="studentInfoManagement">
+<div class="teacherInfoManagement">
     <h3>基本信息管理</h3>
-    <div class="studentInfoManagement-top">
-        <form id="studentInfoForm">
+    <div class="teacherInfoManagement-top">
+        <form id="teacherInfoForm">
             <div class="col-md-2">
                 <label class="control-label">关键字</label>
-                <input type="text" class="form-control" name="keyword" placeholder="学号/姓名/身份证号">
+                <input type="text" class="form-control" name="keyword" placeholder="姓名/身份证号/手机号">
             </div>
             <div class="col-md-2">
                 <label class="control-label">性别</label>
-                <input type="text" class="form-control" name="sex" placeholder="学号/姓名/身份证号">
+                <select class="form-control" name="sex">
+                    <option value="">全部</option>
+                    <option value="1">男</option>
+                    <option value="2">女</option>
+                </select>
             </div>
             <div class="col-md-2">
                 <label class="control-label">年级</label>
@@ -40,66 +44,51 @@
                     <option value="">全部</option>
                 </select>
             </div>
-            <button type="button" class="btn btn-primary searchBtn" onclick="searchStudentInfo()">查询</button>
-            <button type="button" class="btn btn-primary searchBtn" onclick="exportStudentInfo()">导出</button>
+            <div class="col-md-2">
+                <label class="control-label">科目</label>
+                <select class="form-control" name="subject">
+                    <option value="">全部</option>
+                    <option  th:each="dict:${dicts}" th:value="${dict.dictId}"  th:text="${dict.dictName}" ></option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-primary searchBtn" onclick="searchteacherInfo()">查询</button>
+            <button type="button" class="btn btn-primary searchBtn" onclick="addTeacherInfo()">新增</button>
         </form>
     </div>
-    <table id="dataTables-studentInfoDatas"  class="table table-bordered">
+    <table id="dataTables-teacherInfoDatas"  class="table table-bordered">
         <thead>
-            <tr>
-                <th>学号</th>
-                <th>姓名</th>
-                <th>性别</th>
-                <th>年龄</th>
-                <th>出生日期</th>
-                <th>身份证号</th>
-                <th>家庭住址</th>
-                <th>年级</th>
-                <th>班级</th>
-                <th>操作</th>
-            </tr>
+        <tr>
+            <th>年级</th>
+            <th>班级</th>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>年龄</th>
+            <th>身份证号</th>
+            <th>教授科目</th>
+            <th>联系方式</th>
+            <th>操作</th>
+        </tr>
         <thead>
     </table>
 </div>
 <script type="text/javascript">
-    $('#dataTables-studentInfoDatas').DataTable({
-		ajax : {
-			dataType : 'json',
-			url : "/students/studentInfoDatas",
-			data : function(aoData){
-                var jsonData = $("#studentInfoForm").serializeArray();
+    $('#dataTables-teacherInfoDatas').DataTable({
+        ajax : {
+            dataType : 'json',
+            url : "/teachers/teacherInfoDatas",
+            data : function(aoData){
+                var jsonData = $("#teacherInfoForm").serializeArray();
                 jsonData.forEach(function (e, index) {
                     aoData[e.name] = e.value;
                 });
                 return aoData;
             }
-		},
-		serverSide : true,
-		searching : false,
-		bLengthChange : false,
-		lengthMenu : [ 10,20,50 ],
-		"columns" : [
-            {
-                "data" : "studentId"
-            },
-            {
-                "data" : "name"
-            },
-            {
-                "data" : "sex"
-            },
-            {
-                "data" : "age"
-            },
-            {
-                "data" : "birthDateStr"
-            },
-            {
-                "data" : "identityNum"
-            },
-            {
-                "data" : "address"
-            },
+        },
+        serverSide : true,
+        searching : false,
+        bLengthChange : false,
+        lengthMenu : [ 10,20,50 ],
+        "columns" : [
             {
                 "data" : "gradeNum"
             },
@@ -107,21 +96,47 @@
                 "data" : "classNum"
             },
             {
+                "data" : "name"
+            },
+            {
+                "data" : "sex","render" : function(nRow, indexType,dataObj) {
+                   if(nRow==1){
+                       return "男";
+                   }else if(nRow==2){
+                       return "女";
+                   }else {
+                       return "未知";
+                   }
+                }
+            },
+            {
+                "data" : "age"
+            },
+            {
+                "data" : "identityNum"
+            },
+            {
+                "data" : "subjectStr"
+            },
+            {
+                "data" : "phone"
+            },
+            {
                 "data" : null,"render" : function(nRow, indexType,dataObj) {
                     var html ="";
-                    html+='<button type="button" class="btn btn-success btn-edit" onclick="saveStudentInfoPage('+dataObj.id+')">编辑</button>'  ;
-                    html+='<button type="button" class="btn btn-danger btn-del" onclick="delStudentInfo('+dataObj.id+')">删除</button>'  ;
+                    html+='<button type="button" class="btn btn-success btn-edit" onclick="editTeacherInfoPage('+dataObj.id+')">编辑</button>'  ;
+                    html+='<button type="button" class="btn btn-danger btn-del" onclick="delTeacherInfo('+dataObj.id+')">删除</button>'  ;
                     return  html;
                 }
             }
-		],
-		responsive : true,
-		language : dataTablesLanguage
-	});
+        ],
+        responsive : true,
+        language : dataTablesLanguage
+    });
 
     //查询
-    function searchStudentInfo() {
-        $('#dataTables-studentInfoDatas').DataTable().draw();
+    function searchteacherInfo() {
+        $('#dataTables-teacherInfoDatas').DataTable().draw();
     }
 
     //加载班级
@@ -157,13 +172,13 @@
         }
     }
 
-    //修改学生信息
-    function saveStudentInfoPage(id) {
+    //修改教师信息
+    function editTeacherInfoPage(id) {
         $.ajax({
             type: "POST",
-            url: "/students/saveStudentInfoPage",
+            url: "/teachers/editTeacherInfoPage",
             //async: false,同步
-            data: {studentId:id},
+            data: {teacherId:id},
             success: function (html) {
                 layer.open({
                     type: 1,
@@ -175,22 +190,22 @@
         });
     }
 
-    //删除学生信息
-    function delStudentInfo(id) {
-        layer.confirm('您确定删除该学生信息吗？', {
+    //删除教师信息
+    function delTeacherInfo(id) {
+        layer.confirm('您确定删除该教师信息吗？', {
             btn: ['确认','取消'] //按钮
         }, function(){
             $.ajax({
                 type: "POST",
-                url: "/students/delStudentInfo",
+                url: "/teachers/delTeacherInfo",
                 //async: false,同步
                 data: {id:id},
                 success: function (result) {
                     if(result){
-                        var obj = result;
+                        var obj = JSON.parse(result);
                         if(obj && obj.code == 200){
                             layer.msg(obj.message);
-                            $('#dataTables-studentInfoDatas').DataTable().draw();
+                            $('#dataTables-teacherInfoDatas').DataTable().draw();
                         }
                     }
                 }
@@ -200,15 +215,20 @@
         });
     }
 
-    function exportStudentInfo() {
-        var jsonData = $("#studentInfoForm").serializeArray();
-        var aoData=[];
-        jsonData.forEach(function (e, index) {
-            aoData.push(e.name+"="+e.value);
+    //添加教师信息
+    function addTeacherInfo() {
+        $.ajax({
+            type: "POST",
+            url: "/teachers/addTeacherInfoPage",
+            //async: false,同步
+            success: function (html) {
+                layer.open({
+                    type: 1,
+                    skin: 'layer-blue',
+                    area: ['600px', '450px'], //宽高
+                    content: html
+                });
+            }
         });
-        var dat = aoData.join("&");
-        var url = "/students/exportStudentInfo?"+dat;
-        window.location.href = url;
     }
-
 </script>

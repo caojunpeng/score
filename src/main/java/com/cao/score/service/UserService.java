@@ -69,4 +69,13 @@ public interface UserService {
      */
     DataTablesResult<User> dataLists(ObjectParams params);
 
+    /**
+     * 密码赋值
+     * @param possword 新密码
+     * @param user 用户
+     * @param type true：新增  false：编辑
+     * @return
+     */
+    User setUserPossword(String possword,User user,boolean type);
+
 }

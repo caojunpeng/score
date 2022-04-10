@@ -38,6 +38,46 @@
             }
         });
     }
+    /**
+     * 获取合法的url 防止url中出现非法字符
+     * @param url
+     */
+    utils.getLegalUrl = function getLegalUrl(url){
+        var finalUrl = "";
+        if(url.indexOf("?")>0){
+            var urlPrefix = url.substring(0,url.indexOf("?")+1);
+            var urlParam = url.substring(url.indexOf("?")+1,url.length);
+            if(urlParam.indexOf("&")>0){
+                var finalUrlParam = "";
+                var strings = urlParam.split("&");
+                strings.forEach(function (e,i) {
+                    var index = e.indexOf("=")+1;
+                    if(index>0){
+                        var param = e.substring(0,index);
+                        var value = e.substring(index,e.length);
+                        var val = encodeURIComponent(value);
+                        finalUrlParam += param + val;
+                    }else {
+                        finalUrlParam += e;
+                    }
+                    if(i!=strings.length-1){
+                        finalUrlParam += "&";
+                    }
+                })
+                finalUrl = urlPrefix + finalUrlParam;
+            }else{
+                var index = urlParam.indexOf("=")+1;
+                var onlyParam = urlParam.substring(0,index);
+                var onlyValue = urlParam.substring(index,urlParam.length);
+                var val = encodeURIComponent(onlyValue);
+                finalUrl = urlPrefix + onlyParam + val;
+            }
+        }else{
+            finalUrl = url;
+        }
+        return finalUrl;
+    }
+
 
     /**
      * 是否为数字

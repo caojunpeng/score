@@ -4,6 +4,7 @@ import com.cao.score.entity.User;
 import com.cao.score.service.UserService;
 import com.cao.score.shiro.SaltUtil;
 import com.cao.score.utiles.ResponseUtil;
+import com.cao.score.utiles.ScoreStringUtils;
 import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
 import org.apache.catalina.security.SecurityUtil;
@@ -105,17 +106,12 @@ public class UserController {
             if(userId!=null){
                 User user1 = userService.update(user);
             }else{
-                //1.获取随机盐
-                String salt = SaltUtil.getSalt(8);
-                //2.将随机盐保存到数据
-                user.setSalt(salt);
-                //3.明文密码进行md5 + salt + hash散列
-                Md5Hash md5 = new Md5Hash(user.getUserPwd(),salt,1024);
-                user.setUserPwd(md5.toHex());
+                //密码赋值
+                user=userService.setUserPossword(user.getUserPwd(),user,true);
                 user.setCreateTime(new Date());
-                User u=(User)SecurityUtils.getSubject().getPrincipal();
+                Object u=SecurityUtils.getSubject().getPrincipal();
                 if(u!=null){
-                    user.setCreator(u.getUserName());
+                    user.setCreator(String.valueOf(u));
                 }
                 userService.insert(user);
             }
@@ -125,5 +121,65 @@ public class UserController {
         }
         return ResponseUtil.printJson("新增对象成功",null);
     }
+
+    /**
+     * 修改当前用户的密码
+     * @param password
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/editPassword")
+    public String editPassword(String password) {
+        Object principal = SecurityUtils.getSubject().getPrincipal();
+        if(principal!=null){
+            String userName =String.valueOf(principal);
+            User u=new User();
+            u.setUserName(userName);
+            User user = userService.queryOne(u);
+            if(user!=null) {
+                //密码赋值
+                user=userService.setUserPossword(password,user,false);
+                userService.update(user);
+            }else{
+                return ResponseUtil.printFailJson(ResponseUtil.PARAMS_ERROR,"参数异常");
+            }
+        }
+        return ResponseUtil.printJson("修改密码成功",null);
+    }
+    /**
+     * 通过用户名重置密码
+     * @param
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/resetPassword")
+    public String resetPassword(String studentId) {
+        String result = "";
+        try {
+            if(ScoreStringUtils.isBlank(studentId)){
+                return ResponseUtil.printFailJson(ResponseUtil.PARAMS_ERROR,"参数异常");
+            }
+            Object principal = SecurityUtils.getSubject().getPrincipal();
+            if(principal!=null){
+                String userName =studentId;
+
+                User u=new User();
+                u.setUserName(userName);
+                User user = userService.queryOne(u);
+                if(user!=null) {
+                    //密码赋值
+                    user=userService.setUserPossword(user.getOriginalPassword(),user,false);
+                    userService.update(user);
+                }else{
+                    return ResponseUtil.printFailJson(ResponseUtil.PARAMS_ERROR,"参数异常");
+                }
+            }
+        }catch (Exception e){
+            logger.error("重置密码异常,异常信息："+e.getMessage(),e);
+            return ResponseUtil.printFailJson(ResponseUtil.SERVERUPLOAD,"重置密码异常");
+        }
+        return ResponseUtil.printJson("重置密码成功",null);
+    }
+
 
 }

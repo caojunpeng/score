@@ -10,6 +10,8 @@
         <div class="top-left">个人系统</div>
 
         <div class="top-right">
+            <div class="headDiv adminManagerDiv" onclick="resetPasswordPage()"> <i class="adminManagerIcon"></i>重置学生密码</div>
+            <div class="headDiv adminManagerDiv" onclick="editPasswordPage()"> <i class="adminManagerIcon"></i>修改密码</div>
             <div class="headDiv adminManagerDiv" onclick="adminManager()"> <i class="adminManagerIcon"></i>设置</div>
             <div class="headDiv headSapn" onclick="headInfo()"> <i class="headIcon"></i><span class="headSpan" th:text="${userName}"></span></div>
             <input type="hidden" id="userName" th:value="${userName}"/>
@@ -100,6 +102,82 @@
     })
     function fileUpload(){
         $("#addfiles").click();
+    }
+
+    //重置密码
+    function resetPasswordPage(){
+        var html = "";
+        html+='<div>' +
+            '        <div class="col-md-12">\n' +
+            '            <label class="col-sm-12 control-label">用户名（学生学号/教师身份证号）</label>\n' +
+            '            <div class="col-sm-12">\n' +
+            '                <input type="text" class="form-control" id="editUserName" placeholder="请输入联系方式">\n' +
+            '            </div>\n' +
+            '        </div>' +
+            '       <div class="col-md-12">\n' +
+            '            <button type="button" class="btn btn-primary saveteacherBtn" onclick="resetPassword()">重置</button>\n' +
+            '        </div>' +
+            '</div>';
+        layer.open({
+            type: 1,
+            skin: 'layer-blue',
+            area: ['600px', '450px'], //宽高
+            content: html
+        });
+    }
+    function resetPassword() {
+        $.ajax({
+            type: "POST",
+            url: "/user/resetPassword",
+            data:{studentId:$("#editUserName").val()},
+            success: function (result) {
+                if(result){
+                    var obj = JSON.parse(result);
+                    if(obj && obj.code == 200){
+                        layer.msg(obj.message);
+                    }
+                }
+            }
+        });
+    }
+
+
+    //修改密码
+    function editPasswordPage(){
+        var html = "";
+        html+='<div>' +
+            '        <div class="col-md-12">\n' +
+            '            <label class="col-sm-12 control-label">新密码</label>\n' +
+            '            <div class="col-sm-12">\n' +
+            '                <input type="text" class="form-control" id="editPassword" placeholder="请输入新密码">\n' +
+            '            </div>\n' +
+            '        </div>' +
+            '       <div class="col-md-12">\n' +
+            '            <button type="button" class="btn btn-primary saveteacherBtn" onclick="editPassword()">修改</button>\n' +
+            '        </div>' +
+            '</div>';
+        layer.open({
+            type: 1,
+            skin: 'layer-blue',
+            area: ['600px', '450px'], //宽高
+            content: html
+        });
+    }
+    function editPassword() {
+        $.ajax({
+            type: "POST",
+            url: "/user/editPassword",
+            data:{password:$("#editPassword").val()},
+            success: function (result) {
+                if(result){
+                    var obj = JSON.parse(result);
+                    if(obj && obj.code == 200){
+                        layer.msg(obj.message);
+                        logout();
+                    }
+                }
+            }
+        });
     }
 
 </script>

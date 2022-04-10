@@ -3,8 +3,10 @@ package com.cao.score.service.impl;
 import com.cao.score.dao.UserDao;
 import com.cao.score.entity.User;
 import com.cao.score.service.UserService;
+import com.cao.score.shiro.SaltUtil;
 import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -97,5 +99,27 @@ public class UserServiceImpl implements UserService {
         dataTablesResult.setRecordsFiltered(users.size());
         dataTablesResult.setRecordsTotal(users.size());
         return dataTablesResult;
+    }
+
+    @Override
+    public User setUserPossword(String possword, User user,boolean type) {
+        if(type){
+            user.setOriginalPassword(possword);
+        }
+        //1.获取随机盐
+        String salt = SaltUtil.getSalt(8);
+        //2.将随机盐保存到数据
+        user.setSalt(salt);
+        //3.明文密码进行md5 + salt + hash散列
+        Md5Hash md5 = new Md5Hash(possword,salt,1024);
+        user.setUserPwd(md5.toHex());
+        return user;
+    }
+
+    public static void main(String[] args) {
+        String salt = SaltUtil.getSalt(8);
+        System.out.println(salt);
+        Md5Hash md5 = new Md5Hash("123456",salt,1024);
+        System.out.println(md5);
     }
 }

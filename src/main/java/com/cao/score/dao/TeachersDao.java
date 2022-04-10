@@ -1,6 +1,7 @@
 package com.cao.score.dao;
 
 import com.cao.score.entity.Teachers;
+import com.cao.score.vo.ObjectParams;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -80,5 +81,7 @@ public interface TeachersDao {
      * @return 影响行数
      */
     int deleteById(Long id);
+
+    List<Teachers> getTeacherInfoDatas(ObjectParams objectParams);
 
 }

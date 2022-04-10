@@ -25,6 +25,14 @@ public interface DictDao {
     Dict queryById(Long id);
 
     /**
+     * 通过dictId和TypeId查询单条数据
+     *
+     * @param dictId 主键
+     * @return 实例对象
+     */
+    Dict selectOneByDictIdAndTypeId(Integer dictId,Integer typeId);
+
+    /**
      * 查询指定行数据
      *
      * @param offset 查询起始位置

@@ -1,6 +1,5 @@
 package com.cao.score.controller;
 
-import com.cao.score.entity.Dict;
 import com.cao.score.entity.GradeClass;
 import com.cao.score.entity.Students;
 import com.cao.score.service.CommonFilesService;
@@ -10,8 +9,7 @@ import com.cao.score.service.StudentsService;
 import com.cao.score.utiles.*;
 import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.*;
@@ -269,6 +268,17 @@ public class StudentsController {
     public void downloadStudentExcelTemplate(HttpServletResponse response){
         String fileName = "studentInfoTemplate.xlsx";
         commonFilesService.downloadLocalFile(response,fileName);
+    }
+
+    // 学生信息导出
+    @ResponseBody
+    @RequestMapping(value = "/exportStudentInfo")
+    public void harvestRateReport(ObjectParams param, HttpServletRequest request, HttpServletResponse response) {
+        String sheetName = "学生基本信息";
+        String fileName = sheetName + ScoreDateUtils.dateToStr(new Date(), "yyyyMMddHHmmss") + ScoreFileUtil.EXCEL;
+        Map<String, Object> map = new HashMap<>();
+        map.put("param", param);
+       commonFilesService.exportExcel(fileName, map, sheetName,  request,  response);
     }
 
 }
