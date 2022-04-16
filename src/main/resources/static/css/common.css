@@ -166,7 +166,7 @@
     background: url(../images/admin/main.jpg) no-repeat;
     background-size:cover;
     width: 100%;
-    height: 937px;
+    height: 753px;
 }
 .main-div .main-top{
     display: block;
@@ -220,7 +220,7 @@
 .main-div .main-bottom{
     display: block;
     width: 100%;
-    height: 850px;
+    height: 675px;
 }
 .main-div .main-bottom .main-left{
     display: block;
@@ -252,7 +252,7 @@
 }
 .main-div .main-bottom .main-right{
     display: block;
-    width: 90%;
+    width: 90.4%;
     height: 100%;
     border: 1px solid #4dadff;
     float: left;
