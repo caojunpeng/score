@@ -47,6 +47,19 @@ public class ObjectParams extends DataTablesParams {
      */
     private String studentId;
 
+    /**
+     * 考试编号
+     */
+    private String scoreNum;
+
+    public String getScoreNum() {
+        return scoreNum;
+    }
+
+    public void setScoreNum(String scoreNum) {
+        this.scoreNum = scoreNum;
+    }
+
     public String getStudentId() {
         return studentId;
     }

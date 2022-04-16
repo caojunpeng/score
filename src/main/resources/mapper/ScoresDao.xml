@@ -8,6 +8,7 @@
         <result property="score" column="score" jdbcType="NUMERIC"/>
         <result property="subject" column="subject" jdbcType="INTEGER"/>
         <result property="qualifiedState" column="qualified_state" jdbcType="INTEGER"/>
+        <result property="scoreNum" column="score_num" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--查询单个-->
@@ -57,17 +58,54 @@
         stu.class_num classNum,
         stu.student_id studentId,
         stu.name name,
-        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 1 AND s.student_id = stu.student_id LIMIT 1 ) chineseScore,
-        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 2 AND s.student_id = stu.student_id LIMIT 1 ) mathScore,
-        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 3 AND s.student_id = stu.student_id LIMIT 1 ) englishScore,
-        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 4 AND s.student_id = stu.student_id LIMIT 1 ) politicsScore,
-        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 5 AND s.student_id = stu.student_id LIMIT 1 ) historyScore,
-        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 6 AND s.student_id = stu.student_id LIMIT 1 ) geographyScore,
-        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 7 AND s.student_id = stu.student_id LIMIT 1 ) biologicalScore,
-        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 8 AND s.student_id = stu.student_id LIMIT 1 ) physicalScore,
-        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 9 AND s.student_id = stu.student_id LIMIT 1 ) chemicalScore
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 1 AND s.student_id = stu.student_id
+        <if test="scoreNum != null and scoreNum != ''">
+            and s.score_num = #{scoreNum}
+        </if>
+         LIMIT 1 ) chineseScore,
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 2 AND s.student_id = stu.student_id
+        <if test="scoreNum != null and scoreNum != ''">
+            and s.score_num = #{scoreNum}
+        </if>
+        LIMIT 1 ) mathScore,
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 3 AND s.student_id = stu.student_id
+        <if test="scoreNum != null and scoreNum != ''">
+            and s.score_num = #{scoreNum}
+        </if>
+        LIMIT 1 ) englishScore,
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 4 AND s.student_id = stu.student_id
+        <if test="scoreNum != null and scoreNum != ''">
+            and s.score_num = #{scoreNum}
+        </if>
+        LIMIT 1 ) politicsScore,
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 5 AND s.student_id = stu.student_id
+        <if test="scoreNum != null and scoreNum != ''">
+            and s.score_num = #{scoreNum}
+        </if>
+        LIMIT 1 ) historyScore,
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 6 AND s.student_id = stu.student_id
+        <if test="scoreNum != null and scoreNum != ''">
+            and s.score_num = #{scoreNum}
+        </if>
+        LIMIT 1 ) geographyScore,
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 7 AND s.student_id = stu.student_id
+        <if test="scoreNum != null and scoreNum != ''">
+            and s.score_num = #{scoreNum}
+        </if>
+        LIMIT 1 ) biologicalScore,
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 8 AND s.student_id = stu.student_id
+        <if test="scoreNum != null and scoreNum != ''">
+            and s.score_num = #{scoreNum}
+        </if>
+        LIMIT 1 ) physicalScore,
+        (	SELECT s.score FROM	scores s 	WHERE	s.`subject` = 9 AND s.student_id = stu.student_id
+        <if test="scoreNum != null and scoreNum != ''">
+            and s.score_num = #{scoreNum}
+        </if>
+        LIMIT 1 ) chemicalScore
         FROM
-        students stu
+        scores ss left join
+        students stu on ss.student_id = stu.student_id
         <where>
             <if test="keyword != null and keyword != ''">
                 and (stu.identity_num LIKE CONCAT(CONCAT('%', #{keyword}), '%')
@@ -75,9 +113,13 @@
                 or stu. name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
                 )
             </if>
+            <if test="scoreNum != null and scoreNum != ''">
+                and ss.score_num = #{scoreNum}
+            </if>
             <if test="studentId != null and studentId != ''">
                 and stu.student_id = #{studentId}
             </if>
+
             <if test="gradeNum != null">
                 and stu.grade_num = #{gradeNum}
             </if>

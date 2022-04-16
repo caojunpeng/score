@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cao.score.dao.ScoreNumberDao">
+
+    <resultMap type="com.cao.score.entity.ScoreNumber" id="ScoreNumberMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="scoreNum" column="score_num" jdbcType="VARCHAR"/>
+        <result property="scoreName" column="score_name" jdbcType="VARCHAR"/>
+        <result property="scoreTime" column="score_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="ScoreNumberMap">
+        select
+          id, score_num, score_name, score_time
+        from score.score_number
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="ScoreNumberMap">
+        select
+          id, score_num, score_name, score_time
+        from score.score_number
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="ScoreNumberMap">
+        select
+        id, score_num, score_name, score_time
+        from score.score_number
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="scoreNum != null and scoreNum != ''">
+                and score_num = #{scoreNum}
+            </if>
+            <if test="scoreName != null and scoreName != ''">
+                and score_name = #{scoreName}
+            </if>
+            <if test="scoreTime != null">
+                and score_time = #{scoreTime}
+            </if>
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="getScoresNumberDatas" parameterType="com.cao.score.vo.ObjectParams" resultMap="ScoreNumberMap">
+        select
+        id, score_num, score_name, score_time
+        from score.score_number
+        <where>
+            <if test="keyword != null and keyword != ''">
+                and (stu.score_num LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+                    or stu.score_name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+                )
+            </if>
+
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into score.score_number(score_num, score_name, score_time)
+        values (#{scoreNum}, #{scoreName}, #{scoreTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into score.score_number(score_num, score_name, score_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.scoreNum}, #{entity.scoreName}, #{entity.scoreTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into score.score_number(score_num, score_name, score_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.scoreNum}, #{entity.scoreName}, #{entity.scoreTime})
+        </foreach>
+        on duplicate key update
+        score_num = values(score_num) , score_name = values(score_name) , score_time = values(score_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update score.score_number
+        <set>
+            <if test="scoreNum != null and scoreNum != ''">
+                score_num = #{scoreNum},
+            </if>
+            <if test="scoreName != null and scoreName != ''">
+                score_name = #{scoreName},
+            </if>
+            <if test="scoreTime != null">
+                score_time = #{scoreTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from score.score_number where id = #{id}
+    </delete>
+
+</mapper>

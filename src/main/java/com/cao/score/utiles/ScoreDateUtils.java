@@ -12,6 +12,7 @@ public class ScoreDateUtils {
 
     public static final String format_date = "yyyy-MM-dd HH:mm:ss";
     public static final String format_day = "yyyy-MM-dd";
+    public static final String format_dayStr = "yyyyMMdd";
 
     /**
      * 字符串转日期

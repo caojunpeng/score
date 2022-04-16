@@ -40,6 +40,7 @@ public class ScoresController {
 
     /**
      * 安装目录
+     *
      */
     @Value("#{T(java.lang.System).getProperty('user.dir')}")
     private String installDir;
@@ -82,17 +83,18 @@ public class ScoresController {
     }
 
     /**
-     * 跳转到成绩信息录入
+     * 跳转到成绩信息管理
      * @return
      */
     @RequestMapping("/scoreManagement")
-    public ModelAndView scoreManagement(){
+    public ModelAndView scoreManagement(String scoreNum){
         ModelAndView modelAndView=new ModelAndView();
         //获取所有的年级
         Map<String,Object> map = new HashMap<>();
         map.put("groupStr","grade_num");
         List<GradeClass> gradeNumList = gradeClassService.queryAllByMap(map);
         modelAndView.addObject("gradeNumList",gradeNumList);
+        modelAndView.addObject("scoreNum",scoreNum);
         modelAndView.setViewName("/score/scoresManagement");
         return modelAndView;
     }
@@ -113,6 +115,7 @@ public class ScoresController {
         modelAndView.setViewName("/score/saveScoresInfo");
         return modelAndView;
     }
+
 
     /**
      * 获取学生成绩信息列表

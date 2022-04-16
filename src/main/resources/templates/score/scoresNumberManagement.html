@@ -1,0 +1,141 @@
+<style>
+    .main-div .main-bottom .main-right .studentInfoManagement .disabled:active{
+        color: #fff !important;
+    }
+    .layer-blue{
+        overflow: auto;
+        background: #194898;
+        color: #fff;
+    }
+    .layui-layer-title,.layui-layer-ico{
+        color: #fff;
+    }
+    #dataTables-scoreNumberDatas_wrapper{
+        margin-top: 15px;
+        padding: 0 15px;
+    }
+</style>
+<div class="studentInfoManagement">
+    <h3>成绩信息管理</h3>
+    <div class="studentInfoManagement-top">
+        <form id="scoreNumberForm">
+            <div class="col-md-2">
+                <label class="control-label">关键字</label>
+                <input type="text" class="form-control" name="keyword" placeholder="学号/姓名/身份证号">
+            </div>
+
+            <button type="button" class="btn btn-primary searchBtn" onclick="searchscoreNumber()">查询</button>
+            <button type="button" class="btn btn-primary searchBtn" onclick="saveScoreNumberPage()">新增</button>
+        </form>
+    </div>
+    <table id="dataTables-scoreNumberDatas"  class="table table-bordered">
+        <thead>
+            <tr>
+                <th>考试日期</th>
+                <th>考试编号</th>
+                <th>考试名称</th>
+                <th>操作</th>
+            </tr>
+        <thead>
+    </table>
+</div>
+<script type="text/javascript">
+    $('#dataTables-scoreNumberDatas').DataTable({
+		ajax : {
+			dataType : 'json',
+			url : "/scoreNumber/scoreNumberDatas",
+			data : function(aoData){
+                var jsonData = $("#scoreNumberForm").serializeArray();
+                jsonData.forEach(function (e, index) {
+                    aoData[e.name] = e.value;
+                });
+                return aoData;
+            }
+		},
+		serverSide : true,
+		searching : false,
+		bLengthChange : false,
+		lengthMenu : [ 10,20,50 ],
+		"columns" : [
+			{
+				"data" : "scoreTimeStr"
+			},
+			{
+				"data" : "scoreNum"
+			},
+			{
+				"data" : "scoreName"
+			},
+			{
+				"data" : null,"render" : function(nRow, indexType,dataObj) {
+					var html ="";
+                      html+='<button type="button" class="btn btn-success btn-edit" onclick="saveScoreNumberPage('+dataObj.id+')">编辑</button>'  ;
+                      html+='<button type="button" class="btn btn-danger btn-del" onclick="delScoresInfo('+dataObj.id+')">清空</button>'  ;
+                      html+='<button type="button" class="btn btn-danger btn-del" onclick="scoresInfoDetails('+dataObj.scoreNum+')">详情</button>'  ;
+                    return  html;
+				}
+			}
+		],
+		responsive : true,
+		language : dataTablesLanguage
+	});
+
+    //查询
+    function searchscoreNumber() {
+        $('#dataTables-scoreNumberDatas').DataTable().draw();
+    }
+
+    //修改考试场次信息
+    function saveScoreNumberPage(id) {
+        debugger
+        $.ajax({
+            type: "POST",
+            url: "/scoreNumber/saveScoreNumberPage",
+            //async: false,同步
+            data: {scoreNumberId:id},
+            success: function (html) {
+                layer.open({
+                    type: 1,
+                    skin: 'layer-blue',
+                    area: ['600px', '450px'], //宽高
+                    content: html
+                });
+            }
+        });
+    }
+
+    //删除考试场次信息
+    function delScoresInfo(id) {
+        layer.confirm('您确定清除本次考试所有学生成绩信息吗？', {
+            btn: ['确认','取消'] //按钮
+        }, function(){
+            $.ajax({
+                type: "POST",
+                url: "/scoreNumber/delScoreNumber",
+                //async: false,同步
+                data: {id:id},
+                success: function (result) {
+                    layer.closeAll();
+                    layer.msg("清空成功");
+                    $('#dataTables-scoreNumberDatas').DataTable().draw();
+                }
+            });
+        }, function(){
+
+        });
+    }
+
+    //学生成绩详情信息
+    function scoresInfoDetails(scoreNum){
+        $.ajax({
+            type: "POST",
+            url: "/scores/scoreManagement",
+            //async: false,同步
+            data: {scoreNum:scoreNum},
+            success: function (html) {
+                $(".main-right").html(html);
+            }
+        });
+    }
+
+</script>

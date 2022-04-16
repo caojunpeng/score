@@ -1,0 +1,57 @@
+<div class="scoreSaveRow" >
+    <form id="scoreSaveNumberForm">
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">考试时间</label>
+            <div class="col-sm-12">
+                <input id="scoreTime" name="scoreTime" class="form-control" size="16" type="text"  readonly="readonly" th:value="${#dates.format(scoreNumber?.scoreTime, 'yyyy-MM-dd')}" />
+                <input type="hidden" name="scoreNum" th:value="${scoreNumber?.scoreNum}" >
+                <input type="hidden" name="id" th:value="${scoreNumber?.id}" >
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">考试名称</label>
+            <div class="col-sm-12">
+                <input type="text" class="form-control" name="scoreName" th:value="${scoreNumber?.scoreName}" >
+            </div>
+        </div>
+        <div class="col-md-12">
+            <button type="button" class="btn btn-primary saveScoreBtn" onclick="saveScoreNumber()">确定</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    /*<![CDATA[*/
+
+    $("#scoreTime").datetimepicker({
+        language: 'zh-CN',
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        clearBtn: true,
+        minView:'2',
+        pickerPosition: "bottom-left"
+    }).on('changeDate',function(ev){
+
+    });
+
+    //保存学生信息方法
+    function saveScoreNumber() {
+        $.ajax({
+            type: "POST",
+            url: "/scoreNumber/saveScoreNumber",
+            data: $('#scoreSaveNumberForm').serialize(),
+            success: function (obj) {
+                var data=JSON.parse(obj);
+                if(data && data.code==200){
+                    $('#dataTables-scoreNumberDatas').DataTable().draw();
+                    layer.closeAll();
+                    layer.msg("更新成功");
+                    return;
+                }
+                layer.msg("更新失败");
+            }
+        });
+    }
+
+    /*]]>*/
+</script>
