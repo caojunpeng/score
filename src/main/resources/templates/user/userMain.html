@@ -39,12 +39,15 @@
         "columns": [
             {"data": "userName"},
             {"data": "name"},
-            {"data": "createTime"},
+            {"data": "createTimeStr"},
             {
                 "data": null, render: function (data) {
+                    debugger
                     var btnHtml = "";
                     btnHtml += '<button class="btn btn-primary btn-sm" onclick="saveUserPage(' + data.userId + ')">编辑</button>';
-                    btnHtml += '<button class="btn btn-danger btn-sm delUserBtn" onclick="delUser(' + data.userId + ')">删除</button>';
+                    if(data.userId!=1){
+                        btnHtml += '<button class="btn btn-danger btn-sm delUserBtn" onclick="delUser(' + data.userId + ')">删除</button>';
+                    }
                     return btnHtml;
                 }
             }
@@ -65,6 +68,7 @@
                 success: function (obj) {
                     var data=JSON.parse(obj);
                     if(data && data.code==200){
+                        $('#dataTables-userList').DataTable().draw();
                         layer.msg("删除成功");
                         return;
                     }
@@ -85,7 +89,7 @@
                 layer.open({
                     type: 1,
                     skin: 'layui-layer-rim', //加上边框
-                    area: ['420px', '500px'], //宽高
+                    area: ['420px', '600px'], //宽高
                     content: data
                 });
             }

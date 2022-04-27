@@ -1,17 +1,14 @@
 package com.cao.score.controller;
 
-import com.cao.score.entity.GradeClass;
-import com.cao.score.entity.Scores;
-import com.cao.score.entity.Students;
-import com.cao.score.service.CommonFilesService;
-import com.cao.score.service.GradeClassService;
-import com.cao.score.service.ScoresService;
+import com.cao.score.entity.*;
+import com.cao.score.service.*;
 import com.cao.score.utiles.ExcelUtils;
 import com.cao.score.utiles.ResponseUtil;
 import com.cao.score.utiles.ScoreFileUtil;
 import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
 import com.cao.score.vo.ScoreParams;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,6 +52,12 @@ public class ScoresController {
 
     @Resource
     private CommonFilesService commonFilesService;
+    @Resource
+    private ScoreNumberService scoreNumberService;
+    @Resource
+    private UserRoleService userRoleService;
+    @Resource
+    private TeachersService teachersService;
 
     /**
      * 通过主键查询单条数据
@@ -73,11 +76,25 @@ public class ScoresController {
     @RequestMapping("/scoreEnter")
     public ModelAndView scoresEnter(){
         ModelAndView modelAndView=new ModelAndView();
+        Integer role=userRoleService.selectRolesByUserName();
+        if(role==2){
+            Object object = SecurityUtils.getSubject().getPrincipal();
+            Map<String,Object> map = new HashMap<>();
+            map.put("identityNum",object);
+            Teachers teachers = teachersService.queryByMap(map);
+            if(teachers!=null){
+                modelAndView.addObject("classNum",teachers.getClassNum());
+                modelAndView.addObject("gradeNum",teachers.getGradeNum());
+            }
+        }
         //获取所有的年级
         Map<String,Object> map = new HashMap<>();
         map.put("groupStr","grade_num");
         List<GradeClass> gradeNumList = gradeClassService.queryAllByMap(map);
         modelAndView.addObject("gradeNumList",gradeNumList);
+        List<ScoreNumber> scoreNumList = scoreNumberService.queryAll(null);
+        modelAndView.addObject("scoreNumList",scoreNumList);
+        modelAndView.addObject("role",role);
         modelAndView.setViewName("/score/scoresEnter");
         return modelAndView;
     }
@@ -88,6 +105,12 @@ public class ScoresController {
      */
     @RequestMapping("/scoreManagement")
     public ModelAndView scoreManagement(String scoreNum){
+        Integer role=userRoleService.selectRolesByUserName();
+        String studentId =null;
+        if(role==3){
+            Object object = SecurityUtils.getSubject().getPrincipal();
+            studentId = String.valueOf(object);
+        }
         ModelAndView modelAndView=new ModelAndView();
         //获取所有的年级
         Map<String,Object> map = new HashMap<>();
@@ -95,6 +118,9 @@ public class ScoresController {
         List<GradeClass> gradeNumList = gradeClassService.queryAllByMap(map);
         modelAndView.addObject("gradeNumList",gradeNumList);
         modelAndView.addObject("scoreNum",scoreNum);
+        modelAndView.addObject("role",role);
+        modelAndView.addObject("studentId",studentId);
+
         modelAndView.setViewName("/score/scoresManagement");
         return modelAndView;
     }
@@ -112,6 +138,7 @@ public class ScoresController {
             scoreParams = scoresInfos.get(0);
         }
         modelAndView.addObject("score",scoreParams);
+        modelAndView.addObject("scoreNum",objectParams.getScoreNum());
         modelAndView.setViewName("/score/saveScoresInfo");
         return modelAndView;
     }

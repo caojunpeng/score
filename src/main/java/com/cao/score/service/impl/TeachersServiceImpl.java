@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 教师信息表(Teachers)表服务实现类
@@ -37,6 +38,11 @@ public class TeachersServiceImpl implements TeachersService {
     @Override
     public Teachers queryById(Long id) {
         return this.teachersDao.queryById(id);
+    }
+
+    @Override
+    public Teachers queryByMap(Map<String, Object> map) {
+        return this.teachersDao.queryByMap(map);
     }
 
     /**

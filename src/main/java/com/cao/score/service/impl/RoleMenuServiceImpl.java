@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (RoleMenu)表服务实现类
@@ -45,6 +46,11 @@ public class RoleMenuServiceImpl implements RoleMenuService {
         return this.roleMenuDao.queryAllByLimit(offset, limit);
     }
 
+    @Override
+    public List<RoleMenu> queryByMap(Map<String, Object> map) {
+        return this.roleMenuDao.queryByMap(map);
+    }
+
     /**
      * 新增数据
      *
@@ -78,6 +84,11 @@ public class RoleMenuServiceImpl implements RoleMenuService {
     @Override
     public boolean deleteById(Long id) {
         return this.roleMenuDao.deleteById(id) > 0;
+    }
+
+    @Override
+    public boolean deleteByRoleId(Long id) {
+        return this.roleMenuDao.deleteByRoleId(id) > 0;
     }
 
 

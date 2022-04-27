@@ -4,7 +4,10 @@ import com.cao.score.dao.ScoresDao;
 import com.cao.score.entity.GradeClass;
 import com.cao.score.entity.Scores;
 import com.cao.score.entity.Students;
+import com.cao.score.entity.Teachers;
 import com.cao.score.service.ScoresService;
+import com.cao.score.service.TeachersService;
+import com.cao.score.service.UserRoleService;
 import com.cao.score.utiles.ResponseUtil;
 import com.cao.score.utiles.ScoreStringUtils;
 import com.cao.score.vo.DataTablesResult;
@@ -12,6 +15,7 @@ import com.cao.score.vo.ObjectParams;
 import com.cao.score.vo.ScoreParams;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -37,6 +41,10 @@ public class ScoresServiceImpl implements ScoresService {
 
     @Resource
      private ScoresDao scoresDao;
+    @Resource
+     private UserRoleService userRoleService;
+    @Resource
+     private TeachersService teachersService;
 
     /**
      * 通过ID查询单条数据
@@ -100,13 +108,39 @@ public class ScoresServiceImpl implements ScoresService {
         if(!objectParams.isExportType()) {
             PageHelper.offsetPage(objectParams.getStart(), objectParams.getLength());
         }
-        List<ScoreParams> studentInfoDatas = scoresDao.getScoresInfoDatas(objectParams);
-        PageInfo<ScoreParams> page = new PageInfo<ScoreParams>(studentInfoDatas);
+        List<ScoreParams> scoreDatas = scoresDao.getScoresInfoDatas(objectParams);
+        if(!scoreDatas.isEmpty()){
+            for (ScoreParams scoreData : scoreDatas) {
+                editBtnStatue(scoreData);
+            }
+        }
+        PageInfo<ScoreParams> page = new PageInfo<ScoreParams>(scoreDatas);
         DataTablesResult<ScoreParams> dataTablesResult=new DataTablesResult<>();
         dataTablesResult.setData(page.getList());
         dataTablesResult.setRecordsFiltered(page.getTotal());
         dataTablesResult.setRecordsTotal(page.getTotal());
         return dataTablesResult;
+    }
+    //学生管理操作按钮状态
+    private void editBtnStatue(ScoreParams scoreParams){
+        Integer role=userRoleService.selectRolesByUserName();
+        if(role==3){
+            scoreParams.setEditStatue(false);
+        }else if(role==2){
+            Object object = SecurityUtils.getSubject().getPrincipal();
+            Map<String,Object> map = new HashMap<>();
+            map.put("identityNum",object);
+            Teachers teachers = teachersService.queryByMap(map);
+            if(teachers!=null){
+                Integer classNum = teachers.getClassNum();
+                Integer gradeNum = teachers.getGradeNum();
+                if(teachers.getClassNum()==scoreParams.getClassNum()&&teachers.getGradeNum()==scoreParams.getGradeNum()){
+                    scoreParams.setEditStatue(true);
+                }
+            }
+        }else if(role==1){
+            scoreParams.setEditStatue(true);
+        }
     }
 
     @Override
@@ -173,14 +207,14 @@ public class ScoresServiceImpl implements ScoresService {
 
     private void saveScoreInfo(double score,ScoreParams scoreParams,Integer subject){
         Scores s = new Scores();
-        if(score !=0.0){//化学成绩
+        if(score !=0.0){//成绩
             scoreParams.setSubject(subject);
             Scores select = scoresDao.queryOneByScoreParams(scoreParams);
             //获取跟新或新增队想
             if (select!=null) {
-                s =new Scores(select.getId(),scoreParams.getStudentId(),score,subject,checkScoreState(score));
+                s =new Scores(select.getId(),scoreParams.getStudentId(),score,subject,checkScoreState(score),scoreParams.getScoreNum());
             }else {
-                s =new Scores(null,scoreParams.getStudentId(),score,subject,checkScoreState(score));
+                s =new Scores(null,scoreParams.getStudentId(),score,subject,checkScoreState(score),scoreParams.getScoreNum());
             }
             //保存或更新
             saveScore(s);

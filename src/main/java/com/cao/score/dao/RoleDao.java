@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 角色表(Role)表数据库访问层
@@ -88,5 +89,7 @@ public interface RoleDao {
      * @return 影响行数
      */
     int deleteById(Long roleId);
+
+    List<Role> queryAllByMap(Map<String, Object> map);
 
 }

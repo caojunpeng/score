@@ -5,6 +5,7 @@ import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 教师信息表(Teachers)表服务接口
@@ -21,6 +22,13 @@ public interface TeachersService {
      * @return 实例对象
      */
     Teachers queryById(Long id);
+    /**
+     * 通过ID查询单条数据
+     *
+     * @param id 主键
+     * @return 实例对象
+     */
+    Teachers queryByMap(Map<String,Object> map);
 
     /**
      * 查询多条数据

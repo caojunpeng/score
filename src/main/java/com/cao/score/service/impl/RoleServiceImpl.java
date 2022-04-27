@@ -4,12 +4,14 @@ import com.cao.score.dao.RoleDao;
 import com.cao.score.entity.Role;
 import com.cao.score.entity.User;
 import com.cao.score.service.RoleService;
+import com.cao.score.utiles.ScoreDateUtils;
 import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 角色表(Role)表服务实现类
@@ -43,6 +45,11 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<Role> queryAllByLimit(int offset, int limit) {
         return this.roleDao.queryAllByLimit(offset, limit);
+    }
+
+    @Override
+    public List<Role> queryAllByMap(Map<String, Object> map) {
+        return this.roleDao.queryAllByMap(map);
     }
 
     /**
@@ -83,10 +90,16 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public DataTablesResult<Role> dataLists(ObjectParams params) {
         List<Role> roles=roleDao.getList(params);
+        if(!roles.isEmpty()){
+            for (Role role : roles) {
+                role.setCreateTimeStr(ScoreDateUtils.dateToStr(role.getCreateTime(),ScoreDateUtils.format_date));
+            }
+        }
         DataTablesResult<Role> dataTablesResult=new DataTablesResult<>();
         dataTablesResult.setData(roles);
         dataTablesResult.setRecordsFiltered(roles.size());
         dataTablesResult.setRecordsTotal(roles.size());
         return dataTablesResult;
     }
+
 }

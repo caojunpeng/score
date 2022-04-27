@@ -56,6 +56,16 @@ public class Students implements Serializable {
      */
     private Integer classNum;
 
+    private boolean editStatue;
+
+    public boolean isEditStatue() {
+        return editStatue;
+    }
+
+    public void setEditStatue(boolean editStatue) {
+        this.editStatue = editStatue;
+    }
+
     public String getBirthDateStr() {
         return birthDateStr;
     }

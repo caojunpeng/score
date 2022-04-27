@@ -8,7 +8,7 @@
     <img src="/images/login/login.jpg">
 </div>
 <div>
-    <div class="loginTitle">峪河镇中心校成绩管理系统</div>
+    <div class="loginTitle">成绩管理系统</div>
     <div class="fromDiv">
         <form id="loginFrom" role="form" action="/loginHtml">
             <div class="form-group">
@@ -58,9 +58,30 @@
         var checkCode = document.getElementById("checkCode");
         var verificationCode = document.getElementById("verificationCode");
         if(checkCode.value==verificationCode.value){
-            document.getElementById("loginFrom").submit();
+            //document.getElementById("loginFrom").submit();
+            $.ajax({
+                type: 'POST',
+                url:"/loginHtml",
+                data:$('#loginFrom').serialize(),
+                success: function(result) {
+                    debugger
+                    if(result){
+                        var obj = JSON.parse(result);
+                        if(obj){
+                            if(obj.code == 200){
+                                window.location.href = "/index";
+                            }else{
+                                alert(obj.message);
+                                createCode();
+                            }
+                        }
+
+                    }
+                }
+            });
         }else{
-            alert("验证码失败");
+            alert("验证码错误");
+            createCode();
         }
     }
     //监听回车事件

@@ -16,7 +16,7 @@
     }
 </style>
 <div class="teacherInfoManagement">
-    <h3>基本信息管理</h3>
+    <h3>教师信息管理</h3>
     <div class="teacherInfoManagement-top">
         <form id="teacherInfoForm">
             <div class="col-md-2">
@@ -51,10 +51,13 @@
                     <option  th:each="dict:${dicts}" th:value="${dict.dictId}"  th:text="${dict.dictName}" ></option>
                 </select>
             </div>
+            <input type="hidden" th:value="${identityNum}" name="identityNum">
             <button type="button" class="btn btn-primary searchBtn" onclick="searchteacherInfo()">查询</button>
             <button type="button" class="btn btn-primary searchBtn" onclick="addTeacherInfo()">新增</button>
         </form>
     </div>
+    <input type="hidden" th:value="${role}" id="role">
+
     <table id="dataTables-teacherInfoDatas"  class="table table-bordered">
         <thead>
         <tr>
@@ -130,6 +133,13 @@
                 }
             }
         ],
+        "fnDrawCallback": function(settings, json) {
+           /* var role = $("#role").val();
+            if(role==2){
+                $('#dataTables-teacherInfoDatas tr').find('td:eq(8)').hide();
+                $('#dataTables-teacherInfoDatas tr').find('th:eq(8)').hide();
+            }*/
+        },
         responsive : true,
         language : dataTablesLanguage
     });
@@ -183,7 +193,7 @@
                 layer.open({
                     type: 1,
                     skin: 'layer-blue',
-                    area: ['600px', '450px'], //宽高
+                    area: ['600px', '750px'], //宽高
                     content: html
                 });
             }
@@ -225,7 +235,7 @@
                 layer.open({
                     type: 1,
                     skin: 'layer-blue',
-                    area: ['600px', '450px'], //宽高
+                    area: ['600px', '700px'], //宽高
                     content: html
                 });
             }

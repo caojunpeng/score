@@ -69,4 +69,9 @@ public interface StudentsService {
      */
     boolean deleteById(Long id);
 
+    /**
+     * 成绩排名
+     */
+    void scoreRanking();
+
 }

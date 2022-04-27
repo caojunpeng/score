@@ -23,6 +23,17 @@
         from score.role_menu
         limit #{offset}, #{limit}
     </select>
+    <!--查询指定行数据-->
+    <select id="queryByMap" resultMap="RoleMenuMap">
+        select
+          id, role_id, menu_id
+        from score.role_menu
+        <where>
+            <if test="roleId != null">
+                and role_id = #{roleId}
+            </if>
+        </where>
+    </select>
 
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="RoleMenuMap">
@@ -83,6 +94,10 @@
     <!--通过主键删除-->
     <delete id="deleteById">
         delete from score.role_menu where id = #{id}
+    </delete>
+    <!--通过主键删除-->
+    <delete id="deleteByRoleId">
+        delete from score.role_menu where role_id = #{roleId}
     </delete>
 
 </mapper>

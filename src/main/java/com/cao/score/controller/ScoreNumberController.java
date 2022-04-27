@@ -4,6 +4,7 @@ import com.cao.score.entity.GradeClass;
 import com.cao.score.entity.ScoreNumber;
 import com.cao.score.service.ScoreNumberService;
 import com.cao.score.service.ScoresService;
+import com.cao.score.service.UserRoleService;
 import com.cao.score.utiles.ResponseUtil;
 import com.cao.score.utiles.ScoreDateUtils;
 import com.cao.score.vo.DataTablesResult;
@@ -43,6 +44,8 @@ public class ScoreNumberController {
 
     @Resource
     private ScoresService scoresService;
+    @Resource
+    private UserRoleService userRoleService;
 
     /**
      * 通过主键查询单条数据
@@ -60,7 +63,9 @@ public class ScoreNumberController {
      */
     @RequestMapping("/scoreNumberManagement")
     public ModelAndView scoreManagement(){
+        Integer role=userRoleService.selectRolesByUserName();
         ModelAndView modelAndView=new ModelAndView();
+        modelAndView.addObject("role",role);
         modelAndView.setViewName("/score/scoresNumberManagement");
         return modelAndView;
     }

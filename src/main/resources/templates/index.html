@@ -7,12 +7,11 @@
 <body>
 <div class="main-div">
     <div class="main-top">
-        <div class="top-left">个人系统</div>
-
+        <div class="top-left">成绩管理系统</div>
         <div class="top-right">
-            <div class="headDiv adminManagerDiv" onclick="resetPasswordPage()"> <i class="adminManagerIcon"></i>重置学生密码</div>
+            <div class="headDiv adminManagerDiv" onclick="resetPasswordPage()" th:if="${role ne 3}"> <i class="adminManagerIcon"></i>重置学生密码</div>
             <div class="headDiv adminManagerDiv" onclick="editPasswordPage()"> <i class="adminManagerIcon"></i>修改密码</div>
-            <div class="headDiv adminManagerDiv" onclick="adminManager()"> <i class="adminManagerIcon"></i>设置</div>
+            <div class="headDiv adminManagerDiv" onclick="adminManager()" th:if="${role eq 1}"> <i class="adminManagerIcon"></i>设置</div>
             <div class="headDiv headSapn" onclick="headInfo()"> <i class="headIcon"></i><span class="headSpan" th:text="${userName}"></span></div>
             <input type="hidden" id="userName" th:value="${userName}"/>
         </div>
@@ -20,7 +19,7 @@
     <div class="main-bottom">
         <div class="main-left">
             <ul class="menuUl">
-                <li th:each="menu : ${menulist}" th:onclick="menuClick([[${menu.action}]]);">
+                <li th:each="menu : ${menulist}" th:onclick="menuClick([[${menu.action}]],this);">
                     <div class="left-menu">
                         <div class="blackgroundDiv">
                             <sapn th:classappend="${(menu.icon !=null ? menu.icon : '') }" class="iconSpan" th:title="${menu.menuTitle}" aria-hidden="true"></sapn><br/>
@@ -47,7 +46,10 @@
         localStorage.setItem("login-userName",addfiles);
         $(".menuUl li").eq(0).click();
     })
-    function menuClick(url) {
+    function menuClick(url,obj) {
+        debugger
+        $(".menuUl li").children().removeClass("menuChecked");
+        $(obj).children().addClass("menuChecked");
         $.ajax({
             type: 'POST',
             url:url,

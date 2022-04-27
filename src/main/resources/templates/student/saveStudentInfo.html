@@ -28,20 +28,20 @@
         <div class="col-md-12">
             <label class="col-sm-12 control-label">出生日期</label>
             <div class="col-sm-12">
-                <input type="text" class="form-control" name="birthdate" th:value="${student?.birthdate}"  placeholder="请输入邮箱">
+                <input type="text" class="form-control" name="birthdate" id="birthdate" th:value="${student?.birthDateStr}"  placeholder="请输入出生日期">
             </div>
 
         </div>
         <div class="col-md-12">
             <label class="col-sm-12 control-label">身份证号</label>
             <div class="col-sm-12">
-                <input type="text" class="form-control" name="identityNum" th:value="${student?.identityNum}"  placeholder="请输入邮箱">
+                <input type="text" class="form-control" name="identityNum" th:value="${student?.identityNum}"  placeholder="请输入身份证号">
             </div>
         </div>
         <div class="col-md-12">
             <label class="col-sm-12 control-label">家庭住址</label>
             <div class="col-sm-12">
-                <input type="text" class="form-control" name="address" th:value="${student?.address}"  placeholder="请输入邮箱">
+                <input type="text" class="form-control" name="address" th:value="${student?.address}"  placeholder="请输入家庭住址">
             </div>
         </div>
         <div class="col-md-12">
@@ -68,6 +68,18 @@
 </div>
 <script type="text/javascript">
     /*<![CDATA[*/
+
+    $("#birthdate").datetimepicker({
+        language: 'zh-CN',
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        clearBtn: true,
+        minView:'2',
+        pickerPosition: "bottom-left"
+    }).on('changeDate',function(ev){
+
+    });
     //保存学生信息方法
     function saveStudent() {
         $.ajax({

@@ -22,7 +22,7 @@
             <div class="col-md-2">
                 <label class="control-label">关键字</label>
                 <input type="text" class="form-control" name="keyword" placeholder="学号/姓名/身份证号">
-                <input type="hidden" class="form-control" name="scoreNum" th:value="scoreNum">
+                <input type="hidden" class="form-control" name="scoreNum" th:value="${scoreNum}">
             </div>
             <div class="col-md-2">
                 <label class="control-label">年级</label>
@@ -37,9 +37,11 @@
                     <option value="">全部</option>
                 </select>
             </div>
+            <input type="hidden" th:value="${studentId}" name="studentId">
             <button type="button" class="btn btn-primary searchBtn" onclick="searchScoreInfo()">查询</button>
         </form>
     </div>
+    <input type="hidden" th:value="${role}" id="role">
     <table id="dataTables-scoreInfoDatas"  class="table table-bordered">
         <thead>
             <tr>
@@ -120,13 +122,29 @@
             },
 			{
 				"data" : null,"render" : function(nRow, indexType,dataObj) {
+                    var role = $("#role").val();
 					var html ="";
-                      html+='<button type="button" class="btn btn-success btn-edit" onclick="saveScoresInfoPage('+dataObj.studentId+')">编辑</button>'  ;
-                      html+='<button type="button" class="btn btn-danger btn-del" onclick="delScoresInfo('+dataObj.studentId+')">清空</button>'  ;
+                    html+='<button type="button" ';
+                    if(role==2&&!nRow.editStatue){
+                        html+='disabled ';
+                    }
+                    html+=' class="btn btn-success btn-edit" onclick="saveScoresInfoPage('+dataObj.studentId+')">编辑</button>'  ;
+                    html+='<button type="button" ';
+                    if(role==2&&!nRow.editStatue){
+                        html+='disabled ';
+                    }
+                    html+=' class="btn btn-danger btn-del" onclick="delScoresInfo('+dataObj.studentId+')">清空</button>'  ;
                     return  html;
 				}
 			}
 		],
+        "fnDrawCallback": function(settings, json) {
+            var role = $("#role").val();
+            if(role==3){
+                $('#dataTables-scoreInfoDatas tr').find('td:eq(13)').hide();
+                $('#dataTables-scoreInfoDatas tr').find('th:eq(13)').hide();
+            }
+        },
 		responsive : true,
 		language : dataTablesLanguage
 	});
@@ -176,12 +194,12 @@
             type: "POST",
             url: "/scores/saveScoresInfoPage",
             //async: false,同步
-            data: {studentId:id},
+            data: {studentId:id,scoreNum:$("input[name='scoreNum']").val()},
             success: function (html) {
                 layer.open({
                     type: 1,
                     skin: 'layer-blue',
-                    area: ['600px', '450px'], //宽高
+                    area: ['600px', '750px'], //宽高
                     content: html
                 });
             }

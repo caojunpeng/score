@@ -61,6 +61,12 @@
             </if>
         </where>
     </select>
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAllByMap" resultMap="RoleMap">
+        select
+        role_id, role_name, create_time, remark, creator
+        from score.role
+    </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="roleId" useGeneratedKeys="true">

@@ -23,6 +23,17 @@ public class ObjectParams extends DataTablesParams {
     private Integer gradeNum;//年级
     private Integer classNum;//班级
     private Integer subject;//科目
+    private String identityNum;//身份证号
+
+
+
+    public String getIdentityNum() {
+        return identityNum;
+    }
+
+    public void setIdentityNum(String identityNum) {
+        this.identityNum = identityNum;
+    }
 
     private boolean exportType;//导出状态 true为导出
 

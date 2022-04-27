@@ -49,6 +49,11 @@ public class ScoreNumberServiceImpl implements ScoreNumberService {
         return this.scoreNumberDao.queryAllByLimit(offset, limit);
     }
 
+    @Override
+    public List<ScoreNumber> queryAll(ScoreNumber scoreNumber) {
+        return this.scoreNumberDao.queryAll(scoreNumber);
+    }
+
     /**
      * 新增数据
      *

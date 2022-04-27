@@ -40,6 +40,20 @@
                 </select>
             </div>
         </div>
+
+        <div class="col-md-12">
+            <label class="col-sm-12 control-label">角色列表</label>
+            <div class="checkbox col-sm-12" th:each="role:${roleList}">
+                <label>
+                    <input type="checkbox" class="roleCheckBox" th:value="${role.roleId}"
+                               th:text="${role.roleName}" data-bv-choice="true"
+                               data-bv-choice-min="1" data-bv-choice-max="4"
+                               />
+                </label>
+            </div>
+            <input type="hidden" name="roleIds" id="roleIds"/>
+            <input type="hidden" th:value="${roles}" id="roles"/>
+        </div>
         <div class="col-md-12">
             <button type="button" class="btn btn-primary saveUserBtn" onclick="saveUser()">确定</button>
         </div>
@@ -47,7 +61,28 @@
 </div>
 <script type="text/javascript">
 /*<![CDATA[*/
+
+    $(function (){
+        debugger
+        var json=$("#roles").val()
+        var roles=JSON.parse(json);
+        $(".roleCheckBox").each(function () {
+            var roleId = $(this).val();
+            if($.inArray(roleId,roles)>-1){
+                $(this).attr("checked",true);
+            }
+        })
+    })
+
+    function getRoleIds(){
+        var ckbValue="";
+        $("input[class='roleCheckBox']:checked").each(function () {
+            ckbValue = ckbValue + $(this).val() + ",";
+        });
+        $("#roleIds").val(ckbValue.substring(0,ckbValue.length-1));
+    }
     function saveUser() {
+        getRoleIds();
         $.ajax({
             type: "POST",
             url: "/user/saveUser",

@@ -59,7 +59,11 @@
 <script>
 
     $(function () {
+        debugger
         $(".layui-nav-tree li:first").addClass("layui-nav-itemed");
+        $(".layui-nav-child").children().first().addClass("layui-this")
+        utils.menuToPage("\/user\/main");
+
     })
     function logout() {
         window.location.href="/loginOut";

@@ -42,4 +42,12 @@ public class RoleMenu implements Serializable {
         this.menuId = menuId;
     }
 
+    public RoleMenu() {
+    }
+
+    public RoleMenu(Long id, Integer roleId, Integer menuId) {
+        this.id = id;
+        this.roleId = roleId;
+        this.menuId = menuId;
+    }
 }

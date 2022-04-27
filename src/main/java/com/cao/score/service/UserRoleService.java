@@ -3,6 +3,7 @@ package com.cao.score.service;
 import com.cao.score.entity.UserRole;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户权限(UserRole)表服务接口
@@ -53,4 +54,19 @@ public interface UserRoleService {
      */
     boolean deleteById(Long id);
 
+    void editUserRoles(String[] roleIds, Long userId);
+    List<UserRole> queryAllByMap(Map<String,Object> map);
+
+    /**
+     * 通过用户ID查询所有授权信息
+     * @param id
+     * @return
+     */
+    List<String> selectUserRoles(Long id);
+
+    /**
+     * 通过用户名获取最大权限
+     * @return
+     */
+    Integer selectRolesByUserName();
 }

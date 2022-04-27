@@ -28,6 +28,7 @@
             <button type="button" class="btn btn-primary searchBtn" onclick="saveScoreNumberPage()">新增</button>
         </form>
     </div>
+    <input type="hidden" th:value="${role}" id="role">
     <table id="dataTables-scoreNumberDatas"  class="table table-bordered">
         <thead>
             <tr>
@@ -69,9 +70,12 @@
 			{
 				"data" : null,"render" : function(nRow, indexType,dataObj) {
 					var html ="";
+                    var role = $("#role").val();
+                    if(role!=3){
                       html+='<button type="button" class="btn btn-success btn-edit" onclick="saveScoreNumberPage('+dataObj.id+')">编辑</button>'  ;
                       html+='<button type="button" class="btn btn-danger btn-del" onclick="delScoresInfo('+dataObj.id+')">清空</button>'  ;
-                      html+='<button type="button" class="btn btn-danger btn-del" onclick="scoresInfoDetails('+dataObj.scoreNum+')">详情</button>'  ;
+                    }
+                    html+='<button type="button" class="btn btn-danger btn-del" onclick="scoresInfoDetails('+dataObj.scoreNum+')">详情</button>'  ;
                     return  html;
 				}
 			}
@@ -97,7 +101,7 @@
                 layer.open({
                     type: 1,
                     skin: 'layer-blue',
-                    area: ['600px', '450px'], //宽高
+                    area: ['600px', '270px'], //宽高
                     content: html
                 });
             }

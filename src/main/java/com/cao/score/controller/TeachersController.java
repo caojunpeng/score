@@ -4,12 +4,11 @@ import com.cao.score.entity.Dict;
 import com.cao.score.entity.GradeClass;
 import com.cao.score.entity.Students;
 import com.cao.score.entity.Teachers;
-import com.cao.score.service.DictService;
-import com.cao.score.service.GradeClassService;
-import com.cao.score.service.TeachersService;
+import com.cao.score.service.*;
 import com.cao.score.utiles.ResponseUtil;
 import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +44,10 @@ public class TeachersController {
     private GradeClassService gradeClassService;
     @Resource
     private DictService dictService;
+    @Resource
+    private UserService userService;
+    @Resource
+    private UserRoleService userRoleService;
 
     /**
      * 通过主键查询单条数据
@@ -63,6 +66,7 @@ public class TeachersController {
      */
     @RequestMapping("/teacherInfoManagement")
     public ModelAndView studentInfoManagement(){
+        Integer role=userRoleService.selectRolesByUserName();
         ModelAndView modelAndView=new ModelAndView();
         //获取所有的年级
         Map<String,Object> map = new HashMap<>();
@@ -74,6 +78,9 @@ public class TeachersController {
         map.put("typeId",1);
         List<Dict> dicts = dictService.queryAllDict(map);
         modelAndView.addObject("dicts",dicts);
+        modelAndView.addObject("role",role);
+        Object object = SecurityUtils.getSubject().getPrincipal();
+        modelAndView.addObject("identityNum",object);
         modelAndView.setViewName("/teacher/teacherInfoManagement");
         return modelAndView;
     }
@@ -144,9 +151,11 @@ public class TeachersController {
         try {
             if(teachers.getId()!=null) {
                 teachersService.update(teachers);
+                userService.saveUserByTeachers(teachers);
                 result= ResponseUtil.printJson("修改成功",teachers);
             }else{
                 teachersService.insert(teachers);
+                userService.saveUserByTeachers(teachers);
                 result=ResponseUtil.printJson("导入成功",teachers);
             }
         }catch (Exception e){

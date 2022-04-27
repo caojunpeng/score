@@ -1,7 +1,7 @@
 <div class="studentEnter">
     <h3>基本信息录入</h3>
-    <button type="button" class="btn btn-primary" onclick="checkStudentInfoFile()">导入学生信息</button>
-    <button type="button" class="btn btn-primary" onclick="downloadStudentExcelTemplate()">模板导出</button>
+    <button type="button" class="btn btn-primary exportStudentInfoBtn" onclick="checkStudentInfoFile()">导入学生信息</button>
+    <button type="button" class="btn btn-primary downloadStudentInfoBtn" onclick="downloadStudentExcelTemplate()">模板导出</button>
     <input type="file" hidden="hidden" name="studentInfoFiles" id="studentInfoFiles" onchange="exportStudentsInfo()">
     <div class="studentInfoDiv">
         <form id="studentInfoForm">
@@ -49,7 +49,7 @@
                     <option value="">全部</option>
                 </select>
             </div>
-            <button type="button" class="btn btn-success" onclick="insertStudentInfo()">提交</button>
+            <button type="button" class="btn btn-success studentSaveBtn" onclick="insertStudentInfo()">提交</button>
         </form>
     </div>
 </div>

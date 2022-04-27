@@ -94,11 +94,18 @@ public interface ScoresDao {
 
     /**
      * 通过学号清空成绩信息
-     * @param id
+     * @param studentId
      * @return
      */
     int deleteByStudentId(String studentId);
 
     List<ScoreParams> getScoresInfoDatas(ObjectParams objectParams);
+
+    /**
+     * 获取所有考试场次
+     */
+    List<String> getAllScoresNum();
+
+
 
 }

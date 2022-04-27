@@ -21,6 +21,7 @@ public class Role implements Serializable {
      * 创建时间
      */
     private Date createTime;
+    private String createTimeStr;
     /**
      * 备注
      */
@@ -30,6 +31,13 @@ public class Role implements Serializable {
      */
     private String creator;
 
+    public String getCreateTimeStr() {
+        return createTimeStr;
+    }
+
+    public void setCreateTimeStr(String createTimeStr) {
+        this.createTimeStr = createTimeStr;
+    }
 
     public Long getRoleId() {
         return roleId;

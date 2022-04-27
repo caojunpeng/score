@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户权限(UserRole)表数据库访问层
@@ -40,6 +41,7 @@ public interface UserRoleDao {
      * @return 对象列表
      */
     List<UserRole> queryAll(UserRole userRole);
+    List<UserRole> queryAllByMap(Map<String,Object> map);
 
     /**
      * 新增数据
@@ -80,5 +82,7 @@ public interface UserRoleDao {
      * @return 影响行数
      */
     int deleteById(Long id);
+
+    int deleteByUserId(Long id);
 
 }

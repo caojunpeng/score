@@ -1,15 +1,22 @@
 package com.cao.score.service.impl;
 
 import com.cao.score.dao.UserDao;
+import com.cao.score.entity.Students;
+import com.cao.score.entity.Teachers;
 import com.cao.score.entity.User;
+import com.cao.score.entity.UserRole;
+import com.cao.score.service.UserRoleService;
 import com.cao.score.service.UserService;
 import com.cao.score.shiro.SaltUtil;
+import com.cao.score.utiles.ScoreDateUtils;
 import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,8 +27,20 @@ import java.util.List;
  */
 @Service("userService")
 public class UserServiceImpl implements UserService {
+
+    /**
+     * 默认给学生权限
+     */
+    public static final Integer studentRole = 3;
+    /**
+     * 默认给教师权限
+     */
+    public static final Integer teacherRole = 2;
+
     @Resource
     private UserDao userDao;
+    @Resource
+    private UserRoleService userRoleService;
 
     /**
      * 通过ID查询单条数据
@@ -94,6 +113,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public DataTablesResult<User> dataLists(ObjectParams params) {
         List<User> users=userDao.getList(params);
+        if(!users.isEmpty()){
+            for (User user : users) {
+                user.setCreateTimeStr(ScoreDateUtils.dateToStr(user.getCreateTime(),ScoreDateUtils.format_date));
+            }
+        }
         DataTablesResult<User> dataTablesResult=new DataTablesResult<>();
         dataTablesResult.setData(users);
         dataTablesResult.setRecordsFiltered(users.size());
@@ -115,11 +139,76 @@ public class UserServiceImpl implements UserService {
         user.setUserPwd(md5.toHex());
         return user;
     }
+    @Override
+    public void saveUserByTeachers(Teachers teachers) {
+        User user = userDao.queryOne(new User(teachers.getIdentityNum()));
+        if(user!=null){
+            setUserBYTeacher(user,teachers);
+            userDao.update(user);
+        }else{
+            user=new User();
+            setUserBYTeacher(user,teachers);
+            userDao.insert(user);
+            UserRole userRole = new UserRole();
+            userRole.setUserId(Integer.valueOf(user.getUserId()+""));
+            userRole.setRoleId(teacherRole);
+            userRoleService.insert(userRole);
+        }
+    }
+    @Override
+    public void saveUserByStudent(Students students) {
+        User user = userDao.queryOne(new User(students.getStudentId()));
+        if(user!=null){
+            setUserBYStudent(user,students);
+            userDao.update(user);
+        }else{
+            user=new User();
+            setUserBYStudent(user,students);
+            userDao.insert(user);
+            UserRole userRole = new UserRole();
+            userRole.setUserId(Integer.valueOf(user.getUserId()+""));
+            userRole.setRoleId(studentRole);
+            userRoleService.insert(userRole);
+        }
+    }
+    private void setUserBYStudent(User user,Students students){
+        String salt = SaltUtil.getSalt(8);
+        user.setSalt(salt);
+        String identityNum = students.getIdentityNum();
+        String pwd=identityNum.substring(identityNum.length()-6,identityNum.length());
+        Md5Hash md5 = new Md5Hash(pwd,salt,1024);
+        user.setUserPwd(md5.toHex());
+        if(user.getUserId()==null){
+            user.setUserName(students.getStudentId());
+            user.setCreateTime(new Date());
+        }
+        user.setName(students.getName());
+        user.setOriginalPassword(pwd);
+        user.setStatus(1);
+        Object object = SecurityUtils.getSubject().getPrincipal();
+        user.setCreator(String.valueOf(object));
+    }
+    private void setUserBYTeacher(User user,Teachers teachers){
+        String salt = SaltUtil.getSalt(8);
+        user.setSalt(salt);
+        String identityNum = teachers.getIdentityNum();
+        String pwd=identityNum.substring(identityNum.length()-6,identityNum.length());
+        Md5Hash md5 = new Md5Hash(pwd,salt,1024);
+        user.setUserPwd(md5.toHex());
+        if(user.getUserId()==null){
+            user.setUserName(teachers.getIdentityNum());
+            user.setCreateTime(new Date());
+        }
+        user.setName(teachers.getName());
+        user.setPhone(teachers.getPhone());
+        user.setOriginalPassword(pwd);
+        user.setStatus(1);
+        Object object = SecurityUtils.getSubject().getPrincipal();
+        user.setCreator(String.valueOf(object));
+    }
 
     public static void main(String[] args) {
-        String salt = SaltUtil.getSalt(8);
-        System.out.println(salt);
-        Md5Hash md5 = new Md5Hash("123456",salt,1024);
-        System.out.println(md5);
+        String str="123456789";
+        System.out.println(str.substring(str.length()-6,str.length()));
     }
 }

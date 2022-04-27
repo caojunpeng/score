@@ -68,6 +68,29 @@ public class ScoreParams {
      * 科目
      */
     private Integer subject;
+    /**
+     * 考试编号
+     */
+    private String scoreNum;
+
+
+    private boolean editStatue;
+
+    public boolean isEditStatue() {
+        return editStatue;
+    }
+
+    public void setEditStatue(boolean editStatue) {
+        this.editStatue = editStatue;
+    }
+
+    public String getScoreNum() {
+        return scoreNum;
+    }
+
+    public void setScoreNum(String scoreNum) {
+        this.scoreNum = scoreNum;
+    }
 
     public Integer getSubject() {
         return subject;

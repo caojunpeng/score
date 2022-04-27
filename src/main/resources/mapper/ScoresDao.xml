@@ -104,8 +104,7 @@
         </if>
         LIMIT 1 ) chemicalScore
         FROM
-        scores ss left join
-        students stu on ss.student_id = stu.student_id
+        students stu
         <where>
             <if test="keyword != null and keyword != ''">
                 and (stu.identity_num LIKE CONCAT(CONCAT('%', #{keyword}), '%')
@@ -114,7 +113,7 @@
                 )
             </if>
             <if test="scoreNum != null and scoreNum != ''">
-                and ss.score_num = #{scoreNum}
+                and stu.student_id in ( SELECT student_id FROM scores WHERE score_num = #{scoreNum} GROUP BY student_id)
             </if>
             <if test="studentId != null and studentId != ''">
                 and stu.student_id = #{studentId}
@@ -142,11 +141,18 @@
             </if>
         </where>
     </select>
+    <!--通过实体作为筛选条件查询-->
+    <select id="getAllScoresNum" resultMap="ScoresMap">
+        select
+            score_num
+        from score.scores where length(score_num) >0
+        group by score_num
+    </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into score.scores(student_id, score, subject, qualified_state)
-        values (#{studentId}, #{score}, #{subject}, #{qualifiedState})
+        insert into score.scores(student_id, score, subject, qualified_state,score_num)
+        values (#{studentId}, #{score}, #{subject}, #{qualifiedState}, #{scoreNum})
     </insert>
 
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
@@ -183,6 +189,9 @@
             </if>
             <if test="qualifiedState != null">
                 qualified_state = #{qualifiedState},
+            </if>
+            <if test="scoreNum != null and scoreNum != ''">
+                score_num = #{scoreNum},
             </if>
         </set>
         where id = #{id}

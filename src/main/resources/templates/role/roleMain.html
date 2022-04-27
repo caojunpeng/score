@@ -38,12 +38,16 @@
         "columns": [
             {"data": "roleName"},
             {"data": "remark"},
-            {"data": "createTime"},
+            {"data": "createTimeStr"},
             {
                 "data": null, render: function (data) {
+                    debugger
+                    var ids=[1,2,3];
                     var btnHtml = "";
                     btnHtml += '<button class="btn btn-primary btn-sm" onclick="saverolePage(' + data.roleId + ')">编辑</button>';
-                    btnHtml += '<button class="btn btn-danger btn-sm delroleBtn" onclick="delRole(' + data.roleId + ')">删除</button>';
+                    if($.inArray(data.roleId,ids)==-1) {
+                        btnHtml += '<button class="btn btn-danger btn-sm delroleBtn" onclick="delRole(' + data.roleId + ')">删除</button>';
+                    }
                     btnHtml += '<button class="btn btn-danger btn-sm delroleBtn" onclick="roleManage(' + data.roleId + ')">权限管理</button>';
                     return btnHtml;
                 }
@@ -60,7 +64,7 @@
         }, function () {
             $.ajax({
                 type: "POST",
-                url: "/role/delrole",
+                url: "/role/delRole",
                 data: {roleId:id},
                 success: function (obj) {
                     if(obj){

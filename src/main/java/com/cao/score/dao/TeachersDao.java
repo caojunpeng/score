@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 教师信息表(Teachers)表数据库访问层
@@ -23,6 +24,14 @@ public interface TeachersDao {
      * @return 实例对象
      */
     Teachers queryById(Long id);
+
+    /**
+     * 通过ID查询单条数据
+     *
+     * @param id 主键
+     * @return 实例对象
+     */
+    Teachers queryByMap(Map<String,Object> map);
 
     /**
      * 查询指定行数据

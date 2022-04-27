@@ -85,7 +85,7 @@ public class Scores implements Serializable {
         this.qualifiedState = qualifiedState;
     }
 
-    public Scores(Long id, String studentId, Double score, Integer subject, Integer qualifiedState) {
+    public Scores(Long id, String studentId, Double score, Integer subject, Integer qualifiedState,String scoreNum) {
         if(id!=null){
             this.id = id;
         }
@@ -93,6 +93,7 @@ public class Scores implements Serializable {
         this.score = score;
         this.subject = subject;
         this.qualifiedState = qualifiedState;
+        this.scoreNum=scoreNum;
     }
     public Scores(){
 

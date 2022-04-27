@@ -1,5 +1,7 @@
 package com.cao.score.service;
 
+import com.cao.score.entity.Students;
+import com.cao.score.entity.Teachers;
 import com.cao.score.entity.User;
 import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
@@ -78,4 +80,7 @@ public interface UserService {
      */
     User setUserPossword(String possword,User user,boolean type);
 
+    void saveUserByStudent(Students students);
+
+    void saveUserByTeachers(Teachers teachers);
 }

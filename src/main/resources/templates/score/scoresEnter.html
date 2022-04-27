@@ -1,9 +1,19 @@
 <div class="scoresEnter">
     <h3>成绩信息录入</h3>
-    <button type="button" class="btn btn-primary" onclick="checkScoresInfoFile()">导入成绩信息</button>
-    <button type="button" class="btn btn-primary" onclick="downloadScoresExcelTemplate()">模板导出</button>
+    <button type="button" class="btn btn-primary exportScoreInfo" onclick="checkScoresInfoFile()">导入成绩信息</button>
+    <button type="button" class="btn btn-primary downloadScoreInfo" onclick="downloadScoresExcelTemplate()">模板导出</button>
     <input type="file" name="scoresInfoFiles" id="scoresInfoFiles" onchange="exportScoresInfo()">
+    <input type="hidden" th:value="${role}" id="role">
+    <input type="hidden" th:value="${classNum}" id="classNum">
+    <input type="hidden" th:value="${gradeNum}" id="gradeNum">
     <div class="">
+        <div class="col-md-4" id="scoreNumSelectDiv">
+            <label >考试场次</label>
+            <select class="form-control" name="gradeNum" id="scoreNumSelect" onchange="loadScoreNum()">
+                <option value="">全部</option>
+                <option th:each="scoreNum:${scoreNumList}" th:value="${scoreNum.scoreNum}"  th:text="${scoreNum.scoreName}" ></option>
+            </select>
+        </div>
         <div class="col-md-4">
             <label >年级</label>
             <select class="form-control" name="gradeNum" id="gradeNumSelect" onchange="loadClassNumList()">
@@ -27,6 +37,7 @@
     <div class="scoresDiv">
         <form id="scoresForm">
             <input type="hidden" class="form-control"  name="studentId">
+            <input type="hidden" class="form-control"  name="scoreNum">
             <div class="col-md-4">
                 <label >语文</label>
                 <input type="text" class="form-control"  name="chineseScore" placeholder="请输入语文成绩">
@@ -63,16 +74,29 @@
                 <label >化学</label>
                 <input type="text" class="form-control" name="chemicalScore" placeholder="请输入化学成绩">
             </div>
-            <button type="button" class="btn btn-success" onclick="insertScores()">提交</button>
+            <button type="button" class="btn btn-success saveScoresInfo" onclick="insertScores()">提交</button>
         </form>
     </div>
 </div>
 <script type="text/javascript">
     //选择导入的文件
     function checkScoresInfoFile() {
+        var html ='<from id="scoreUploadFile">';
+            html +=$("#scoreNumSelectDiv").html();
+            html +='</from>';
+            html +='<button type="button" class="btn btn-success" onclick="uploadScoreFile()">导入</button>';
+            html +="/<div>";
+
+        layer.open({
+            type: 1,
+            skin: 'layer-skin-blue',
+            area: ['600px', '450px'], //宽高
+            content: html
+        });
+    }
+    function uploadScoreFile(){
         $("#scoresInfoFiles").click();
     }
-
     //成绩导入
     function exportScoresInfo() {
         var scoresInfoFiles = $("#scoresInfoFiles")[0].files[0].name;
@@ -215,4 +239,24 @@
         var studentId=$("#studentNameSelect").val();
         $("input[name='studentId']").val(studentId);
     }
+    //考试编号赋值
+    function loadScoreNum(){
+        var scoreNum=$("#scoreNumSelect").val();
+        $("input[name='scoreNum']").val(scoreNum);
+    }
+
+    //默认触发
+    $(function (){
+        debugger
+        var role = $("#role").val();
+        var classNum = $("#classNum").val();
+        var gradeNum = $("#gradeNum").val();
+        if(role==2){
+            $("#gradeNumSelect").html('<option value="'+gradeNum+'" selected>'+gradeNum+'</option>');
+            $("#classNumSelect").html('<option value="'+classNum+'" selected>'+classNum+'</option>');
+            $("#gradeNumSelect").attr("disabled",true);
+            $("#classNumSelect").attr("disabled",true);
+            loadStudentNameList()
+        }
+    })
 </script>

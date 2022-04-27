@@ -45,9 +45,10 @@
         $.ajax({
             type: "post",
             url:"/role/addRoleMenu",
-            data:{roleId:$("#roleId").val(),menuIdList:menuIdList.join(",")},
+            data:{id:$("#roleId").val(),menuIds:menuIdList.join(",")},
             success:function () {
-
+                layer.closeAll();
+                layer.msg("更新成功");
             }
         })
     }

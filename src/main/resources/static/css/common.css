@@ -162,17 +162,18 @@
 
 
 /*前台-主页*/
+
 .main-div{
     background: url(../images/admin/main.jpg) no-repeat;
     background-size:cover;
     width: 100%;
-    height: 753px;
+    height: 941px;
 }
 .main-div .main-top{
     display: block;
     width: 100%;
     height: 60px;
-    border: 1px solid rgb(55 125 196);
+    border-bottom: 1px solid rgb(55 125 196);
     color: #fff;
 }
 .main-div .main-top .top-left{
@@ -220,14 +221,18 @@
 .main-div .main-bottom{
     display: block;
     width: 100%;
-    height: 675px;
+    height: 865px;
 }
 .main-div .main-bottom .main-left{
     display: block;
-    width: 9.5%;
+    width: 8.5%;
     float: left;
     height: 100%;
     border-right: 1px solid #4dadff;
+}
+.main-div .main-bottom .main-left .menuChecked{
+    color: #28e85a;
+    background: rgb(46 99 218) !important;
 }
 .main-div .main-bottom .main-left .left-menu{
     width: 140px;
@@ -252,7 +257,7 @@
 }
 .main-div .main-bottom .main-right{
     display: block;
-    width: 90.4%;
+    width: 91.4%;
     height: 100%;
     border: 1px solid #4dadff;
     float: left;
@@ -274,7 +279,15 @@
  .studentEnter #studentInfoFiles{
     display: none;
 }
-
+.studentEnter #studentInfoForm .studentSaveBtn{
+    margin: 20px 20px 0px 96%;
+}
+.studentEnter .exportStudentInfoBtn,.scoresEnter .exportScoreInfo{
+    margin: 10px 20px 0px 86%;
+}
+.studentEnter .downloadStudentInfoBtn,.scoresEnter .downloadScoreInfo{
+    margin-top: 10px;
+}
  .main-right-menus{
     position: absolute;
     left: 400px;
@@ -378,6 +391,12 @@
 
 
 /*后台-用户管理*/
+.userListDiv h1,.menuListDiv h1,.roleListDiv h1{
+    margin-left: 25px;
+}
+.userListDiv #dataTables-userList_wrapper,.roleListDiv #dataTables-roleList_wrapper,.menuListDiv #dataTables-menuList_wrapper{
+    padding: 0px 15px;
+}
 .userListDiv .delUserBtn{
     margin-left: 15px;
 }
@@ -411,8 +430,20 @@
 .scoresEnter #scoresInfoFiles{
     display: none;
 }
+.scoresEnter label{
+    color: #fff;
+}
+.scoresEnter .saveScoresInfo{
+    margin: 25px 0px 0px 62.5%;
+}
 
+#studentSaveForm .col-md-12,#scoreSaveNumberForm .col-md-12,#scoreSaveForm .col-md-12,#teacherSaveForm .col-md-12{
+    margin-top: 10px;
 
+}
+#studentSaveForm .savestudentBtn,#scoreSaveNumberForm .saveScoreBtn,#scoreSaveForm .saveScoreBtn,#teacherSaveForm .saveteacherBtn{
+    margin: 10px 20px 0px 88%;
+}
 
 
 /*强制字体白色*/

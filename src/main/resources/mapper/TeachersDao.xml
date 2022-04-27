@@ -21,6 +21,41 @@
         from score.teachers
         where id = #{id}
     </select>
+    <!--查询单个-->
+    <select id="queryByMap" resultMap="TeachersMap">
+        select
+          id, name, sex, age, identity_num, subject, phone, grade_num, class_num
+        from score.teachers
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="sex != null">
+                and sex = #{sex}
+            </if>
+            <if test="age != null">
+                and age = #{age}
+            </if>
+            <if test="identityNum != null">
+                and identity_num = #{identityNum}
+            </if>
+            <if test="subject != null">
+                and subject = #{subject}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+            <if test="gradeNum != null">
+                and grade_num = #{gradeNum}
+            </if>
+            <if test="classNum != null">
+                and class_num = #{classNum}
+            </if>
+        </where>
+    </select>
 
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="TeachersMap">
@@ -89,6 +124,9 @@
             </if>
             <if test="classNum != null">
                 and class_num = #{classNum}
+            </if>
+            <if test="identityNum != null">
+                and identity_num = #{identityNum}
             </if>
         </where>
     </select>

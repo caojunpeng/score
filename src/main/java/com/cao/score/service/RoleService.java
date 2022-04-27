@@ -5,6 +5,7 @@ import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 角色表(Role)表服务接口
@@ -30,6 +31,11 @@ public interface RoleService {
      * @return 对象列表
      */
     List<Role> queryAllByLimit(int offset, int limit);
+    /**
+     * 查询多条数据
+     * @return 对象列表
+     */
+    List<Role> queryAllByMap(Map<String,Object> map);
 
     /**
      * 新增数据

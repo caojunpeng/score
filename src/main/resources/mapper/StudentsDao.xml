@@ -58,6 +58,9 @@
             <if test="sex != null">
                 and sex = #{sex}
             </if>
+             <if test="studentId != null and studentId != '' ">
+                and student_id = #{studentId}
+            </if>
             <if test="gradeNum != null">
                 and grade_num = #{gradeNum}
             </if>

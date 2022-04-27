@@ -2,14 +2,12 @@ package com.cao.score.controller;
 
 import com.cao.score.entity.GradeClass;
 import com.cao.score.entity.Students;
-import com.cao.score.service.CommonFilesService;
-import com.cao.score.service.DictService;
-import com.cao.score.service.GradeClassService;
-import com.cao.score.service.StudentsService;
+import com.cao.score.service.*;
 import com.cao.score.utiles.*;
 import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,6 +53,10 @@ public class StudentsController {
 
     @Resource
     private DictService dictService;
+    @Resource
+    private UserRoleService userRoleService;
+    @Resource
+    private UserService userService;
 
     /**
      * 通过主键查询单条数据
@@ -73,12 +75,14 @@ public class StudentsController {
      */
     @RequestMapping("/studentInfoEnter")
     public ModelAndView studentEnter(){
+        Integer role=userRoleService.selectRolesByUserName();
         ModelAndView modelAndView=new ModelAndView();
         //获取所有的年级
         Map<String,Object> map = new HashMap<>();
         map.put("groupStr","grade_num");
         List<GradeClass> gradeNumList = gradeClassService.queryAllByMap(map);
         modelAndView.addObject("gradeNumList",gradeNumList);
+        modelAndView.addObject("role",role);
         modelAndView.setViewName("/student/studentEnter");
         return modelAndView;
     }
@@ -89,12 +93,20 @@ public class StudentsController {
      */
     @RequestMapping("/studentInfoManagement")
     public ModelAndView studentInfoManagement(){
+        Integer role=userRoleService.selectRolesByUserName();
+        String studentId =null;
+        if(role==3){
+            Object object = SecurityUtils.getSubject().getPrincipal();
+            studentId = String.valueOf(object);
+        }
         ModelAndView modelAndView=new ModelAndView();
         //获取所有的年级
         Map<String,Object> map = new HashMap<>();
         map.put("groupStr","grade_num");
         List<GradeClass> gradeNumList = gradeClassService.queryAllByMap(map);
         modelAndView.addObject("gradeNumList",gradeNumList);
+        modelAndView.addObject("role",role);
+        modelAndView.addObject("studentId",studentId);
         modelAndView.setViewName("/student/studentInfoManagement");
         return modelAndView;
     }
@@ -183,6 +195,7 @@ public class StudentsController {
                     students.setGradeNum(Integer.valueOf(map.get("evenColumn")+""));
                     students.setClassNum(Integer.valueOf(map.get("eightColumn")+""));
                     studentsService.insert(students);
+                    userService.saveUserByStudent(students);
                 }
                 result=ResponseUtil.printJson("导入成功",maps);
             }else{
@@ -207,14 +220,17 @@ public class StudentsController {
         try {
             if(students.getId()!=null) {
                 studentsService.update(students);
+                userService.saveUserByStudent(students);
                 result=ResponseUtil.printJson("修改成功",students);
             }else{
                 studentsService.insert(students);
+                userService.saveUserByStudent(students);
                 result=ResponseUtil.printJson("导入成功",students);
+
             }
         }catch (Exception e){
             logger.error("学生信息录入异常，异常信息"+e.getMessage(),e);
-            result=ResponseUtil.printJson("学生信息录入异常",null);
+            result=ResponseUtil.printFailJson(ResponseUtil.SERVERUPLOAD,"学生信息录入异常");
         }
         return result;
     }
@@ -233,7 +249,7 @@ public class StudentsController {
             result=ResponseUtil.printJson("删除成功",null);
         }catch (Exception e){
             logger.error("学生信息录入异常，异常信息"+e.getMessage(),e);
-            result=ResponseUtil.printJson("学生信息录入异常",null);
+            result=ResponseUtil.printFailJson(ResponseUtil.SERVERUPLOAD,"学生信息录入异常");
         }
         return result;
     }
@@ -249,6 +265,7 @@ public class StudentsController {
         ModelAndView modelAndView=new ModelAndView();
         if (studentId != null){
             Students students = studentsService.queryById(studentId);
+            students.setBirthDateStr(ScoreDateUtils.dateToStr(students.getBirthdate(),ScoreDateUtils.format_date));
             modelAndView.addObject("student",students);
         }
         Map<String,Object> map = new HashMap<>();

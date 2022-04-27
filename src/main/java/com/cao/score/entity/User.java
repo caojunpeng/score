@@ -41,6 +41,7 @@ public class User implements Serializable {
      * 创建时间
      */
     private Date createTime;
+    private String createTimeStr;
     /**
      * 创建者
      */
@@ -54,6 +55,26 @@ public class User implements Serializable {
      * 原密码
      */
     private String originalPassword;
+    /**
+     * 权限id
+     */
+    private String roleIds;
+
+    public String getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(String roleIds) {
+        this.roleIds = roleIds;
+    }
+
+    public String getCreateTimeStr() {
+        return createTimeStr;
+    }
+
+    public void setCreateTimeStr(String createTimeStr) {
+        this.createTimeStr = createTimeStr;
+    }
 
     public String getOriginalPassword() {
         return originalPassword;
@@ -143,4 +164,25 @@ public class User implements Serializable {
         this.status = status;
     }
 
+    public User() {
+    }
+
+    public User(String userName) {
+        this.userName = userName;
+    }
+
+    public User(Long userId, String userName, String userPwd, String salt, String phone, String email, String name, Date createTime, String createTimeStr, String creator, Integer status, String originalPassword) {
+        this.userId = userId;
+        this.userName = userName;
+        this.userPwd = userPwd;
+        this.salt = salt;
+        this.phone = phone;
+        this.email = email;
+        this.name = name;
+        this.createTime = createTime;
+        this.createTimeStr = createTimeStr;
+        this.creator = creator;
+        this.status = status;
+        this.originalPassword = originalPassword;
+    }
 }

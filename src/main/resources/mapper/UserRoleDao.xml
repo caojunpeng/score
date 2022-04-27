@@ -5,13 +5,13 @@
     <resultMap type="com.cao.score.entity.UserRole" id="UserRoleMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="roleId" column="role_id" jdbcType="INTEGER"/>
-        <result property="menuId" column="menu_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
     </resultMap>
 
     <!--查询单个-->
     <select id="queryById" resultMap="UserRoleMap">
         select
-          id, role_id, menu_id
+          id, role_id, user_id
         from score.user_role
         where id = #{id}
     </select>
@@ -19,7 +19,7 @@
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="UserRoleMap">
         select
-          id, role_id, menu_id
+          id, role_id, user_id
         from score.user_role
         limit #{offset}, #{limit}
     </select>
@@ -27,7 +27,7 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="UserRoleMap">
         select
-        id, role_id, menu_id
+        id, role_id, user_id
         from score.user_role
         <where>
             <if test="id != null">
@@ -36,34 +36,45 @@
             <if test="roleId != null">
                 and role_id = #{roleId}
             </if>
-            <if test="menuId != null">
-                and menu_id = #{menuId}
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+        </where>
+    </select>
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAllByMap" resultMap="UserRoleMap">
+        select
+        id, role_id, user_id
+        from score.user_role
+        <where>
+            <if test="userId != null">
+                and user_id = #{userId}
             </if>
         </where>
     </select>
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into score.user_role(role_id, menu_id)
-        values (#{roleId}, #{menuId})
+        insert into score.user_role(role_id, user_id)
+        values (#{roleId}, #{userId})
     </insert>
 
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into score.user_role(role_id, menu_id)
+        insert into score.user_role(role_id, user_id)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.roleId}, #{entity.menuId})
+            (#{entity.roleId}, #{entity.userId})
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
-        insert into score.user_role(role_id, menu_id)
+        insert into score.user_role(role_id, user_id)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.roleId}, #{entity.menuId})
+            (#{entity.roleId}, #{entity.userId})
         </foreach>
         on duplicate key update
-        role_id = values(role_id) , menu_id = values(menu_id)
+        role_id = values(role_id) , user_id = values(user_id)
     </insert>
 
     <!--通过主键修改数据-->
@@ -73,8 +84,8 @@
             <if test="roleId != null">
                 role_id = #{roleId},
             </if>
-            <if test="menuId != null">
-                menu_id = #{menuId},
+            <if test="userId != null">
+                user_id = #{userId},
             </if>
         </set>
         where id = #{id}
@@ -83,6 +94,10 @@
     <!--通过主键删除-->
     <delete id="deleteById">
         delete from score.user_role where id = #{id}
+    </delete>
+    <!--通过主键删除-->
+    <delete id="deleteByUserId">
+        delete from score.user_role where user_id = #{userId}
     </delete>
 
 </mapper>

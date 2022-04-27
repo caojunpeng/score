@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * (RoleMenu)表数据库访问层
@@ -31,7 +32,7 @@ public interface RoleMenuDao {
      * @return 对象列表
      */
     List<RoleMenu> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
-
+    List<RoleMenu> queryByMap(Map<String, Object> map);
 
     /**
      * 通过实体作为筛选条件查询
@@ -80,5 +81,12 @@ public interface RoleMenuDao {
      * @return 影响行数
      */
     int deleteById(Long id);
+    /**
+     * 通过主键删除数据
+     *
+     * @param id 主键
+     * @return 影响行数
+     */
+    int deleteByRoleId(Long roleId);
 
 }

@@ -1,6 +1,10 @@
 package com.cao.score.controller;
 
+import com.cao.score.entity.Role;
 import com.cao.score.entity.User;
+import com.cao.score.entity.UserRole;
+import com.cao.score.service.RoleService;
+import com.cao.score.service.UserRoleService;
 import com.cao.score.service.UserService;
 import com.cao.score.shiro.SaltUtil;
 import com.cao.score.utiles.ResponseUtil;
@@ -18,7 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.swing.*;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * (User)表控制层
@@ -37,6 +45,17 @@ public class UserController {
      */
     @Resource
     private UserService userService;
+    /**
+     * 服务对象
+     */
+    @Resource
+    private RoleService roleService;
+    /**
+     * 服务对象
+     */
+    @Resource
+    private UserRoleService userRoleService;
+
 
     /**
      * 跳转到主页面
@@ -71,10 +90,16 @@ public class UserController {
         if(params!=null && params.getUserId()!=null){
             User userByUserId = userService.queryById(params.getUserId());
             modelAndView.addObject("user",userByUserId);
+            List<String> roles=userRoleService.selectUserRoles(params.getUserId());
+            modelAndView.addObject("roles",ScoreStringUtils.getJsonObj(roles));
         }
+        List<Role> roleList = roleService.queryAllByMap(null);
+        modelAndView.addObject("roleList",roleList);
+
         modelAndView.setViewName("/user/editUser");
         return modelAndView;
     }
+
 
     /**
      * 删除用户
@@ -115,6 +140,8 @@ public class UserController {
                 }
                 userService.insert(user);
             }
+            String[] roleIds=user.getRoleIds().split(",");
+            userRoleService.editUserRoles(roleIds,userId);
         }catch (Exception e){
             logger.error("新增对象异常,异常信息："+e.getMessage(),e);
             ResponseUtil.printFailJson(ResponseUtil.SERVERUPLOAD,"新增对象异常");

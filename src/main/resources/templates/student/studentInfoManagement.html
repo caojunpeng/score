@@ -40,10 +40,12 @@
                     <option value="">全部</option>
                 </select>
             </div>
+            <input type="hidden" th:value="${studentId}" name="studentId">
             <button type="button" class="btn btn-primary searchBtn" onclick="searchStudentInfo()">查询</button>
             <button type="button" class="btn btn-primary searchBtn" onclick="exportStudentInfo()">导出</button>
         </form>
     </div>
+    <input type="hidden" th:value="${role}" id="role">
     <table id="dataTables-studentInfoDatas"  class="table table-bordered">
         <thead>
             <tr>
@@ -86,7 +88,14 @@
                 "data" : "name"
             },
             {
-                "data" : "sex"
+                "data" : "sex","render" : function(nRow, indexType,dataObj) {
+                    if(nRow==1){
+                        return "男";
+                    }else if(nRow==2){
+                        return "女";
+                    }
+                    return "未知";
+                }
             },
             {
                 "data" : "age"
@@ -109,12 +118,32 @@
             {
                 "data" : null,"render" : function(nRow, indexType,dataObj) {
                     var html ="";
-                    html+='<button type="button" class="btn btn-success btn-edit" onclick="saveStudentInfoPage('+dataObj.id+')">编辑</button>'  ;
-                    html+='<button type="button" class="btn btn-danger btn-del" onclick="delStudentInfo('+dataObj.id+')">删除</button>'  ;
+                    var role = $("#role").val();
+                        html+='<button type="button" ';
+                        if(role==2 && !nRow.editStatue){
+                            html+='disabled ';
+                        }
+                        html+='class="btn btn-success btn-edit" onclick="saveStudentInfoPage('+dataObj.id+')">编辑</button>'  ;
+                        html+='<button type="button" ';
+                        if(role==2 && !nRow.editStatue){
+                            html+='disabled ';
+                        }
+                        html+='class="btn btn-danger btn-del" onclick="delStudentInfo('+dataObj.id+')">删除</button>'  ;
                     return  html;
                 }
             }
 		],
+        "fnDrawCallback": function(settings, json) {
+            var role = $("#role").val();
+            if(role==3){
+                $('#dataTables-studentInfoDatas tr').find('td:eq(9)').hide();
+                $('#dataTables-studentInfoDatas tr').find('th:eq(9)').hide();
+            }
+        },
+        //表格绘制完成后执行
+        "initComplete": function(settings, json) {
+
+        },
 		responsive : true,
 		language : dataTablesLanguage
 	});
@@ -168,7 +197,7 @@
                 layer.open({
                     type: 1,
                     skin: 'layer-blue',
-                    area: ['600px', '450px'], //宽高
+                    area: ['600px', '750px'], //宽高
                     content: html
                 });
             }
@@ -186,8 +215,9 @@
                 //async: false,同步
                 data: {id:id},
                 success: function (result) {
+                    debugger
                     if(result){
-                        var obj = result;
+                        var obj = JSON.parse(result);
                         if(obj && obj.code == 200){
                             layer.msg(obj.message);
                             $('#dataTables-studentInfoDatas').DataTable().draw();
