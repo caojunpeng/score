@@ -65,9 +65,22 @@ public class ScoreParams {
     private double chemicalScore;
 
     /**
+     * 总成绩
+     */
+    private double scoreSum;
+
+    /**
      * 科目
      */
     private Integer subject;
+     /**
+     * 班级排名
+     */
+    private Integer classRanking;
+     /**
+     * 年纪排名
+     */
+    private Integer gradeRanking;
     /**
      * 考试编号
      */
@@ -75,6 +88,30 @@ public class ScoreParams {
 
 
     private boolean editStatue;
+
+    public Integer getClassRanking() {
+        return classRanking;
+    }
+
+    public void setClassRanking(Integer classRanking) {
+        this.classRanking = classRanking;
+    }
+
+    public Integer getGradeRanking() {
+        return gradeRanking;
+    }
+
+    public void setGradeRanking(Integer gradeRanking) {
+        this.gradeRanking = gradeRanking;
+    }
+
+    public double getScoreSum() {
+        return scoreSum;
+    }
+
+    public void setScoreSum(double scoreSum) {
+        this.scoreSum = scoreSum;
+    }
 
     public boolean isEditStatue() {
         return editStatue;

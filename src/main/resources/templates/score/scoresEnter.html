@@ -2,7 +2,7 @@
     <h3>成绩信息录入</h3>
     <button type="button" class="btn btn-primary exportScoreInfo" onclick="checkScoresInfoFile()">导入成绩信息</button>
     <button type="button" class="btn btn-primary downloadScoreInfo" onclick="downloadScoresExcelTemplate()">模板导出</button>
-    <input type="file" name="scoresInfoFiles" id="scoresInfoFiles" onchange="exportScoresInfo()">
+    <input type="file" name="scoresInfoFiles" id="scoresInfoFiles" onchange="getFileName()">
     <input type="hidden" th:value="${role}" id="role">
     <input type="hidden" th:value="${classNum}" id="classNum">
     <input type="hidden" th:value="${gradeNum}" id="gradeNum">
@@ -81,11 +81,21 @@
 <script type="text/javascript">
     //选择导入的文件
     function checkScoresInfoFile() {
-        var html ='<from id="scoreUploadFile">';
+        var html ='<div class="importScoreDiv">';
+            html +='<div>';
+            html +='<from id="scoreUploadFile">';
             html +=$("#scoreNumSelectDiv").html();
             html +='</from>';
-            html +='<button type="button" class="btn btn-success" onclick="uploadScoreFile()">导入</button>';
-            html +="/<div>";
+            html +='</div>';
+            html +='<div>';
+            html +='<button type="button" class="btn btn-success checkScoreFile" onclick="uploadScoreFile()">选择文件</button>';
+            html +="<div id='fileNameDiv'>文件名称：";
+            html +="<span id='scoreInfoFileName'></span>";
+            html +='</div></div>';
+            html +='<div>';
+            html +='<button type="button" class="btn btn-success exportScoresInfoBtn" onclick="exportScoresInfo()">导入</button>';
+            html +='</div>';
+            html +="</div>";
 
         layer.open({
             type: 1,
@@ -97,6 +107,13 @@
     function uploadScoreFile(){
         $("#scoresInfoFiles").click();
     }
+    function getFileName(){
+        var path = $("#scoresInfoFiles").val();
+        debugger
+        var list = path.split("\\");
+        var fileName = list[list.length-1]
+        $("#scoreInfoFileName").html(fileName);
+    }
     //成绩导入
     function exportScoresInfo() {
         var scoresInfoFiles = $("#scoresInfoFiles")[0].files[0].name;
@@ -104,6 +121,7 @@
             var packageName="";
             var formData = new FormData();
             formData.append("files", $("#scoresInfoFiles")[0].files[0]);
+            formData.append("scoreNum", $(".importScoreDiv #scoreNumSelect").val());
             $.ajax({
                 type: 'POST',
                 data: formData,
@@ -115,7 +133,8 @@
                 success: function(data){
                     if(data){
                         var obj = JSON.parse(data);
-                        layer.msg(obj.msg)
+                        layer.closeAll();
+                        layer.msg(obj.message)
                     }
                 }
             });
@@ -132,12 +151,34 @@
     //插入单个学生的成绩信息
     function insertScores() {
         debugger
+        var scoreNum = $("#scoreNumSelect").val();
+        if(!scoreNum){
+            layer.msg("请选择考试场次");
+            return;
+        }
+        var gradeNum = $("#gradeNumSelect").val();
+        if(!gradeNum){
+            layer.msg("请选择年纪");
+            return;
+        }
+        var classNum = $("#classNumSelect").val();
+        if(!classNum){
+            layer.msg("请选择班级");
+            return;
+        }
+        var studentName = $("#studentNameSelect").val();
+        if(!studentName){
+            layer.msg("请选择学生");
+            return;
+        }
         var chineseScore = $("input[name='chineseScore']").val();
-        if(!checkNum(chineseScore)){
+        if(!chineseScore){
+            layer.msg("语文成绩不能为空");
+            return;
+        }else if(!checkNum(chineseScore)){
             layer.msg("成绩格式为纯数字");
             return;
         }
-
         $.ajax({
             type: "POST",
             dataType: "json",
@@ -148,6 +189,7 @@
                     var obj = result;
                     if(obj && obj.code == 200){
                         layer.msg(obj.message);
+                        debugger
                     }
                 }
             }

@@ -23,7 +23,7 @@
                     <div class="left-menu">
                         <div class="blackgroundDiv">
                             <sapn th:classappend="${(menu.icon !=null ? menu.icon : '') }" class="iconSpan" th:title="${menu.menuTitle}" aria-hidden="true"></sapn><br/>
-                            <span th:text="${menu.menuTitle}"></span>
+                            <span class="menuTitleSpan" th:text="${menu.menuTitle}"></span>
                         </div>
                     </div>
                 </li>
@@ -73,10 +73,6 @@
             elem: '.headSapn'
             ,align: 'center' //居中对齐（2.6.8 新增）
             ,data: [{
-                title: '修改密码'
-                ,id: 100
-                ,style: 'color:black'
-            },{
                 title: '退出'
                 ,id: 101
                 ,style: 'color:black'
@@ -109,7 +105,7 @@
     //重置密码
     function resetPasswordPage(){
         var html = "";
-        html+='<div>' +
+        html+='<div class="editPasswordDiv">' +
             '        <div class="col-md-12">\n' +
             '            <label class="col-sm-12 control-label">用户名（学生学号/教师身份证号）</label>\n' +
             '            <div class="col-sm-12">\n' +
@@ -123,7 +119,7 @@
         layer.open({
             type: 1,
             skin: 'layer-blue',
-            area: ['600px', '450px'], //宽高
+            area: ['400px', '250px'], //宽高
             content: html
         });
     }
@@ -147,7 +143,7 @@
     //修改密码
     function editPasswordPage(){
         var html = "";
-        html+='<div>' +
+        html+='<div class="editPasswordDiv">' +
             '        <div class="col-md-12">\n' +
             '            <label class="col-sm-12 control-label">新密码</label>\n' +
             '            <div class="col-sm-12">\n' +
@@ -161,7 +157,7 @@
         layer.open({
             type: 1,
             skin: 'layer-blue',
-            area: ['600px', '450px'], //宽高
+            area: ['400px', '250px'], //宽高
             content: html
         });
     }
@@ -174,8 +170,10 @@
                 if(result){
                     var obj = JSON.parse(result);
                     if(obj && obj.code == 200){
-                        layer.msg(obj.message);
-                        logout();
+                        layer.msg("修改成功，请重新登录！");
+                        setTimeout(function (){
+                            logout();
+                        },1000);
                     }
                 }
             }

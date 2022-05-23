@@ -53,8 +53,8 @@
         from score.score_number
         <where>
             <if test="keyword != null and keyword != ''">
-                and (stu.score_num LIKE CONCAT(CONCAT('%', #{keyword}), '%')
-                    or stu.score_name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+                and (score_num LIKE CONCAT(CONCAT('%', #{keyword}), '%')
+                    or score_name LIKE CONCAT(CONCAT('%', #{keyword}), '%')
                 )
             </if>
 

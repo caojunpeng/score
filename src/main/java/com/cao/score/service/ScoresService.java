@@ -90,4 +90,10 @@ public interface ScoresService {
      * @return
      */
     public boolean deleteByStudentId(String objectParams);
+    /**
+     * 通过学号清空所有科目成绩
+     * @param scoreNum
+     * @return
+     */
+    public boolean deleteByScoreNum(String scoreNum);
 }

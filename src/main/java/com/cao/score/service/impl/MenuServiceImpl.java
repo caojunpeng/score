@@ -4,11 +4,14 @@ import ch.qos.logback.core.util.InvocationGate;
 import com.cao.score.dao.MenuDao;
 import com.cao.score.entity.Menu;
 import com.cao.score.entity.RoleMenu;
+import com.cao.score.entity.User;
 import com.cao.score.service.MenuService;
 import com.cao.score.service.RoleMenuService;
 import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
 import com.cao.score.vo.ZtreeObject;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -100,11 +103,13 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public DataTablesResult<Menu> dataLists(ObjectParams params) {
+        PageHelper.offsetPage(params.getStart(), params.getLength());
         List<Menu> menu=menuDao.getList(params);
+        PageInfo<Menu> page = new PageInfo<Menu>(menu);
         DataTablesResult<Menu> dataTablesResult=new DataTablesResult<>();
-        dataTablesResult.setData(menu);
-        dataTablesResult.setRecordsFiltered(menu.size());
-        dataTablesResult.setRecordsTotal(menu.size());
+        dataTablesResult.setData(page.getList());
+        dataTablesResult.setRecordsFiltered(page.getTotal());
+        dataTablesResult.setRecordsTotal(page.getTotal());
         return dataTablesResult;
     }
 

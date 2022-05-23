@@ -16,6 +16,7 @@
             <div class="col-md-4">
                 <label >性别</label>
                 <select class="form-control" name="sex">
+                    <option value="">未知</option>
                     <option value="1">男</option>
                     <option value="2">女</option>
                 </select>
@@ -115,6 +116,12 @@
             layer.msg("学号格式为纯数字");
             return;
         }
+        var name = $("input[name='name']").val();
+        if(!name){
+            layer.msg("姓名不能为空");
+            return;
+        }
+
         var age = $("input[name='age']").val();
         if(!age){
             layer.msg("年龄不能为空");
@@ -123,9 +130,32 @@
             layer.msg("年龄格式为纯数字");
             return;
         }
+        var birthdate = $("input[name='birthdate']").val();
+        if(!birthdate){
+            layer.msg("出生日期不能为空");
+            return;
+        }
         var identityNum = $("input[name='identityNum']").val();
         if(!identityNum){
             layer.msg("身份证号不能为空");
+            return;
+        }else if(identityNum.length<17){
+            layer.msg("身份证号为18位");
+            return;
+        }
+        var address = $("input[name='address']").val();
+        if(!address){
+            layer.msg("家庭住址不能为空");
+            return;
+        }
+        var gradeNum = $("#gradeNumSelect").val();
+        if(!gradeNum){
+            layer.msg("年纪不能为空");
+            return;
+        }
+        var classNum = $("#classNumSelect").val();
+        if(!classNum){
+            layer.msg("班级不能为空");
             return;
         }
         $.ajax({
@@ -138,6 +168,7 @@
                     var obj = result;
                     if(obj && obj.code == 200){
                         layer.msg(obj.message);
+                        $('.menuUl').find('li').eq(1).click();
                     }
                 }
             }
@@ -160,9 +191,10 @@
                 contentType: false,
                 secureuri: false,
                 success: function(data){
+                    debugger
                     if(data){
                         var obj = JSON.parse(data);
-                        layer.msg(obj.msg)
+                        layer.msg(obj.message);
                     }
                 }
             });

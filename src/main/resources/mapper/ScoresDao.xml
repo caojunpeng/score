@@ -102,7 +102,22 @@
         <if test="scoreNum != null and scoreNum != ''">
             and s.score_num = #{scoreNum}
         </if>
-        LIMIT 1 ) chemicalScore
+        LIMIT 1 ) chemicalScore,
+        (	SELECT sr.score_sum FROM	score_ranking sr 	WHERE	 sr.student_id = stu.student_id
+        <if test="scoreNum != null and scoreNum != ''">
+            and sr.score_num = #{scoreNum}
+        </if>
+        LIMIT 1 ) scoreSum,
+        (	SELECT sr.class_ranking FROM	score_ranking sr 	WHERE  sr.student_id = stu.student_id
+        <if test="scoreNum != null and scoreNum != ''">
+            and sr.score_num = #{scoreNum}
+        </if>
+        LIMIT 1 ) classRanking,
+        (	SELECT sr.grade_ranking FROM	score_ranking sr 	WHERE  sr.student_id = stu.student_id
+        <if test="scoreNum != null and scoreNum != ''">
+            and sr.score_num = #{scoreNum}
+        </if>
+        LIMIT 1 ) gradeRanking
         FROM
         students stu
         <where>
@@ -141,13 +156,7 @@
             </if>
         </where>
     </select>
-    <!--通过实体作为筛选条件查询-->
-    <select id="getAllScoresNum" resultMap="ScoresMap">
-        select
-            score_num
-        from score.scores where length(score_num) >0
-        group by score_num
-    </select>
+
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
@@ -203,7 +212,12 @@
     </delete>
     <!--通过主键删除-->
     <delete id="deleteByStudentId">
-        delete from score.scores where student_id = #{studentId}
+        delete from score.scores where student_id = #{scoreNum}
+    </delete>
+
+    <!--通过主键删除-->
+    <delete id="deleteByScoreNum">
+        delete from score.scores where score_num = #{studentId}
     </delete>
 
 </mapper>

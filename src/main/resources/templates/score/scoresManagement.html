@@ -21,7 +21,7 @@
         <form id="scoreInfoForm">
             <div class="col-md-2">
                 <label class="control-label">关键字</label>
-                <input type="text" class="form-control" name="keyword" placeholder="学号/姓名/身份证号">
+                <input type="text" class="form-control" name="keyword" placeholder="学号/姓名">
                 <input type="hidden" class="form-control" name="scoreNum" th:value="${scoreNum}">
             </div>
             <div class="col-md-2">
@@ -39,14 +39,15 @@
             </div>
             <input type="hidden" th:value="${studentId}" name="studentId">
             <button type="button" class="btn btn-primary searchBtn" onclick="searchScoreInfo()">查询</button>
+            <button type="button" class="btn btn-primary searchBtn" onclick="exportScoreInfo()">导出</button>
         </form>
     </div>
     <input type="hidden" th:value="${role}" id="role">
     <table id="dataTables-scoreInfoDatas"  class="table table-bordered">
         <thead>
             <tr>
-                <th>班级</th>
                 <th>年级</th>
+                <th>班级</th>
                 <th>学号</th>
                 <th>姓名</th>
                 <th>语文</th>
@@ -58,6 +59,9 @@
                 <th>生物</th>
                 <th>物理</th>
                 <th>化学</th>
+                <th>总成绩</th>
+                <th>班级排名</th>
+                <th>年纪排名</th>
                 <th>操作</th>
             </tr>
         <thead>
@@ -81,11 +85,11 @@
 		bLengthChange : false,
 		lengthMenu : [ 10,20,50 ],
 		"columns" : [
+            {
+                "data" : "gradeNum"
+            },
 			{
 				"data" : "classNum"
-			},
-			{
-				"data" : "gradeNum"
 			},
 			{
 				"data" : "studentId"
@@ -119,6 +123,15 @@
             },
             {
                 "data" : "chemicalScore"
+            },
+            {
+                "data" : "scoreSum"
+            },
+            {
+                "data" : "classRanking"
+            },
+            {
+                "data" : "gradeRanking"
             },
 			{
 				"data" : null,"render" : function(nRow, indexType,dataObj) {
@@ -225,6 +238,17 @@
         }, function(){
 
         });
+    }
+
+    function exportScoreInfo(){
+        var jsonData = $("#scoreInfoForm").serializeArray();
+        var aoData=[];
+        jsonData.forEach(function (e, index) {
+            aoData.push(e.name+"="+e.value);
+        });
+        var dat = aoData.join("&");
+        var url = "/scores/downloadScoresInfo?"+dat;
+        window.location.href = url;
     }
 
 </script>

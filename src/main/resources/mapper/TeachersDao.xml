@@ -125,7 +125,7 @@
             <if test="classNum != null">
                 and class_num = #{classNum}
             </if>
-            <if test="identityNum != null">
+            <if test="identityNum != null and identityNum != ''">
                 and identity_num = #{identityNum}
             </if>
         </where>

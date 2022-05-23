@@ -1,13 +1,13 @@
 <div class="scoreSaveRow" >
     <form id="scoreSaveNumberForm">
-        <div class="col-md-12">
+        <div class="col-md-12" th:if="!${scoreNumber.id}">
             <label class="col-sm-12 control-label">考试时间</label>
             <div class="col-sm-12">
                 <input id="scoreTime" name="scoreTime" class="form-control" size="16" type="text"  readonly="readonly" th:value="${#dates.format(scoreNumber?.scoreTime, 'yyyy-MM-dd')}" />
-                <input type="hidden" name="scoreNum" th:value="${scoreNumber?.scoreNum}" >
-                <input type="hidden" name="id" th:value="${scoreNumber?.id}" >
             </div>
         </div>
+        <input type="hidden" name="scoreNum" th:value="${scoreNumber?.scoreNum}" >
+        <input type="hidden" name="id" th:value="${scoreNumber?.id}" >
         <div class="col-md-12">
             <label class="col-sm-12 control-label">考试名称</label>
             <div class="col-sm-12">

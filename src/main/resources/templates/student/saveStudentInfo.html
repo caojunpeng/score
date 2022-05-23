@@ -49,7 +49,7 @@
             <div class="col-sm-12">
                 <select class="form-control" name="gradeNum" id="editGradeNumSelect" onchange="loadClassNumList()">
                     <option value="">待选择</option>
-                    <option  th:each="grade:${gradeNumList}" th:value="${grade.gradeNum}"  th:text="${grade.gradeNum}" ></option>
+                    <option  th:each="grade:${gradeNumList}" th:value="${grade.gradeNum}" th:selected="${grade.gradeNum eq student?.gradeNum}"  th:text="${grade.gradeNum}" ></option>
                 </select>
             </div>
         </div>
@@ -58,6 +58,7 @@
             <div class="col-sm-12">
                 <select class="form-control" name="classNum" id="editClassNumSelect">
                     <option value="">待选择</option>
+                    <option th:value="${student?.classNum}" selected="selected" th:if="${student.classNum}" th:text="${student?.classNum}"></option>
                 </select>
             </div>
         </div>

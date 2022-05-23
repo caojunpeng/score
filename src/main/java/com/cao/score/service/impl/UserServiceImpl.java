@@ -11,6 +11,9 @@ import com.cao.score.shiro.SaltUtil;
 import com.cao.score.utiles.ScoreDateUtils;
 import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
+import com.cao.score.vo.ScoreParams;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.stereotype.Service;
@@ -112,16 +115,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public DataTablesResult<User> dataLists(ObjectParams params) {
+        PageHelper.offsetPage(params.getStart(), params.getLength());
         List<User> users=userDao.getList(params);
         if(!users.isEmpty()){
             for (User user : users) {
                 user.setCreateTimeStr(ScoreDateUtils.dateToStr(user.getCreateTime(),ScoreDateUtils.format_date));
             }
         }
+        PageInfo<User> page = new PageInfo<User>(users);
         DataTablesResult<User> dataTablesResult=new DataTablesResult<>();
-        dataTablesResult.setData(users);
-        dataTablesResult.setRecordsFiltered(users.size());
-        dataTablesResult.setRecordsTotal(users.size());
+        dataTablesResult.setData(page.getList());
+        dataTablesResult.setRecordsFiltered(page.getTotal());
+        dataTablesResult.setRecordsTotal(page.getTotal());
         return dataTablesResult;
     }
 

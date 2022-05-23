@@ -444,9 +444,36 @@
 #studentSaveForm .savestudentBtn,#scoreSaveNumberForm .saveScoreBtn,#scoreSaveForm .saveScoreBtn,#teacherSaveForm .saveteacherBtn{
     margin: 10px 20px 0px 88%;
 }
-
+.importScoreDiv{
+    padding: 30px 20px 0px 20px;
+}
+.importScoreDiv .checkScoreFile{
+    float: left;
+    margin-top: 20px;
+}
+.importScoreDiv #fileNameDiv{
+    float: left;
+    width: 75%;
+    margin-top: 25px;
+    font-size: 15px;
+    margin-left: 20px;
+}
+.importScoreDiv .exportScoresInfoBtn{
+    margin-left: 80%;
+}
 
 /*强制字体白色*/
 .next,.previous,.dataTables_info,.layui-layer-setwin{
-    color: #fff !important;
+    color: #337ab7 !important;
+}
+.editPasswordDiv{
+    margin-top: 25px;
+}
+.editPasswordDiv .saveteacherBtn{
+    margin-top: 20px;
+    margin-left: 80%;
+}
+
+.menuTitleSpan{
+    color: #fff;
 }

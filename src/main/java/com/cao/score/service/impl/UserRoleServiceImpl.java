@@ -88,12 +88,12 @@ public class UserRoleServiceImpl implements UserRoleService {
         }
         Integer result = 0;
         if(!roleIds.isEmpty()){
-            if(roleIds.contains(3)){
-                result=3;
+            if(roleIds.contains(1)){
+                result=1;
             }else if(roleIds.contains(2)){
                 result=2;
-            }else if(roleIds.contains(1)){
-                result=1;
+            }else if(roleIds.contains(3)){
+                result=3;
             }
         }
         return result;

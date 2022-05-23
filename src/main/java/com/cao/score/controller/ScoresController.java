@@ -4,6 +4,7 @@ import com.cao.score.entity.*;
 import com.cao.score.service.*;
 import com.cao.score.utiles.ExcelUtils;
 import com.cao.score.utiles.ResponseUtil;
+import com.cao.score.utiles.ScoreDateUtils;
 import com.cao.score.utiles.ScoreFileUtil;
 import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
@@ -17,8 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +61,8 @@ public class ScoresController {
     private UserRoleService userRoleService;
     @Resource
     private TeachersService teachersService;
+    @Resource
+    private StudentsService studentsService;
 
     /**
      * 通过主键查询单条数据
@@ -151,6 +156,10 @@ public class ScoresController {
     @ResponseBody
     @RequestMapping("/scoresInfoDatas")
     public DataTablesResult<ScoreParams> scoresInfoDatas(ObjectParams objectParams){
+        Integer role=userRoleService.selectRolesByUserName();
+        if(role==0){//管理员可以看所有学生成绩信息
+            objectParams.setStudentId("");
+        }
         return scoresService.getScoresInfoDatas(objectParams);
 
     }
@@ -161,7 +170,7 @@ public class ScoresController {
      */
     @ResponseBody
     @RequestMapping("/exportScoreInfo")
-    public String exportScoreInfo(@RequestParam("files") MultipartFile files){
+    public String exportScoreInfo(@RequestParam("files") MultipartFile files,String scoreNum){
         String result = "";
         try {
             String dirPath = installDir + File.separator + "scoreinfoexcels" ;
@@ -189,9 +198,12 @@ public class ScoresController {
                     scoreParams.setBiologicalScore(Double.valueOf(map.get("tenColumn")+""));
                     scoreParams.setPhysicalScore(Double.valueOf(map.get("elevenColumn")+""));
                     scoreParams.setChemicalScore(Double.valueOf(map.get("twelveColumn")+""));
+                    scoreParams.setScoreNum(scoreNum);
                     scoresService.saveScoreByParams(scoreParams);
                 }
             }
+            studentsService.scoreRanking();
+            result=ResponseUtil.printJson("成绩信息导入成功",null);
         }catch (Exception e){
             logger.error("导入学生信息异常,异常信息:"+e.getMessage(),e);
             result=ResponseUtil.printFailJson(ResponseUtil.SERVERUPLOAD,"文件导入异常");
@@ -206,7 +218,9 @@ public class ScoresController {
     @ResponseBody
     @RequestMapping("/saveScoreByParams")
     public String saveScoreByParams(ScoreParams scoreParams){
-        return scoresService.saveScoreByParams(scoreParams);
+        String result = scoresService.saveScoreByParams(scoreParams);
+        studentsService.scoreRanking();
+        return result;
     }
 
     /**
@@ -228,4 +242,21 @@ public class ScoresController {
         String fileName = "scoresInfoTemplate.xlsx";
         commonFilesService.downloadLocalFile(response,fileName);
     }
+    /**
+     * 成绩信息导出
+     * @param response
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/downloadScoresInfo")
+    public void downloadScoresInfo(ObjectParams param, HttpServletRequest request, HttpServletResponse response) {
+        String sheetName = "成绩信息导出";
+        String fileName = sheetName + ScoreDateUtils.dateToStr(new Date(), "yyyyMMddHHmmss") + ScoreFileUtil.EXCEL;
+        Map<String, Object> map = new HashMap<>();
+        map.put("param", param);
+        commonFilesService.exportExcel(fileName, map, sheetName,  request,  response);
+        studentsService.scoreRanking();
+    }
+
+
 }

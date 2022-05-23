@@ -118,6 +118,10 @@ public class StudentsController {
     @ResponseBody
     @RequestMapping("/studentInfoDatas")
     public DataTablesResult<Students> studentInfoDatas(ObjectParams objectParams){
+        Integer role=userRoleService.selectRolesByUserName();
+        if(role==0){//管理员可以看所有学生信息
+            objectParams.setStudentId("");
+        }
         return studentsService.getStudentInfoDatas(objectParams);
     }
     /**
@@ -185,7 +189,14 @@ public class StudentsController {
                     Students students = new Students();
                     students.setStudentId(map.get("zeroColumn")+"");
                     students.setName(map.get("oneColumn")+"");
-                    students.setSex(Integer.valueOf(map.get("twoColumn")+""));
+                    String sex= map.get("twoColumn")+"";
+                    if("男".equals(sex)){
+                        students.setSex(1);
+                    }else if("女".equals(sex)){
+                        students.setSex(2);
+                    }else{
+                        students.setSex(0);
+                    }
                     students.setAge(Integer.valueOf(map.get("threeColumn")+""));
                     String birthdatae= map.get("fourColumn")+"";
                     Date date=ScoreDateUtils.parseStrToDate(birthdatae,ScoreDateUtils.format_day);
@@ -265,7 +276,7 @@ public class StudentsController {
         ModelAndView modelAndView=new ModelAndView();
         if (studentId != null){
             Students students = studentsService.queryById(studentId);
-            students.setBirthDateStr(ScoreDateUtils.dateToStr(students.getBirthdate(),ScoreDateUtils.format_date));
+            students.setBirthDateStr(ScoreDateUtils.dateToStr(students.getBirthdate(),ScoreDateUtils.format_day));
             modelAndView.addObject("student",students);
         }
         Map<String,Object> map = new HashMap<>();

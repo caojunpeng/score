@@ -138,9 +138,10 @@ public class ScoreNumberController {
     public String delScoreNumber(Long id){
         String result="";
         try {
-            scoreNumberService.deleteById(id);
+            ScoreNumber scoreNumber = scoreNumberService.queryById(id);
             //删除本次考试所有学生成绩
-            // TODO: 2022/4/13  
+            scoresService.deleteByScoreNum(scoreNumber.getScoreNum());
+            scoreNumberService.deleteById(id);
             result= ResponseUtil.printJson("删除成功",null);
         }catch (Exception e){
             logger.error("考试场次信息更新异常，异常信息："+e.getMessage(),e);

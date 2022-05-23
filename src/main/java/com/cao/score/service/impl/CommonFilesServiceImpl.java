@@ -2,11 +2,13 @@ package com.cao.score.service.impl;
 
 import com.cao.score.entity.Students;
 import com.cao.score.service.CommonFilesService;
+import com.cao.score.service.ScoresService;
 import com.cao.score.service.StudentsService;
 import com.cao.score.utiles.ExcelUtils;
 import com.cao.score.utiles.ScoreDateUtils;
 import com.cao.score.vo.DataTablesResult;
 import com.cao.score.vo.ObjectParams;
+import com.cao.score.vo.ScoreParams;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -30,10 +32,10 @@ public class CommonFilesServiceImpl implements CommonFilesService {
 
     private static Logger logger = LoggerFactory.getLogger(CommonFilesServiceImpl.class);
 
-
-
     @Resource
     private StudentsService studentsService;
+    @Resource
+    private ScoresService scoresService;
 
     /**
      * 导出指定格式的Excel
@@ -52,6 +54,10 @@ public class CommonFilesServiceImpl implements CommonFilesService {
             String[] title = { "学号", "姓名","性别", "年龄", "出生日期", "身份证号", "家庭住址", "年纪", "班级" };// 标题
             titlList = Arrays.asList(title);
             selectAllByParm = studentInfoSheet((ObjectParams)map.get("param"));
+        }else if("成绩信息导出".equals(sheetName)){
+            String[] title = { "年级", "班级","学号", "姓名", "语文", "数学", "英语", "政治", "历史" , "地理" , "生物" , "物理" , "化学" , "总成绩" , "班级排名" , "年级排名" };// 标题
+            titlList = Arrays.asList(title);
+            selectAllByParm = scoresInfoSheet((ObjectParams)map.get("param"));
         }
         wb = ExcelUtils.getXSSFExportExcel(sheetName, titlList, selectAllByParm, mC, new XSSFWorkbook());
         downFile(response, fileName, wb, request);
@@ -83,6 +89,35 @@ public class CommonFilesServiceImpl implements CommonFilesService {
             excel.add(students.getAddress());
             excel.add(students.getGradeNum()+"");
             excel.add(students.getClassNum()+"");
+            selectAllByParm.add(excel);
+        }
+        return selectAllByParm;
+    }
+    private List<List<String>> scoresInfoSheet(ObjectParams param) {
+        List<ScoreParams> scoreslist = new ArrayList<>();
+        List<List<String>> selectAllByParm = new ArrayList<>();
+        DataTablesResult<ScoreParams> scoresInfoDatas = scoresService.getScoresInfoDatas(param);
+        if(scoresInfoDatas!=null && !scoresInfoDatas.getData().isEmpty()){
+            scoreslist = scoresInfoDatas.getData();
+        }
+        for(ScoreParams scoreParam:scoreslist) {
+            List<String> excel = new ArrayList<>();
+            excel.add(scoreParam.getGradeNum()+"");
+            excel.add(scoreParam.getClassNum()+"");
+            excel.add(scoreParam.getStudentId());
+            excel.add(scoreParam.getName());
+            excel.add(scoreParam.getChineseScore()+"");
+            excel.add(scoreParam.getMathScore()+"");
+            excel.add(scoreParam.getEnglishScore()+"");
+            excel.add(scoreParam.getPoliticsScore()+"");
+            excel.add(scoreParam.getHistoryScore()+"");
+            excel.add(scoreParam.getGeographyScore()+"");
+            excel.add(scoreParam.getBiologicalScore()+"");
+            excel.add(scoreParam.getPhysicalScore()+"");
+            excel.add(scoreParam.getChemicalScore()+"");
+            excel.add(scoreParam.getScoreSum()+"");
+            excel.add(scoreParam.getClassRanking()+"");
+            excel.add(scoreParam.getGradeRanking()+"");
             selectAllByParm.add(excel);
         }
         return selectAllByParm;

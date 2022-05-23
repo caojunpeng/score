@@ -97,6 +97,9 @@ public class TeachersServiceImpl implements TeachersService {
         if(!objectParams.isExportType()) {
             PageHelper.offsetPage(objectParams.getStart(), objectParams.getLength());
         }
+        if(objectParams.getRoleId()==1){//管理员可以看所有教师
+            objectParams.setIdentityNum("");
+        }
         List<Teachers> teachers = teachersDao.getTeacherInfoDatas(objectParams);
         if(!teachers.isEmpty()){
             for (Teachers teacher: teachers){

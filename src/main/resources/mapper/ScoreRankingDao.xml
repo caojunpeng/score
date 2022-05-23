@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cao.score.dao.ScoreRankingDao">
+
+    <resultMap type="com.cao.score.entity.ScoreRanking" id="ScoreRankingMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="studentId" column="student_id" jdbcType="VARCHAR"/>
+        <result property="scoreSum" column="score_sum" jdbcType="NUMERIC"/>
+        <result property="gradeRanking" column="grade_ranking" jdbcType="INTEGER"/>
+        <result property="classRanking" column="class_ranking" jdbcType="INTEGER"/>
+        <result property="scoreNum" column="score_num" jdbcType="VARCHAR"/>
+        <result property="classNum" column="class_num" jdbcType="INTEGER"/>
+        <result property="gradeNum" column="grade_num" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="ScoreRankingMap">
+        select
+          id, student_id, score_sum, grade_ranking, class_ranking, score_num, class_num, grade_num
+        from score_ranking
+        where id = #{id}
+    </select>
+    <!--查询多个-->
+    <select id="queryByMap" resultMap="ScoreRankingMap">
+        select
+          id, student_id, score_sum, grade_ranking, class_ranking, score_num, class_num, grade_num
+        from score_ranking
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="studentId != null and studentId != ''">
+                and student_id = #{studentId}
+            </if>
+            <if test="scoreSum != null">
+                and score_sum = #{scoreSum}
+            </if>
+            <if test="gradeRanking != null">
+                and grade_ranking = #{gradeRanking}
+            </if>
+            <if test="classRanking != null">
+                and class_ranking = #{classRanking}
+            </if>
+            <if test="scoreNum != null and scoreNum != ''">
+                and score_num = #{scoreNum}
+            </if>
+            <if test="classNum != null">
+                and class_num = #{classNum}
+            </if>
+            <if test="gradeNum != null">
+                and grade_num = #{gradeNum}
+            </if>
+        </where>
+            order by  score_sum desc;
+    </select>
+
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from score_ranking
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="studentId != null and studentId != ''">
+                and student_id = #{studentId}
+            </if>
+            <if test="scoreSum != null">
+                and score_sum = #{scoreSum}
+            </if>
+            <if test="gradeRanking != null">
+                and grade_ranking = #{gradeRanking}
+            </if>
+            <if test="classRanking != null">
+                and class_ranking = #{classRanking}
+            </if>
+            <if test="scoreNum != null and scoreNum != ''">
+                and score_num = #{scoreNum}
+            </if>
+            <if test="classNum != null">
+                and class_num = #{classNum}
+            </if>
+            <if test="gradeNum != null">
+                and grade_num = #{gradeNum}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into score_ranking(student_id, score_sum, grade_ranking, class_ranking, score_num, class_num, grade_num)
+        values (#{studentId}, #{scoreSum}, #{gradeRanking}, #{classRanking}, #{scoreNum}, #{classNum}, #{gradeNum})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into score_ranking(student_id, score_sum, grade_ranking, class_ranking, score_num, class_num, grade_num)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.studentId}, #{entity.scoreSum}, #{entity.gradeRanking}, #{entity.classRanking}, #{entity.scoreNum}, #{entity.classNum}, #{entity.gradeNum})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into score_ranking(student_id, score_sum, grade_ranking, class_ranking, score_num, class_num, grade_num)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.studentId}, #{entity.scoreSum}, #{entity.gradeRanking}, #{entity.classRanking}, #{entity.scoreNum}, #{entity.classNum}, #{entity.gradeNum})
+        </foreach>
+        on duplicate key update
+        student_id = values(student_id),
+        score_sum = values(score_sum),
+        grade_ranking = values(grade_ranking),
+        class_ranking = values(class_ranking),
+        score_num = values(score_num),
+        class_num = values(class_num),
+        grade_num = values(grade_num)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update score_ranking
+        <set>
+            <if test="studentId != null and studentId != ''">
+                student_id = #{studentId},
+            </if>
+            <if test="scoreSum != null">
+                score_sum = #{scoreSum},
+            </if>
+            <if test="gradeRanking != null">
+                grade_ranking = #{gradeRanking},
+            </if>
+            <if test="classRanking != null">
+                class_ranking = #{classRanking},
+            </if>
+            <if test="scoreNum != null and scoreNum != ''">
+                score_num = #{scoreNum},
+            </if>
+            <if test="classNum != null">
+                class_num = #{classNum},
+            </if>
+            <if test="gradeNum != null">
+                grade_num = #{gradeNum},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from score_ranking where id = #{id}
+    </delete>
+    <!--通过主键删除-->
+    <delete id="deleteTable">
+        delete from score_ranking
+    </delete>
+
+</mapper>
+

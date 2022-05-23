@@ -171,6 +171,11 @@ public class ScoresServiceImpl implements ScoresService {
     }
 
     @Override
+    public boolean deleteByScoreNum(String scoreNum) {
+        return this.scoresDao.deleteByScoreNum(scoreNum) > 0;
+    }
+
+    @Override
     public String saveScoreByParams(ScoreParams scoreParams) {
         try{
             if(ScoreStringUtils.isBlank(scoreParams.getStudentId())){
